@@ -1,7 +1,7 @@
 package com.melvic.archia.output
 
 object JsonStringOutput : Transformer<String> {
-    val SEPARATOR = ","
+    const val SEPARATOR = ","
 
     override fun jsonNull(json: JsonValue.JsonNull): String = "null"
 
