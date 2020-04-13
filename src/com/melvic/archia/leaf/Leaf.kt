@@ -1,7 +1,9 @@
 package com.melvic.archia.leaf
 
-interface WithLeaf {
-    fun match(query: Match.() -> Unit) = Match().apply(query)
+import com.melvic.archia.Init
 
-    fun term(query: Term.() -> Unit) = Term().apply(query)
+interface WithLeaf {
+    fun match(query: Init<Match>) = Match().apply(query)
+
+    fun term(query: Init<Term>) = Term().apply(query)
 }
