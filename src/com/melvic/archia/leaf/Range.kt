@@ -26,4 +26,7 @@ data class RangeField(
 
 enum class Relation { INTERSECTS, CONTAINS, WITHIN }
 
-typealias RangeValue = Float
+sealed class RangeValue {
+    class RangeFormat(format: DateFormat) : RangeValue()
+    class RangeNum(value: Float) : RangeValue()
+}
