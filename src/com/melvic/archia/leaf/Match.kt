@@ -1,16 +1,13 @@
 package com.melvic.archia.leaf
 
-import com.melvic.archia.Fuzziness
-import com.melvic.archia.MinimumShouldMatch
-import com.melvic.archia.Query
-import com.melvic.archia.Rewrite
+import com.melvic.archia.*
 import java.util.*
 
 data class Match(var field: MatchField? = null) : Query() {
     /**
      * Constructs a match field from a string
      */
-    operator fun String.invoke(init: MatchField.() -> Unit): MatchField =
+    operator fun String.invoke(init: Init<MatchField>): MatchField =
         MatchField(this).apply(init)
 }
 

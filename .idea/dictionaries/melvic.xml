@@ -2,6 +2,7 @@
   <dictionary name="melvic">
     <words>
       <w>freqs</w>
+      <w>weekyear</w>
     </words>
   </dictionary>
 </component>
