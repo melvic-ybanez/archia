@@ -27,18 +27,17 @@ data class MatchField(
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var zeroTermsQuery: ZeroTermsQuery? = null
 ) {
-    fun text(value: String) = MatchQueryValue.TextValue(value)
-    fun num(value: Number) = MatchQueryValue.NumberValue(value)
-    fun bool(value: Boolean) = MatchQueryValue.BooleanValue(value)
-    fun date(value: Date) = MatchQueryValue.DateValue(value)
+    fun text(value: String) = TextValue(value)
+    fun num(value: Number) = NumberValue(value)
+    fun bool(value: Boolean) = BooleanValue(value)
+    fun date(value: Date) = DateValue(value)
 }
 
-sealed class MatchQueryValue {
-    data class TextValue(val value: String) : MatchQueryValue()
-    data class NumberValue(val value: Number) : MatchQueryValue()
-    data class BooleanValue(val value: Boolean) : MatchQueryValue()
-    data class DateValue(val value: Date) : MatchQueryValue()
-}
+sealed class MatchQueryValue
+data class TextValue(val value: String) : MatchQueryValue()
+data class NumberValue(val value: Number) : MatchQueryValue()
+data class BooleanValue(val value: Boolean) : MatchQueryValue()
+data class DateValue(val value: Date) : MatchQueryValue()
 
 enum class FieldOperator { OR, AND }
 enum class ZeroTermsQuery { NONE, ALL }

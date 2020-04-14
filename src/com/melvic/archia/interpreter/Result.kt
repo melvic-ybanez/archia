@@ -2,6 +2,7 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.Clause
 import kotlin.reflect.KCallable
+import kotlin.reflect.KProperty
 
 sealed class Result<out A> {
     abstract fun value(): A
