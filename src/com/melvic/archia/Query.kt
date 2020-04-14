@@ -12,7 +12,7 @@ data class Query(var queryClause: QueryClause? = null) {
 }
 
 open class Clause {
-    private val children = mutableListOf<Clause>()
+    val children = mutableListOf<Clause>()
 
     /**
      * Constructs a child and add it to the list of children

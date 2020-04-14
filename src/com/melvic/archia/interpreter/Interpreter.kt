@@ -20,7 +20,14 @@ fun interpret(query: Query): Evaluation {
     }
 
     val output = query.queryClause?.let {
-        interpret(it, json {})
+        var result: Evaluation = Success(json {})
+
+        for (child in it.children) {
+            if (result is Failed) break
+            result = interpret(child, result.value())
+        }
+
+        result
     } ?: return Failed(missingField(query::query))
 
     return when (output) {
