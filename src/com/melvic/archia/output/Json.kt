@@ -7,35 +7,48 @@ import com.melvic.archia.Init
  *
  * DSL is provided for the ease of use and testing.
  */
-sealed class JsonValue {
-    object JsonNull : JsonValue()
-    data class JsonString(val value: String) : JsonValue()
-    data class JsonNumber(val value: Number) : JsonValue()
-    data class JsonBoolean(val value: Boolean) : JsonValue()
+sealed class JsonValue
 
-    data class JsonArray(val items: List<JsonValue>) : JsonValue(), JsonHelper
+object JsonNull : JsonValue()
 
-    data class JsonObject(
-        var entries: MutableMap<String, JsonValue> = mutableMapOf()
-    ) : JsonValue(), JsonHelper {
-        infix fun <J : JsonValue> String.to(json: J) {
-            entries[this] = json
-        }
+data class JsonString(val value: String) : JsonValue()
+data class JsonNumber(val value: Number) : JsonValue()
+data class JsonBoolean(val value: Boolean) : JsonValue()
 
-        fun array(vararg value: JsonValue) = json(*value)
+data class JsonArray(val items: List<JsonValue>) : JsonValue(), JsonHelper, Compound<JsonArray> {
+    override fun instance() = this
+}
+
+data class JsonObject(
+    var entries: MutableMap<String, JsonValue> = mutableMapOf()
+) : JsonValue(), JsonHelper, Compound<JsonObject> {
+    infix fun <J : JsonValue> String.to(json: J) {
+        entries[this] = json
     }
 
-    interface JsonHelper {
-        fun num(value: Number) = JsonNumber(value)
-        fun str(value: String) = JsonString(value)
-        fun bool(value: Boolean) = JsonBoolean(value)
-    }
+    fun array(vararg value: JsonValue) = json(*value)
+
+    override fun instance() = this
+}
+
+interface JsonHelper {
+    fun num(value: Number) = JsonNumber(value)
+    fun str(value: String) = JsonString(value)
+    fun bool(value: Boolean) = JsonBoolean(value)
+}
+
+interface Compound<C> {
+    fun instance(): C
+
+    operator fun invoke(init: Init<C>): C = instance().apply(init)
 }
 
 fun <T, J : JsonValue> J.transform(transformer: Transformer<T>): T {
     return transformer.transform(this)
 }
 
-fun json(init: Init<JsonValue.JsonObject>) = JsonValue.JsonObject().apply(init)
+fun json(init: Init<JsonObject>) = JsonObject().apply(init)
 
-fun json(vararg value: JsonValue) =JsonValue.JsonArray(listOf(*value))
+fun json(vararg value: JsonValue) = JsonArray(listOf(*value))
+
+

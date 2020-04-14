@@ -12,7 +12,6 @@ data class Range(var field: RangeField? = null) : Query() {
 data class RangeField(
     val name: String,
 
-    // TODO: Support for date math.
     var gt: RangeValue? = null,
     var gte: RangeValue? = null,
     var lt: RangeValue? = null,
@@ -20,7 +19,7 @@ data class RangeField(
 
     var format: DateFormat? = null,
     var relation: Relation? = null,
-    var timeZone: String? = null,   // TODO: Define
+    var timeZone: String? = null,
     var boost: Float? = null
 )
 
