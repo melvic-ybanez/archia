@@ -3,7 +3,7 @@ package com.melvic.archia.leaf
 import com.melvic.archia.*
 import java.util.*
 
-data class Match(var field: MatchField? = null) : Query() {
+data class Match(var field: MatchField? = null) : Clause() {
     /**
      * Constructs a match field from a string
      */

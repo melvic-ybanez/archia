@@ -2,9 +2,9 @@ package com.melvic.archia.leaf
 
 import com.melvic.archia.DateFormat
 import com.melvic.archia.Init
-import com.melvic.archia.Query
+import com.melvic.archia.Clause
 
-data class Range(var field: RangeField? = null) : Query() {
+data class Range(var field: RangeField? = null) : Clause() {
     operator fun String.invoke(init: Init<RangeField>) =
         RangeField(this).apply(init)
 }

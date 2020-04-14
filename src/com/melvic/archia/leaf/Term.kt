@@ -1,8 +1,8 @@
 package com.melvic.archia.leaf
 
-import com.melvic.archia.Query
+import com.melvic.archia.Clause
 
-data class Term(var field: TermField? = null): Query() {
+data class Term(var field: TermField? = null): Clause() {
     operator fun String.invoke(init: TermField.() -> Unit) =
         TermField(this).apply(init)
 }

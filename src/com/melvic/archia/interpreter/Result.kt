@@ -1,7 +1,6 @@
 package com.melvic.archia.interpreter
 
-import com.melvic.archia.Query
-import com.melvic.archia.output.JsonValue
+import com.melvic.archia.Clause
 import kotlin.reflect.KCallable
 
 sealed class Result<out A> {
@@ -18,7 +17,7 @@ class Success<A>(private val init: A) : Result<A>() {
 
 sealed class ErrorCode
 class MissingField(val fieldName: String) : ErrorCode()
-class UnknownQuery(val query: Query) : ErrorCode()
+class UnknownQuery(val query: Clause) : ErrorCode()
 
 fun errorMessage(code: ErrorCode) = when (code) {
     is MissingField -> "Missing field: ${code.fieldName}"

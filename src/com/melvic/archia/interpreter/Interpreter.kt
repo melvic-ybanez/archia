@@ -1,9 +1,8 @@
 package com.melvic.archia.interpreter
 
+import com.melvic.archia.Clause
 import com.melvic.archia.Query
-import com.melvic.archia.QueryContext
 import com.melvic.archia.leaf.Term
-import com.melvic.archia.output.JsonArray
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
@@ -11,7 +10,7 @@ import com.melvic.archia.output.json
 typealias Evaluation = Result<JsonValue>
 
 fun interpret(query: Query): Evaluation {
-    fun interpret(query: Query, parent: JsonValue): Evaluation {
+    fun interpret(query: Clause, parent: JsonValue): Evaluation {
         val objectOrEmpty = if (parent is JsonObject) parent else json {}
 
         return when (query) {
@@ -20,7 +19,16 @@ fun interpret(query: Query): Evaluation {
         }
     }
 
-    return interpret(query, json {})
+    val output = query.queryClause?.let {
+        interpret(it, json {})
+    } ?: return Failed(missingField(query::query))
+
+    return when (output) {
+        is Failed -> output
+        is Success<*> -> Success(json {
+            "query" to output.value()
+        })
+    }
 }
 
 fun interpretTerm(term: Term, parent: JsonObject): Evaluation {
