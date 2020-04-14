@@ -1,9 +1,10 @@
 package com.melvic.archia.leaf
 
+import com.melvic.archia.Clause
 import com.melvic.archia.Init
 
-interface WithLeaf {
-    fun match(query: Init<Match>) = Match().apply(query)
+open class WithLeaf : Clause() {
+    fun match(query: Init<Match>) = initChild(Match(), query)
 
-    fun term(query: Init<Term>) = Term().apply(query)
+    fun term(query: Init<Term>) = initChild(Term(), query)
 }

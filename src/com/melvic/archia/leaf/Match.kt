@@ -7,8 +7,9 @@ data class Match(var field: MatchField? = null) : Clause() {
     /**
      * Constructs a match field from a string
      */
-    operator fun String.invoke(init: Init<MatchField>): MatchField =
-        MatchField(this).apply(init)
+    operator fun String.invoke(init: Init<MatchField>) {
+        field = MatchField(this).apply(init)
+    }
 }
 
 data class MatchField(

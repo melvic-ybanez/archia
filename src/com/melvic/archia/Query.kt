@@ -6,8 +6,7 @@ typealias Init<A> = A.() -> Unit
 
 data class Query(var queryClause: QueryClause? = null) {
     fun query(init: Init<QueryClause>) {
-        val clause = QueryClause().apply(init)
-        queryClause = clause
+        queryClause = QueryClause().apply(init)
     }
 }
 
@@ -17,12 +16,12 @@ open class Clause {
     /**
      * Constructs a child and add it to the list of children
      */
-    fun <Q : Clause> addChild(child: Q, init: Init<Q>) {
+    fun <Q : Clause> initChild(child: Q, init: Init<Q>) {
         child.init()
         children.add(child)
     }
 }
 
-class QueryClause : Clause(), WithLeaf
+class QueryClause : WithLeaf()
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)

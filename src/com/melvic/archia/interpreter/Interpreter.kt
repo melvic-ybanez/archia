@@ -46,7 +46,7 @@ fun interpretTerm(term: Term, parent: JsonObject): Evaluation {
         field.boost?.let { "boost" to num(it) }
     }
 
-    val termOut = parent { "term" to json { "field" to termFieldOut } }
+    val termOut = parent { "term" to json { field.name to termFieldOut } }
 
     return Success(termOut)
 }
