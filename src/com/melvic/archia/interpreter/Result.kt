@@ -2,7 +2,6 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.Clause
 import kotlin.reflect.KCallable
-import kotlin.reflect.KProperty
 
 sealed class Result<out A> {
     abstract fun value(): A
@@ -26,5 +25,3 @@ fun errorMessage(code: ErrorCode) = when (code) {
 }
 
 fun <R> missingField(callable: KCallable<R>) = MissingField(nameOf(callable))
-
-fun <R> nameOf(callable: KCallable<R>): String = callable.name

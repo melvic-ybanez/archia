@@ -27,17 +27,18 @@ data class MatchField(
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var zeroTermsQuery: ZeroTermsQuery? = null
 ) {
-    fun text(value: String) = TextValue(value)
-    fun num(value: Number) = NumberValue(value)
-    fun bool(value: Boolean) = BooleanValue(value)
-    fun date(value: Date) = DateValue(value)
+    fun text(value: String) = MatchQueryValue.Text(value)
+    fun num(value: Number) = MatchQueryValue.Number(value)
+    fun bool(value: Boolean) = MatchQueryValue.Boolean(value)
+    fun date(value: Date) = MatchQueryValue.Date(value)
 }
 
-sealed class MatchQueryValue
-data class TextValue(val value: String) : MatchQueryValue()
-data class NumberValue(val value: Number) : MatchQueryValue()
-data class BooleanValue(val value: Boolean) : MatchQueryValue()
-data class DateValue(val value: Date) : MatchQueryValue()
+sealed class MatchQueryValue {
+    data class Text(val value: String) : MatchQueryValue()
+    data class Number(val value: kotlin.Number) : MatchQueryValue()
+    data class Boolean(val value: kotlin.Boolean) : MatchQueryValue()
+    data class Date(val value: java.util.Date) : MatchQueryValue()
+}
 
 enum class FieldOperator { OR, AND }
 enum class ZeroTermsQuery { NONE, ALL }

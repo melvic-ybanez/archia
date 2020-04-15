@@ -1,6 +1,8 @@
 package com.melvic.archia.output
 
 import com.melvic.archia.Init
+import com.melvic.archia.interpreter.snakeCaseNameOf
+import kotlin.reflect.KCallable
 
 /**
  * Javascript Object Notation.
@@ -33,7 +35,7 @@ data class JsonObject(
 
 interface JsonHelper {
     fun num(value: Number) = JsonNumber(value)
-    fun str(value: String) = JsonString(value)
+    fun text(value: String) = JsonString(value)
     fun bool(value: Boolean) = JsonBoolean(value)
 }
 
