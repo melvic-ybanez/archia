@@ -30,6 +30,8 @@ data class JsonObject(
 
     fun array(vararg value: JsonValue) = json(*value)
 
+    fun array(values: List<JsonValue>) = JsonArray(values)
+
     override fun instance() = this
 }
 
