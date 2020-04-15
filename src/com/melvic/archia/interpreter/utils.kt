@@ -26,3 +26,5 @@ inline fun <R, C : KCallable<R?>> JsonObject.prop(callable: C, f: (R) -> JsonVal
 }
 
 fun <E : Enum<E>> E.lowerName(): String = this.name.toLowerCase()
+
+fun die(message: String): JsonValue = throw Exception(message)

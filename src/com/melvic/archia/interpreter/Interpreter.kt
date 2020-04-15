@@ -60,10 +60,11 @@ fun Match.interpret(parent: JsonObject): Evaluation {
         json {
             prop(::query) {
                 when (it) {
-                    is MatchQueryValue.Text -> text(it.value)
-                    is MatchQueryValue.Number -> num(it.value)
-                    is MatchQueryValue.Boolean -> bool(it.value)
-                    is MatchQueryValue.Date -> text(it.value.toString())
+                    is AString -> text(it.value)
+                    is ANumber -> num(it.value)
+                    is ABoolean -> bool(it.value)
+                    is ADate -> text(it.value.toString())
+                    else -> die("Invalid query value")
                 }
             }
             prop(::analyzer) { text(it) }
@@ -86,15 +87,15 @@ fun Match.interpret(parent: JsonObject): Evaluation {
             prop(::lenient) { bool(it) }
             prop(::operator) { text(it.lowerName()) }
             prop(::minimumShouldMatch) {
-                fun interpretSimple(it: MinimumShouldMatch.Simple): JsonValue = when (it) {
-                    is MinimumShouldMatch.Number -> num(it.value)
-                    is MinimumShouldMatch.Percent -> text("${it.value}%")
+                fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
+                    is ANumber -> num(it.value)
+                    is Percent -> text("${it.value}%")
                     else -> throw Exception("Unrecognized simple match type")
                 }
                 fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
-                    is MinimumShouldMatch.Simple -> interpretSimple(it)
-                    is MinimumShouldMatch.Combination -> text("${it.value}<${interpretSimple(it.simple)}")
-                    is MinimumShouldMatch.Multiple -> array(it.values.map { i -> interpretMin(i) })
+                    is SimpleMSM -> interpretSimple(it)
+                    is Combination -> text("${it.value}<${interpretSimple(it.simple)}")
+                    is Multiple -> array(it.values.map { i -> interpretMin(i) })
                     else -> throw Exception("Unrecognized match type")
                 }
                 interpretMin(it)
