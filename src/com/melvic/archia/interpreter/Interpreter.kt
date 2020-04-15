@@ -90,13 +90,13 @@ fun Match.interpret(parent: JsonObject): Evaluation {
                 fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
                     is ANumber -> num(it.value)
                     is Percent -> text("${it.value}%")
-                    else -> throw Exception("Unrecognized simple match type")
+                    else -> die("Unrecognized simple match type")
                 }
                 fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
                     is SimpleMSM -> interpretSimple(it)
                     is Combination -> text("${it.value}<${interpretSimple(it.simple)}")
                     is Multiple -> array(it.values.map { i -> interpretMin(i) })
-                    else -> throw Exception("Unrecognized match type")
+                    else -> die("Unrecognized match type")
                 }
                 interpretMin(it)
             }
