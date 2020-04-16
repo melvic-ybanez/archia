@@ -10,7 +10,7 @@ import java.lang.Exception
 
 typealias Evaluation = Result<JsonValue>
 
-fun interpret(query: Query): Evaluation {
+fun Query.interpret(): Evaluation {
     fun interpret(query: Clause, parent: JsonValue): Evaluation {
         val objectOrEmpty = if (parent is JsonObject) parent else json {}
 
@@ -21,7 +21,7 @@ fun interpret(query: Query): Evaluation {
         }
     }
 
-    val output = query.queryClause?.let {
+    val output = this.queryClause?.let {
         var result: Evaluation = Success(json {})
 
         for (child in it.children) {
@@ -30,7 +30,7 @@ fun interpret(query: Query): Evaluation {
         }
 
         result
-    } ?: return Failed(missingField(query::query))
+    } ?: return Failed(missingField(this::query))
 
     return when (output) {
         is Failed -> output

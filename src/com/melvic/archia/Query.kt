@@ -1,5 +1,6 @@
 package com.melvic.archia
 
+import com.melvic.archia.interpreter.interpret
 import com.melvic.archia.leaf.WithLeaf
 
 typealias Init<A> = A.() -> Unit
@@ -25,3 +26,5 @@ open class Clause {
 class QueryClause : WithLeaf()
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
+
+fun runQuery(init: Init<Query>) = buildQuery(init).interpret()

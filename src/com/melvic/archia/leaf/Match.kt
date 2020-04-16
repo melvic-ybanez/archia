@@ -1,7 +1,6 @@
 package com.melvic.archia.leaf
 
 import com.melvic.archia.*
-import java.util.*
 
 data class Match(var field: MatchField? = null) : Clause() {
     /**
@@ -23,12 +22,12 @@ data class MatchField(
     var transpositions: Boolean? = null,
     var fuzzyRewrite: Rewrite? = null,
     var lenient: Boolean? = null,
-    var operator: FieldOperator? = null,
+    var operator: Operator? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var zeroTermsQuery: ZeroTermsQuery? = null
 ) : WithText, WithNum, WithBool, WithDate
 
 interface MatchQueryValue
 
-enum class FieldOperator { OR, AND }
+enum class Operator { OR, AND }
 enum class ZeroTermsQuery { NONE, ALL }
