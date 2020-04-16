@@ -3,8 +3,9 @@ package com.melvic.archia.leaf
 import com.melvic.archia.DateFormat
 import com.melvic.archia.Init
 import com.melvic.archia.Clause
+import com.melvic.archia.WithNum
 
-data class Range(var field: RangeField? = null) : Clause() {
+data class RangeQuery(var field: RangeField? = null) : Clause() {
     operator fun String.invoke(init: Init<RangeField>) =
         RangeField(this).apply(init)
 }
@@ -21,11 +22,8 @@ data class RangeField(
     var relation: Relation? = null,
     var timeZone: String? = null,
     var boost: Float? = null
-)
+): WithNum
 
 enum class Relation { INTERSECTS, CONTAINS, WITHIN }
 
-sealed class RangeValue {
-    class RangeFormat(format: DateFormat) : RangeValue()
-    class RangeNum(value: Float) : RangeValue()
-}
+interface RangeValue

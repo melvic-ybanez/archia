@@ -2,9 +2,9 @@ package com.melvic.archia.leaf
 
 import com.melvic.archia.*
 
-data class Match(var field: MatchField? = null) : Clause() {
+data class MatchQuery(var field: MatchField? = null) : Clause() {
     /**
-     * Constructs a match field from a string
+     * Constructs es match field from es string
      */
     operator fun String.invoke(init: Init<MatchField>) {
         field = MatchField(this).apply(init)
@@ -25,7 +25,7 @@ data class MatchField(
     var operator: Operator? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var zeroTermsQuery: ZeroTermsQuery? = null
-) : WithText, WithNum, WithBool, WithDate
+): WithText, WithNum, WithBool, WithDate
 
 interface MatchQueryValue
 

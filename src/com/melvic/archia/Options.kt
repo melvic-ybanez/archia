@@ -1,5 +1,7 @@
 package com.melvic.archia
 
+import com.melvic.archia.leaf.RangeValue
+
 typealias Boost = Float
 
 sealed class Fuzziness {
@@ -25,7 +27,7 @@ data class Percent(val value: Int) : SimpleMSM
 data class Combination(val value: Int, val simple: SimpleMSM) : MinimumShouldMatch
 data class Multiple(val values: List<Combination>) : MinimumShouldMatch
 
-enum class DateFormat {
+enum class DateFormat : RangeValue {
     EPOCH_MILLIS, EPOCH_SECOND, DATE_OPTIONAL_TIME, STRICT_DATE_OPTIONAL_TIME,
     BASIC_DATE, BASIC_DATE_TIME, BASIC_DATE_TIME_NO_MILLIS, BASIC_ORDINAL_DATE,
     BASIC_ORDINAL_DATE_TIME, BASIC_ORDINAL_DATE_TIME_NO_MILLIS, BASIC_TIME, BASIC_TIME_NO_MILLIS,

@@ -21,10 +21,12 @@ fun <R> nameOf(callable: KCallable<R>): String = callable.name
 
 fun <R> snakeCaseNameOf(callable: KCallable<R>): String = nameOf(callable).toSnakeCase()
 
-inline fun <R, C : KCallable<R?>> JsonObject.prop(callable: C, f: (R) -> JsonValue) {
+inline fun <R> JsonObject.prop(callable: KCallable<R?>, f: (R) -> JsonValue) {
     callable.call()?.let { snakeCaseNameOf(callable) to f(it) }
 }
 
-fun <E : Enum<E>> E.lowerName(): String = this.name.toLowerCase()
+fun <E : Enum<E>> JsonObject.prop(callable: KCallable<E?>) {
+    this.prop(callable) { text(it.lowerName()) }
+}
 
-fun die(message: String): JsonValue = throw Exception(message)
+fun <E : Enum<E>> E.lowerName(): String = this.name.toLowerCase()

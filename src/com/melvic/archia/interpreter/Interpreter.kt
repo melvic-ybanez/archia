@@ -1,11 +1,12 @@
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.*
-import com.melvic.archia.compound.BoolQuery
 import com.melvic.archia.leaf.*
+import com.melvic.archia.output.JsonNull
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
+import kotlin.reflect.KCallable
 
 typealias Evaluation = Result<JsonValue>
 
@@ -14,8 +15,8 @@ fun Query.interpret(): Evaluation {
         val objectOrEmpty = if (parent is JsonObject) parent else json {}
 
         return when (query) {
-            is Term -> query.interpret(objectOrEmpty)
-            is Match -> query.interpret(objectOrEmpty)
+            is TermQuery -> query.interpret(objectOrEmpty)
+            is MatchQuery -> query.interpret(objectOrEmpty)
             else -> json {}.success()
         }
     }
@@ -39,7 +40,7 @@ fun Query.interpret(): Evaluation {
     }
 }
 
-fun Term.interpret(parent: JsonObject): Evaluation {
+fun TermQuery.interpret(parent: JsonObject): Evaluation {
     val field = this.field ?: return missingField(this::field).fail()
     if (field.value == null) return missingField(field::value).fail()
 
@@ -52,7 +53,7 @@ fun Term.interpret(parent: JsonObject): Evaluation {
     return termOut.success()
 }
 
-fun Match.interpret(parent: JsonObject): Evaluation {
+fun MatchQuery.interpret(parent: JsonObject): Evaluation {
     val field = this.field ?: return missingField(this::field).fail()
     if (field.query == null) return missingField(field::query).fail()
 
@@ -64,7 +65,7 @@ fun Match.interpret(parent: JsonObject): Evaluation {
                     is ANumber -> num(it.value)
                     is ABoolean -> bool(it.value)
                     is ADate -> text(it.value.toString())
-                    else -> die("Invalid query value")
+                    else -> JsonNull
                 }
             }
             prop(::analyzer) { text(it) }
@@ -83,27 +84,57 @@ fun Match.interpret(parent: JsonObject): Evaluation {
             prop(::maxExpansions) { num(it) }
             prop(::prefixLength) { num(it) }
             prop(::transpositions) { bool(it) }
-            prop(::fuzzyRewrite) { text(it.lowerName()) }
+            prop(::fuzzyRewrite)
             prop(::lenient) { bool(it) }
-            prop(::operator) { text(it.lowerName()) }
-            prop(::minimumShouldMatch) {
+            prop(::operator)
+            prop(::minimumShouldMatch) min@ {
                 fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
                     is ANumber -> num(it.value)
                     is Percent -> text("${it.value}%")
-                    else -> die("Unrecognized simple match type")
+                    else -> JsonNull
                 }
                 fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
                     is SimpleMSM -> interpretSimple(it)
                     is Combination -> text("${it.value}<${interpretSimple(it.simple)}")
                     is Multiple -> array(it.values.map { i -> interpretMin(i) })
-                    else -> die("Unrecognized match type")
+                    else -> JsonNull
                 }
                 interpretMin(it)
             }
-            prop(::zeroTermsQuery) { text(it.lowerName()) }
+            prop(::zeroTermsQuery)
         }
     }
 
     val matchOut = parent { "match" to json { field.name to matchFieldOut } }
     return matchOut.success()
+}
+
+fun RangeQuery.interpret(parent: JsonObject): Evaluation {
+    val field = this.field ?: return missingField(this::field).fail()
+
+    val rangeFieldOut = with(field) {
+        json {
+            fun <R, C : KCallable<R>>propFieldParam(callable: C) {
+                prop(callable) {
+                    when (it) {
+                        is ANumber -> num(it.value)
+                        is DateFormat -> text(it.lowerName())
+                        else -> JsonNull
+                    }
+                }
+            }
+            propFieldParam(::gt)
+            propFieldParam(::gte)
+            propFieldParam(::lt)
+            propFieldParam(::lte)
+
+            prop(::format)
+            prop(::relation)
+            prop(::timeZone) { text(it) }
+            prop(::boost) { num(it) }
+        }
+    }
+
+    val rangeOut = parent { "range" to json { field.name to rangeFieldOut }}
+    return rangeOut.success()
 }

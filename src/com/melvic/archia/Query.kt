@@ -1,8 +1,8 @@
 package com.melvic.archia
 
 import com.melvic.archia.interpreter.interpret
-import com.melvic.archia.leaf.Match
-import com.melvic.archia.leaf.Term
+import com.melvic.archia.leaf.MatchQuery
+import com.melvic.archia.leaf.TermQuery
 
 typealias Init<A> = A.() -> Unit
 
@@ -16,16 +16,16 @@ open class Clause {
     val children = mutableListOf<Clause>()
 
     /**
-     * Constructs a child and add it to the list of children
+     * Constructs es child and add it to the list of children
      */
     fun <Q : Clause> initChild(child: Q, init: Init<Q>) {
         child.init()
         children.add(child)
     }
 
-    fun match(query: Init<Match>) = initChild(Match(), query)
+    fun match(query: Init<MatchQuery>) = initChild(MatchQuery(), query)
 
-    fun term(query: Init<Term>) = initChild(Term(), query)
+    fun term(query: Init<TermQuery>) = initChild(TermQuery(), query)
 }
 
 open class MultiClause : Clause()
