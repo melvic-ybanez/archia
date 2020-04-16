@@ -25,3 +25,7 @@ fun errorMessage(code: ErrorCode) = when (code) {
 }
 
 fun <R> missingField(callable: KCallable<R>) = MissingField(nameOf(callable))
+
+fun ErrorCode.fail() = Failed(this)
+
+fun <A> A.success() = Success(this)

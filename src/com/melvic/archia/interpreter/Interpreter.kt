@@ -1,12 +1,11 @@
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.*
+import com.melvic.archia.compound.BoolQuery
 import com.melvic.archia.leaf.*
-import com.melvic.archia.output.JsonNumber
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
-import java.lang.Exception
 
 typealias Evaluation = Result<JsonValue>
 
@@ -17,12 +16,12 @@ fun Query.interpret(): Evaluation {
         return when (query) {
             is Term -> query.interpret(objectOrEmpty)
             is Match -> query.interpret(objectOrEmpty)
-            else -> Success(json {})
+            else -> json {}.success()
         }
     }
 
     val output = this.queryClause?.let {
-        var result: Evaluation = Success(json {})
+        var result: Evaluation = json {}.success()
 
         for (child in it.children) {
             if (result is Failed) break
@@ -30,19 +29,19 @@ fun Query.interpret(): Evaluation {
         }
 
         result
-    } ?: return Failed(missingField(this::query))
+    } ?: return missingField(this::query).fail()
 
     return when (output) {
         is Failed -> output
-        is Success<*> -> Success(json {
+        is Success<*> -> json {
             "query" to output.value()
-        })
+        }.success()
     }
 }
 
 fun Term.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return Failed(missingField(this::field))
-    if (field.value == null) return Failed(missingField(field::value))
+    val field = this.field ?: return missingField(this::field).fail()
+    if (field.value == null) return missingField(field::value).fail()
 
     val termFieldOut = json {
         prop(field::value) { text(it) }
@@ -50,12 +49,12 @@ fun Term.interpret(parent: JsonObject): Evaluation {
     }
 
     val termOut = parent { "term" to json { field.name to termFieldOut } }
-    return Success(termOut)
+    return termOut.success()
 }
 
 fun Match.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return Failed(missingField(this::field))
-    if (field.query == null) return Failed(missingField(field::query))
+    val field = this.field ?: return missingField(this::field).fail()
+    if (field.query == null) return missingField(field::query).fail()
 
     val matchFieldOut = with(field) {
         json {
@@ -106,5 +105,5 @@ fun Match.interpret(parent: JsonObject): Evaluation {
     }
 
     val matchOut = parent { "match" to json { field.name to matchFieldOut } }
-    return Success(matchOut)
+    return matchOut.success()
 }
