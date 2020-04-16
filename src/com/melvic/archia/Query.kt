@@ -23,7 +23,10 @@ open class Clause {
     }
 }
 
-class QueryClause : WithLeaf()
+interface Context
+
+open class QueryClause : WithLeaf(), Context
+interface FilterClause : Context
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
 

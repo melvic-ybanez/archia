@@ -8,7 +8,9 @@ data class Term(var field: TermField? = null): Clause() {
     }
 }
 
-data class TermField(val name: String, var boost: Float? = null) {
-    lateinit var value: String
-}
+data class TermField(
+    val name: String,
+    var value: String? = null,
+    var boost: Float? = null
+)
 

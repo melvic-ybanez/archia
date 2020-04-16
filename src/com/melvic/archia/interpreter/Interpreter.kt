@@ -42,10 +42,11 @@ fun Query.interpret(): Evaluation {
 
 fun Term.interpret(parent: JsonObject): Evaluation {
     val field = this.field ?: return Failed(missingField(this::field))
+    if (field.value == null) return Failed(missingField(field::value))
 
     val termFieldOut = json {
-        nameOf(field::value) to text(field.value)
-        field.boost?.let { "boost" to num(it) }
+        prop(field::value) { text(it) }
+        prop(field::boost) { num(it) }
     }
 
     val termOut = parent { "term" to json { field.name to termFieldOut } }
