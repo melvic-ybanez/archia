@@ -100,6 +100,7 @@ fun Match.interpret(parent: JsonObject): Evaluation {
                 }
                 interpretMin(it)
             }
+            prop(::zeroTermsQuery) { text(it.lowerName()) }
         }
     }
 
