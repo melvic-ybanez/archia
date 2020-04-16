@@ -1,13 +1,14 @@
 package com.melvic.archia
 
 import com.melvic.archia.interpreter.interpret
-import com.melvic.archia.leaf.WithLeaf
+import com.melvic.archia.leaf.Match
+import com.melvic.archia.leaf.Term
 
 typealias Init<A> = A.() -> Unit
 
-data class Query(var queryClause: QueryClause? = null) {
-    fun query(init: Init<QueryClause>) {
-        queryClause = QueryClause().apply(init)
+data class Query(var queryClause: Clause? = null) {
+    fun query(init: Init<Clause>) {
+        queryClause = Clause().apply(init)
     }
 }
 
@@ -21,13 +22,13 @@ open class Clause {
         child.init()
         children.add(child)
     }
+
+    fun match(query: Init<Match>) = initChild(Match(), query)
+
+    fun term(query: Init<Term>) = initChild(Term(), query)
 }
 
 open class MultiClause : Clause()
-
-interface Context
-open class QueryClause : WithLeaf(), Context
-interface FilterClause : Context
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
 
