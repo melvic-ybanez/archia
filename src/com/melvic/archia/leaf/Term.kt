@@ -1,5 +1,6 @@
 package com.melvic.archia.leaf
 
+import com.melvic.archia.Boost
 import com.melvic.archia.Clause
 
 data class Term(var field: TermField? = null): Clause() {
@@ -11,6 +12,6 @@ data class Term(var field: TermField? = null): Clause() {
 data class TermField(
     val name: String,
     var value: String? = null,
-    var boost: Float? = null
+    var boost: Boost? = null
 )
 

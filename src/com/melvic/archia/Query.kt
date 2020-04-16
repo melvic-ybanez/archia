@@ -23,8 +23,9 @@ open class Clause {
     }
 }
 
-interface Context
+open class MultiClause : Clause()
 
+interface Context
 open class QueryClause : WithLeaf(), Context
 interface FilterClause : Context
 

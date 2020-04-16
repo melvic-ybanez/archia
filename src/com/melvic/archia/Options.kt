@@ -1,5 +1,7 @@
 package com.melvic.archia
 
+typealias Boost = Float
+
 sealed class Fuzziness {
     object _0 : Fuzziness()
     object _1 : Fuzziness()
