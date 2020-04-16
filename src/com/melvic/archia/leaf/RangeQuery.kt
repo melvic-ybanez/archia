@@ -6,8 +6,9 @@ import com.melvic.archia.Clause
 import com.melvic.archia.WithNum
 
 data class RangeQuery(var field: RangeField? = null) : Clause() {
-    operator fun String.invoke(init: Init<RangeField>) =
-        RangeField(this).apply(init)
+    operator fun String.invoke(init: Init<RangeField>) {
+        field = RangeField(this).apply(init)
+    }
 }
 
 data class RangeField(
