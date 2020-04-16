@@ -17,6 +17,7 @@ fun Query.interpret(): Evaluation {
         return when (query) {
             is TermQuery -> query.interpret(objectOrEmpty)
             is MatchQuery -> query.interpret(objectOrEmpty)
+            is RangeQuery -> query.interpret(objectOrEmpty)
             else -> json {}.success()
         }
     }

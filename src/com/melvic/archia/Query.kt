@@ -2,6 +2,7 @@ package com.melvic.archia
 
 import com.melvic.archia.interpreter.interpret
 import com.melvic.archia.leaf.MatchQuery
+import com.melvic.archia.leaf.RangeQuery
 import com.melvic.archia.leaf.TermQuery
 
 typealias Init<A> = A.() -> Unit
@@ -26,6 +27,8 @@ open class Clause {
     fun match(query: Init<MatchQuery>) = initChild(MatchQuery(), query)
 
     fun term(query: Init<TermQuery>) = initChild(TermQuery(), query)
+
+    fun range(query: Init<RangeQuery>) = initChild(RangeQuery(), query)
 }
 
 open class MultiClause : Clause()
