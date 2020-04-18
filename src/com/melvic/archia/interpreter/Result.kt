@@ -47,7 +47,9 @@ fun errorMessageOf(code: ErrorCode) = when (code) {
     is InvalidValue<*> -> "Invalid value. Field: ${code.fieldName}. Value: ${code.value}"
 }
 
-fun <R> missingField(callable: KCallable<R>) = MissingField(nameOf(callable)).fail()
+fun <R> missingField(callable: KCallable<R>) = missingFieldCode(callable).fail()
+
+fun <R> missingFieldCode(callable: KCallable<R>) = MissingField(nameOf(callable))
 
 fun <R, A> invalidValue(callable: KCallable<R>, value: A) = InvalidValue(nameOf(callable), value).fail()
 

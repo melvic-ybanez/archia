@@ -36,11 +36,15 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
     if (field.value == null) return missingField(field::value)
 
     val termFieldOut = json {
-        prop(field::value) { it.json() }
-        prop(field::boost) { it.json() }
+        customProp?.let {
+            it.first to it.second.json()
+        } ?: field.name to json {
+            prop(field::value) { it.json() }
+            prop(field::boost) { it.json() }
+        }
     }
 
-    val termOut = parent { "term" to json { field.name to termFieldOut } }
+    val termOut = parent { "term" to termFieldOut }
     return termOut.success()
 }
 
