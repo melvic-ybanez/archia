@@ -131,6 +131,9 @@ fun BoolQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MultiClause.interpret(): Evaluation {
+    if (this.size == 1)
+        return this[0].interpret()
+
     val result: JsonArray = jsonArray()
 
     for (clause in this) {
