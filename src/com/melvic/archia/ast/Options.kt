@@ -1,6 +1,6 @@
-package com.melvic.archia
+package com.melvic.archia.ast
 
-import com.melvic.archia.leaf.RangeValue
+import com.melvic.archia.ast.leaf.RangeValue
 
 typealias Boost = Float
 
@@ -24,7 +24,8 @@ interface MinimumShouldMatch
 interface SimpleMSM : MinimumShouldMatch
 
 data class Percent(val value: Int) : SimpleMSM
-data class Combination(val value: Int, val simple: SimpleMSM) : MinimumShouldMatch
+data class Combination(val value: Int, val simple: SimpleMSM) :
+    MinimumShouldMatch
 data class Multiple(val values: List<Combination>) : MinimumShouldMatch
 
 enum class DateFormat : RangeValue {

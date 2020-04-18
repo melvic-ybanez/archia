@@ -1,6 +1,6 @@
 package com.melvic.archia.interpreter
 
-import com.melvic.archia.Clause
+import com.melvic.archia.ast.Clause
 import kotlin.reflect.KCallable
 
 sealed class Result<out A> {

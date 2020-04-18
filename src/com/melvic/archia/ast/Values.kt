@@ -1,7 +1,7 @@
-package com.melvic.archia
+package com.melvic.archia.ast
 
-import com.melvic.archia.leaf.MatchQueryValue
-import com.melvic.archia.leaf.RangeValue
+import com.melvic.archia.ast.leaf.MatchQueryValue
+import com.melvic.archia.ast.leaf.RangeValue
 import java.util.*
 
 data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue

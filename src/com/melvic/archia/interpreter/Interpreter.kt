@@ -1,7 +1,7 @@
 package com.melvic.archia.interpreter
 
-import com.melvic.archia.*
-import com.melvic.archia.leaf.*
+import com.melvic.archia.ast.*
+import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.JsonNull
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
@@ -23,15 +23,8 @@ fun Query.interpret(): Evaluation {
     }
 
     val output = this.queryClause?.let {
-        var result: Evaluation = json {}.success()
-
-        for (child in it.children) {
-            if (result is Failed) break
-            result = interpret(child, result.value())
-        }
-
-        result
-    } ?: return missingField(this::query).fail()
+        interpret(it, json {})
+    } ?: missingField(this::query).fail()
 
     return when (output) {
         is Failed -> output

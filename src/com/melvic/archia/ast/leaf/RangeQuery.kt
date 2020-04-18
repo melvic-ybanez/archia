@@ -1,11 +1,11 @@
-package com.melvic.archia.leaf
+package com.melvic.archia.ast.leaf
 
-import com.melvic.archia.DateFormat
-import com.melvic.archia.Init
-import com.melvic.archia.Clause
-import com.melvic.archia.WithNum
+import com.melvic.archia.ast.DateFormat
+import com.melvic.archia.ast.Init
+import com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.WithNum
 
-data class RangeQuery(var field: RangeField? = null) : Clause() {
+data class RangeQuery(var field: RangeField? = null) : Clause {
     operator fun String.invoke(init: Init<RangeField>) {
         field = RangeField(this).apply(init)
     }

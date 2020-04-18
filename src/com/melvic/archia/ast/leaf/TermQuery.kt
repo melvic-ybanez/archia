@@ -1,9 +1,10 @@
-package com.melvic.archia.leaf
+package com.melvic.archia.ast.leaf
 
-import com.melvic.archia.Boost
-import com.melvic.archia.Clause
+import com.melvic.archia.ast.Boost
+import com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.Init
 
-data class TermQuery(var field: TermField? = null): Clause() {
+data class TermQuery(var field: TermField? = null): Clause {
     operator fun String.invoke(init: TermField.() -> Unit) {
         field = TermField(this).apply(init)
     }

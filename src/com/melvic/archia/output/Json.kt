@@ -1,8 +1,6 @@
 package com.melvic.archia.output
 
-import com.melvic.archia.Init
-import com.melvic.archia.interpreter.snakeCaseNameOf
-import kotlin.reflect.KCallable
+import com.melvic.archia.ast.Init
 
 /**
  * Javascript Object Notation.
