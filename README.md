@@ -38,11 +38,10 @@ You are expected to handle errors, if any:
 
 ```kotlin
 val output = when (result) {
-    is Failed -> errorMessage(result.code)
-    is Success<*> -> result.value().transform(JsonStringOutput)
+    is Failed -> result.show()      
+    is Success<*> -> result.value()     
 }
 ``` 
-
 
 A successful query produces a JSON object, which you can then transform into various forms
 of your liking.  
@@ -52,10 +51,12 @@ of your liking.
 So far, the only built-in _transformer_ converts the JSON object into its string representation.
 Using it requires the application of the `transform` method to the `JsonStringOutput` transformer:
 ```kotlin
-val result = runQuery { ... }
-if (result is Failed) return result
-
-result.value().transform(JsonStringOutput)
+val result = ...
+val output = when (result) {
+    ...
+}
+val jsonString = output.transform(JsonStringOutput)
+println(jsonString)
 ```
 
 The transformer will then produce the following JSON string:
