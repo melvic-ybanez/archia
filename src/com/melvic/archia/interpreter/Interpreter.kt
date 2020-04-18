@@ -8,6 +8,8 @@ import kotlin.reflect.KCallable
 
 typealias Evaluation = Result<JsonValue>
 
+fun interpret(init: Init<Query>) = buildQuery(init).interpret()
+
 fun Query.interpret(): Evaluation {
     val output = this.queryClause?.interpret() ?: missingField(this::query)
 

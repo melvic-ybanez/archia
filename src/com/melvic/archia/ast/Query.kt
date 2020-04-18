@@ -16,5 +16,3 @@ interface Clause
 typealias MultiClause = MutableList<Clause>
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
-
-fun runQuery(init: Init<Query>) = buildQuery(init).interpret()
