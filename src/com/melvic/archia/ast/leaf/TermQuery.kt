@@ -8,6 +8,10 @@ data class TermQuery(var field: TermField? = null): Clause {
     operator fun String.invoke(init: TermField.() -> Unit) {
         field = TermField(this).apply(init)
     }
+
+    infix fun String.to(_value: String) {
+        this { value = _value }
+    }
 }
 
 data class TermField(

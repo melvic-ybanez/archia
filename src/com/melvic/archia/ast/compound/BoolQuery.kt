@@ -10,7 +10,7 @@ data class BoolQuery(
     var _mustNot: MultiClause? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var boost: Boost? = null
-): Clause {
+): Clause, WithNum {
     private fun setArrayClause(init: Init<ClauseArrayBuilder>, set: (MultiClause) -> Unit) {
         val builder = ClauseArrayBuilder().apply(init)
         set(builder.clauses)
