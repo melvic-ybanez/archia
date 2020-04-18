@@ -3,29 +3,13 @@ package com.melvic.archia.interpreter
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.leaf.*
-import com.melvic.archia.output.JsonNull
-import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.JsonValue
-import com.melvic.archia.output.json
+import com.melvic.archia.output.*
 import kotlin.reflect.KCallable
 
 typealias Evaluation = Result<JsonValue>
 
 fun Query.interpret(): Evaluation {
-    fun interpret(query: Clause, parent: JsonValue): Evaluation {
-        val objectOrEmpty = if (parent is JsonObject) parent else json {}
-
-        return when (query) {
-            is TermQuery -> query.interpret(objectOrEmpty)
-            is MatchQuery -> query.interpret(objectOrEmpty)
-            is RangeQuery -> query.interpret(objectOrEmpty)
-            else -> json {}.success()
-        }
-    }
-
-    val output = this.queryClause?.let {
-        interpret(it, json {})
-    } ?: missingField(this::query).fail()
+    val output = this.queryClause?.interpret() ?: missingField(this::query)
 
     return when (output) {
         is Failed -> output
@@ -35,9 +19,21 @@ fun Query.interpret(): Evaluation {
     }
 }
 
+fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
+    val objectOrEmpty = if (parent is JsonObject) parent else json {}
+
+    return when (this) {
+        is TermQuery -> interpret(objectOrEmpty)
+        is MatchQuery -> interpret(objectOrEmpty)
+        is RangeQuery -> interpret(objectOrEmpty)
+        is BoolQuery -> interpret(objectOrEmpty)
+        else -> json {}.success()
+    }
+}
+
 fun TermQuery.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return missingField(this::field).fail()
-    if (field.value == null) return missingField(field::value).fail()
+    val field = this.field ?: return missingField(this::field)
+    if (field.value == null) return missingField(field::value)
 
     val termFieldOut = json {
         prop(field::value) { text(it) }
@@ -49,8 +45,8 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MatchQuery.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return missingField(this::field).fail()
-    if (field.query == null) return missingField(field::query).fail()
+    val field = this.field ?: return missingField(this::field)
+    if (field.query == null) return missingField(field::query)
 
     val matchFieldOut = with(field) {
         json {
@@ -60,7 +56,7 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
                     is ANumber -> num(it.value)
                     is ABoolean -> bool(it.value)
                     is ADate -> text(it.value.toString())
-                    else -> JsonNull
+                    else  -> JsonNull
                 }
             }
             prop(::analyzer) { text(it) }
@@ -79,24 +75,11 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
             prop(::maxExpansions) { num(it) }
             prop(::prefixLength) { num(it) }
             prop(::transpositions) { bool(it) }
-            prop(::fuzzyRewrite)
+            propEnum(::fuzzyRewrite)
             prop(::lenient) { bool(it) }
-            prop(::operator)
-            prop(::minimumShouldMatch) min@ {
-                fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
-                    is ANumber -> num(it.value)
-                    is Percent -> text("${it.value}%")
-                    else -> JsonNull
-                }
-                fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
-                    is SimpleMSM -> interpretSimple(it)
-                    is Combination -> text("${it.value}<${interpretSimple(it.simple)}")
-                    is Multiple -> array(it.values.map { i -> interpretMin(i) })
-                    else -> JsonNull
-                }
-                interpretMin(it)
-            }
-            prop(::zeroTermsQuery)
+            propEnum(::operator)
+            prop(::minimumShouldMatch) { it.interpret(this) }
+            propEnum(::zeroTermsQuery)
         }
     }
 
@@ -105,7 +88,7 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun RangeQuery.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return missingField(this::field).fail()
+    val field = this.field ?: return missingField(this::field)
 
     val rangeFieldOut = with(field) {
         json {
@@ -123,8 +106,8 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
             propFieldParam(::lt)
             propFieldParam(::lte)
 
-            prop(::format)
-            prop(::relation)
+            propEnum(::format)
+            propEnum(::relation)
             prop(::timeZone) { text(it) }
             prop(::boost) { num(it) }
         }
@@ -132,4 +115,47 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
 
     val rangeOut = parent { "range" to json { field.name to rangeFieldOut }}
     return rangeOut.success()
+}
+
+fun BoolQuery.interpret(parent: JsonObject): Evaluation {
+    val propsOut = json {
+        propWithAlt(::_must, ::must) { it.interpret() }
+        propWithAlt(::_should, ::should) { it.interpret() }
+        propWithAlt(::_filter, ::filter) { it.interpret() }
+        propWithAlt(::_mustNot, ::mustNot) { it.interpret() }
+        prop(::minimumShouldMatch) { it.interpret(this) }
+        prop(::boost) { num(it) }
+    }
+    val boolOut = parent { "bool" to propsOut }
+    return boolOut.success()
+}
+
+fun MultiClause.interpret(): Evaluation {
+    val result: JsonArray = jsonArray()
+
+    for (clause in this) {
+        val eval = clause.interpret()
+        if (eval is Failed) return eval
+        result.add(eval.value())
+    }
+
+    return result.success()
+}
+
+fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
+    val msm: MinimumShouldMatch = this
+    return with(parent) {
+        fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
+            is ANumber -> num(it.value)
+            is Percent -> text("${it.value}%")
+            else -> JsonNull
+        }
+        fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
+            is SimpleMSM -> interpretSimple(it)
+            is Combination -> text("${it.value}<${interpretSimple(it.simple)}")
+            is Multiple -> array(it.values.map { i -> interpretMin(i) })
+            else -> JsonNull
+        }
+        interpretMin(msm)
+    }
 }

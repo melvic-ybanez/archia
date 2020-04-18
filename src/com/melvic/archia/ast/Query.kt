@@ -13,7 +13,7 @@ data class Query(var queryClause: Clause? = null) {
 }
 
 interface Clause
-typealias MultiClause = List<Clause>
+typealias MultiClause = MutableList<Clause>
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
 

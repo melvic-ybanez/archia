@@ -1,6 +1,9 @@
 package com.melvic.archia.output
 
 import com.melvic.archia.ast.Init
+import com.melvic.archia.interpreter.ErrorCode
+import com.melvic.archia.interpreter.Evaluation
+import com.melvic.archia.interpreter.Failed
 
 /**
  * Javascript Object Notation.
@@ -15,20 +18,31 @@ data class JsonString(val value: String) : JsonValue()
 data class JsonNumber(val value: Number) : JsonValue()
 data class JsonBoolean(val value: Boolean) : JsonValue()
 
-data class JsonArray(val items: List<JsonValue>) : JsonValue(), JsonHelper, Compound<JsonArray> {
+data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(), JsonHelper, Compound<JsonArray> {
     override fun instance() = this
+
+    fun add(json: JsonValue) {
+        items.add(json)
+    }
 }
 
 data class JsonObject(
-    var entries: MutableMap<String, JsonValue> = mutableMapOf()
+    val entries: MutableMap<String, JsonValue> = mutableMapOf()
 ) : JsonValue(), JsonHelper, Compound<JsonObject> {
+    val errors: MutableList<ErrorCode> = mutableListOf()
+
     infix fun <J : JsonValue> String.to(json: J) {
         entries[this] = json
     }
 
-    fun array(vararg value: JsonValue) = json(*value)
+    infix fun String.to(eval: Evaluation) {
+        if (eval is Failed) errors.add(eval.code)
+        this to eval.value()
+    }
 
-    fun array(values: List<JsonValue>) = JsonArray(values)
+    fun array(vararg value: JsonValue) = jsonArray(*value)
+
+    fun array(values: List<JsonValue>) = JsonArray(values.toMutableList())
 
     override fun instance() = this
 }
@@ -51,6 +65,6 @@ fun <T, J : JsonValue> J.transform(transformer: Transformer<T>): T {
 
 fun json(init: Init<JsonObject>) = JsonObject().apply(init)
 
-fun json(vararg value: JsonValue) = JsonArray(listOf(*value))
+fun jsonArray(vararg value: JsonValue) = JsonArray(mutableListOf(*value))
 
 

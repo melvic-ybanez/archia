@@ -4,10 +4,10 @@ import com.melvic.archia.ast.*
 import com.melvic.archia.ast.leaf.ClauseArrayBuilder
 
 data class BoolQuery(
-    private var _must: MultiClause? = null,
-    private var _filter: MultiClause? = null,
-    private var _should: MultiClause? = null,
-    private var _mustNot: MultiClause? = null,
+    var _must: MultiClause? = null,
+    var _filter: MultiClause? = null,
+    var _should: MultiClause? = null,
+    var _mustNot: MultiClause? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var boost: Boost? = null
 ): Clause {
