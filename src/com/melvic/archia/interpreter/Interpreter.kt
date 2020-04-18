@@ -1,6 +1,7 @@
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
+import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.JsonNull
 import com.melvic.archia.output.JsonObject
