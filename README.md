@@ -8,12 +8,22 @@ Archia is a Kotlin DSL for the [Elastic Search Query Language](https://www.elast
 ```kotlin
 val result = runQuery {
     query {
-        match {
-            "message" {
-                query = text("to be or not to be")
-                operator = Operator.AND
-                zeroTermsQuery = ZeroTermsQuery.ALL
+        bool {
+            must {
+                term { "user" to "kimchy" }
             }
+            filter { term { "tag" to "tech"} }
+            mustNot {
+                range {
+                    "age" { gte = 10.es(); lte = 20.es() }
+                }
+            }
+            should {
+                term { "tag" to "wow" }
+                term { "tag" to "elasticsearch" }
+            }
+            minimumShouldMatch = 1.es()
+            boost = 1.0f
         }
     }
 }
@@ -34,19 +44,44 @@ of your liking.
 
 ### Transformers
 
-So far, the only built-in _transformer_ converts the JSON object into its string representation:
+So far, the only built-in _transformer_ converts the JSON object into its string representation.
+To use it, you need to invoke the `transform` method and apply it to the `JsonStringOutput` transformer:
+```kotlin
+val result = runQuery { ... }
+if (result is Failed) return result
 
+result.value().transform(JsonStringOutput)
+```
+
+The transformer produces the following JSON string:
 ```json
 {
-    "query": {
-        "match" : {
-            "message" : {
-                "query" : "to be or not to be",
-                "operator" : "and",
-                "zero_terms_query": "all"
+   "query": {
+      "bool": {
+         "must": [
+            { "term": { "user": { "value": "kimchy" } } }
+         ],
+         "should": [
+            { "term": { "tag": { "value": "wow" } } },
+            { "term": { "tag": { "value":"elasticsearch" } } }
+         ],
+         "filter": [
+            { "term": { "tag": { "value":"tech" } } }
+         ],
+         "must_not": [
+            {
+               "range": {
+                  "age": {
+                     "gte": 10,
+                     "lte": 20
+                  }
+               }
             }
-        }
-    }
+         ],
+         "minimum_should_match": 1,
+         "boost": 1.0
+      }
+   }
 }
 ```
 

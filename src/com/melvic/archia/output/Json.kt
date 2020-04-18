@@ -4,6 +4,7 @@ import com.melvic.archia.ast.Init
 import com.melvic.archia.interpreter.ErrorCode
 import com.melvic.archia.interpreter.Evaluation
 import com.melvic.archia.interpreter.Failed
+import com.melvic.archia.interpreter.validate
 
 /**
  * Javascript Object Notation.
@@ -18,7 +19,7 @@ data class JsonString(val value: String) : JsonValue()
 data class JsonNumber(val value: Number) : JsonValue()
 data class JsonBoolean(val value: Boolean) : JsonValue()
 
-data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(), JsonHelper, Compound<JsonArray> {
+data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(), Compound<JsonArray> {
     override fun instance() = this
 
     fun add(json: JsonValue) {
@@ -28,29 +29,31 @@ data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(), JsonHelpe
 
 data class JsonObject(
     val entries: MutableMap<String, JsonValue> = mutableMapOf()
-) : JsonValue(), JsonHelper, Compound<JsonObject> {
+) : JsonValue(), Compound<JsonObject> {
     val errors: MutableList<ErrorCode> = mutableListOf()
 
-    infix fun <J : JsonValue> String.to(json: J) {
-        entries[this] = json
+    infix fun String.to(json: JsonValue) {
+        if (json is JsonObject) {
+            this to json.validate()
+        } else {
+            entries[this] = json
+        }
     }
 
     infix fun String.to(eval: Evaluation) {
-        if (eval is Failed) errors.add(eval.code)
-        this to eval.value()
+        if (eval is Failed) errors.addAll(eval.errors)
+        else entries[this] = eval.value()
     }
 
     fun array(vararg value: JsonValue) = jsonArray(*value)
 
     fun array(values: List<JsonValue>) = JsonArray(values.toMutableList())
 
-    override fun instance() = this
-}
+    fun Number.json() = JsonNumber(this)
+    fun String.json() = JsonString(this)
+    fun Boolean.json() = JsonBoolean(this)
 
-interface JsonHelper {
-    fun num(value: Number) = JsonNumber(value)
-    fun text(value: String) = JsonString(value)
-    fun bool(value: Boolean) = JsonBoolean(value)
+    override fun instance() = this
 }
 
 interface Compound<C> {
