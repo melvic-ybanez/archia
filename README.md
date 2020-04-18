@@ -20,7 +20,12 @@ val result = runQuery {
             }
             should {
                 term { "tag" to "wow" }
-                term { "tag" to "elasticsearch" }
+                term {
+                    "tag" {
+                        value = "elasticsearch"
+                        boost = 1.4f
+                    }
+                }
             }
             minimumShouldMatch = 1.es()
             boost = 1.0f
@@ -45,7 +50,7 @@ of your liking.
 ### Transformers
 
 So far, the only built-in _transformer_ converts the JSON object into its string representation.
-To use it, you need to invoke the `transform` method and apply it to the `JsonStringOutput` transformer:
+Using it requires the application of the `transform` method to the `JsonStringOutput` transformer:
 ```kotlin
 val result = runQuery { ... }
 if (result is Failed) return result
@@ -53,37 +58,45 @@ if (result is Failed) return result
 result.value().transform(JsonStringOutput)
 ```
 
-The transformer produces the following JSON string:
+The transformer will then produce the following JSON string:
 ```json
 {
    "query": {
       "bool": {
-         "must": [
-            { "term": { "user": { "value": "kimchy" } } }
-         ],
+         "must": {
+            "term": { "user":"kimchy" }
+         },
          "should": [
-            { "term": { "tag": { "value": "wow" } } },
-            { "term": { "tag": { "value":"elasticsearch" } } }
-         ],
-         "filter": [
-            { "term": { "tag": { "value":"tech" } } }
-         ],
-         "must_not": [
+            { "term": { "tag":"wow" } },
             {
-               "range": {
-                  "age": {
-                     "gte": 10,
-                     "lte": 20
+               "term": {
+                  "tag": {
+                     "value": "elasticsearch",
+                     "boost": 1.4
                   }
                }
             }
          ],
+         "filter": {
+            "term":{ "tag":"tech" }
+         },
+         "must_not": {
+            "range": {
+               "age": {
+                  "gte": 10,
+                  "lte": 20
+               }
+            }
+         },
          "minimum_should_match": 1,
          "boost": 1.0
       }
    }
 }
 ```
+
+(_The resulting JSON string is manually prettified. At the time of this writing, 
+prettification of the string output isn't supported yet, but soon will be._)
 
 Future features might add support for transforming the result into actual queries that connect to the elastic
 engine. However, this isn't currently a priority.
