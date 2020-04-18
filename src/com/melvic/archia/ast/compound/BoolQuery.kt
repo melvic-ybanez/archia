@@ -1,7 +1,7 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.leaf.ClauseArrayBuilder
+import com.melvic.archia.ast.ClauseArrayBuilder
 
 data class BoolQuery(
     var _must: MultiClause? = null,

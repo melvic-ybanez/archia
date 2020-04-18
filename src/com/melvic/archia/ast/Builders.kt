@@ -1,8 +1,9 @@
-package com.melvic.archia.ast.leaf
+package com.melvic.archia.ast
 
-import com.melvic.archia.ast.Clause
-import com.melvic.archia.ast.Init
 import com.melvic.archia.ast.compound.BoolQuery
+import com.melvic.archia.ast.leaf.MatchQuery
+import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.TermQuery
 
 interface Builder {
     fun <C : Clause> registerClause(clause: C, init: Init<C>)
