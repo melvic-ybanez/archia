@@ -2,6 +2,7 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.BoolQuery
+import com.melvic.archia.ast.compound.BoostingQuery
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
 import kotlin.reflect.KCallable
@@ -29,6 +30,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is MatchQuery -> interpret(objectOrEmpty)
         is RangeQuery -> interpret(objectOrEmpty)
         is BoolQuery -> interpret(objectOrEmpty)
+        is BoostingQuery -> interpret(objectOrEmpty)
         else -> json {}.success()
     }
 }
@@ -134,6 +136,20 @@ fun BoolQuery.interpret(parent: JsonObject): Evaluation {
     }
     val boolOut = parent { "bool" to propsOut }
     return boolOut.validate()
+}
+
+fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
+    if (_positive == null) return missingField(::positive)
+    if (_negative == null) return missingField(::negative)
+
+    val propsOut = json {
+        propWithAlt(::_positive, ::positive) { it.interpret() }
+        propWithAlt(::_negative, ::negative) { it.interpret() }
+        prop(::negativeBoost) { it.json() }
+    }
+
+    val boostingOut = parent { "boosting" to propsOut }
+    return boostingOut.success()
 }
 
 fun MultiClause.interpret(): Evaluation {

@@ -12,7 +12,7 @@ val result = interpret {
     query {
         bool {
             must {
-                term { "user" to "kimchy" }
+                term { "user" to "melvic" }
             }
             filter { term { "tag" to "tech"} }
             mustNot {
@@ -70,7 +70,7 @@ The transformer will then produce the following JSON string:
    "query": {
       "bool": {
          "must": {
-            "term": { "user":"kimchy" }
+            "term": { "user":"melvic" }
          },
          "should": [
             { "term": { "tag":"wow" } },
@@ -84,7 +84,7 @@ The transformer will then produce the following JSON string:
             }
          ],
          "filter": {
-            "term":{ "tag":"tech" }
+            "term": { "tag":"tech" }
          },
          "must_not": {
             "range": {

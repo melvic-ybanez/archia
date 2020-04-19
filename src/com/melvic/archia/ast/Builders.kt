@@ -1,6 +1,7 @@
 package com.melvic.archia.ast
 
 import com.melvic.archia.ast.compound.BoolQuery
+import com.melvic.archia.ast.compound.BoostingQuery
 import com.melvic.archia.ast.leaf.MatchQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
@@ -22,6 +23,10 @@ interface Builder {
 
     fun bool(init: Init<BoolQuery>) {
         registerClause(BoolQuery(), init)
+    }
+
+    fun boosting(init: Init<BoostingQuery>) {
+        registerClause(BoostingQuery(), init)
     }
 }
 
