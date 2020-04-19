@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+
 plugins {
     kotlin("jvm") version "1.3.72"
 }
@@ -7,6 +9,5 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jre7"))
-    implementation(kotlin("stdlib-jre8"))
+    implementation(kotlin("stdlib", getKotlinPluginVersion()))
 }
