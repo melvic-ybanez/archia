@@ -1,4 +1,4 @@
-package com.melvic.archia.ast
+package main.kotlin.com.melvic.archia.ast
 
 typealias Init<A> = A.() -> Unit
 

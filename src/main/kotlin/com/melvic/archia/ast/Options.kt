@@ -1,6 +1,6 @@
-package com.melvic.archia.ast
+package main.kotlin.com.melvic.archia.ast
 
-import com.melvic.archia.ast.leaf.RangeValue
+import main.kotlin.com.melvic.archia.ast.leaf.RangeValue
 
 typealias Boost = Float
 
@@ -26,7 +26,8 @@ interface SimpleMSM : MinimumShouldMatch
 data class Percent(val value: Int) : SimpleMSM
 data class Combination(val value: Int, val simple: SimpleMSM) :
     MinimumShouldMatch
-data class Multiple(val values: List<Combination>) : MinimumShouldMatch
+data class Multiple(val values: List<Combination>) :
+    MinimumShouldMatch
 
 enum class DateFormat : RangeValue {
     EPOCH_MILLIS, EPOCH_SECOND, DATE_OPTIONAL_TIME, STRICT_DATE_OPTIONAL_TIME,

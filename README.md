@@ -6,7 +6,7 @@ Archia is a Kotlin DSL for the [Elastic Search Query Language](https://www.elast
 ### A Quick Example:
 
 ```kotlin
-import com.melvic.archia.interpreter.*
+import main.kotlin.archia.interpreter.*
 
 val result = interpret {
     query {
@@ -54,7 +54,7 @@ So far, the only built-in _transformer_ converts the JSON object into its string
 Using it requires the application of the `transform` method to the `JsonStringOutput` transformer:
 ```kotlin
 ...
-import com.melvic.archia.output.*
+import main.kotlin.archia.output.*
 
 val result = ...
 val output = when (result) {

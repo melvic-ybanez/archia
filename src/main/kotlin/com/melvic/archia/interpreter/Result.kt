@@ -1,10 +1,9 @@
-package com.melvic.archia.interpreter
+package main.kotlin.com.melvic.archia.interpreter
 
-import com.melvic.archia.ast.Clause
-import com.melvic.archia.output.JsonArray
-import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.json
-import com.melvic.archia.output.jsonArray
+import main.kotlin.com.melvic.archia.ast.Clause
+import main.kotlin.com.melvic.archia.output.JsonArray
+import main.kotlin.com.melvic.archia.output.JsonObject
+import main.kotlin.com.melvic.archia.output.json
 import kotlin.reflect.KCallable
 
 sealed class Result<out A> {
@@ -35,9 +34,15 @@ data class InvalidValue<A>(val fieldName: String, val value: A) : ErrorCode()
 
 fun ErrorCode.show(): String {
     return when (this) {
-        is MissingField -> snakeCaseNameOf(MissingField::class)
-        is UnknownQuery -> snakeCaseNameOf(UnknownQuery::class)
-        is InvalidValue<*> -> snakeCaseNameOf(InvalidValue::class)
+        is MissingField -> snakeCaseNameOf(
+            MissingField::class
+        )
+        is UnknownQuery -> snakeCaseNameOf(
+            UnknownQuery::class
+        )
+        is InvalidValue<*> -> snakeCaseNameOf(
+            InvalidValue::class
+        )
     }
 }
 
@@ -49,11 +54,23 @@ fun errorMessageOf(code: ErrorCode) = when (code) {
 
 fun <R> missingField(callable: KCallable<R>) = missingFieldCode(callable).fail()
 
-fun <R> missingFieldCode(callable: KCallable<R>) = MissingField(nameOf(callable))
+fun <R> missingFieldCode(callable: KCallable<R>) = MissingField(
+    nameOf(
+        callable
+    )
+)
 
-fun <R, A> invalidValue(callable: KCallable<R>, value: A) = InvalidValue(nameOf(callable), value).fail()
+fun <R, A> invalidValue(callable: KCallable<R>, value: A) = InvalidValue(
+    nameOf(
+        callable
+    ), value
+).fail()
 
-fun ErrorCode.fail() = Failed(listOf(this))
+fun ErrorCode.fail() = Failed(
+    listOf(
+        this
+    )
+)
 
 fun <A> A.success() = Success(this)
 

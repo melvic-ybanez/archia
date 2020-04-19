@@ -1,7 +1,6 @@
-package com.melvic.archia.ast.compound
+package main.kotlin.com.melvic.archia.ast.compound
 
-import com.melvic.archia.ast.*
-import com.melvic.archia.ast.ClauseArrayBuilder
+import main.kotlin.com.melvic.archia.ast.*
 
 data class BoolQuery(
     var _must: MultiClause? = null,

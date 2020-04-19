@@ -1,15 +1,19 @@
-package com.melvic.archia.interpreter
+package main.kotlin.com.melvic.archia.interpreter
 
-import com.melvic.archia.ast.*
-import com.melvic.archia.ast.compound.BoolQuery
-import com.melvic.archia.ast.compound.BoostingQuery
-import com.melvic.archia.ast.leaf.*
-import com.melvic.archia.output.*
+import main.kotlin.com.melvic.archia.ast.*
+import main.kotlin.com.melvic.archia.ast.compound.BoolQuery
+import main.kotlin.com.melvic.archia.ast.compound.BoostingQuery
+import main.kotlin.com.melvic.archia.ast.leaf.MatchQuery
+import main.kotlin.com.melvic.archia.ast.leaf.RangeQuery
+import main.kotlin.com.melvic.archia.ast.leaf.TermQuery
+import main.kotlin.com.melvic.archia.output.*
 import kotlin.reflect.KCallable
 
 typealias Evaluation = Result<JsonValue>
 
-fun interpret(init: Init<Query>) = buildQuery(init).interpret()
+fun interpret(init: Init<Query>) = buildQuery(
+    init
+).interpret()
 
 fun Query.interpret(): Evaluation {
     val output = this.queryClause?.interpret() ?: missingField(this::query)
@@ -64,7 +68,7 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
                     is ANumber -> it.value.json()
                     is ABoolean -> it.value.json()
                     is ADate -> it.value.toString().json()
-                    else  -> JsonNull
+                    else -> JsonNull
                 }
             }
             prop(::analyzer) { it.json() }
@@ -100,7 +104,7 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
 
     val rangeFieldOut = with(field) {
         json {
-            fun <R, C : KCallable<R>>propFieldParam(callable: C) {
+            fun <R, C : KCallable<R>> propFieldParam(callable: C) {
                 prop(callable) {
                     when (it) {
                         is ANumber -> it.value.json()
@@ -121,7 +125,7 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
         }
     }
 
-    val rangeOut = parent { "range" to json { field.name to rangeFieldOut }}
+    val rangeOut = parent { "range" to json { field.name to rangeFieldOut } }
     return rangeOut.success()
 }
 

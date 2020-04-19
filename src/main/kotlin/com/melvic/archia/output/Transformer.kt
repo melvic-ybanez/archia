@@ -1,6 +1,4 @@
-package com.melvic.archia.output
-
-import com.melvic.archia.output.JsonValue.*
+package main.kotlin.com.melvic.archia.output
 
 interface Transformer<T> {
     fun <J : JsonValue> transform(json: J): T =
