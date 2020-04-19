@@ -3,6 +3,7 @@ package com.melvic.archia.interpreter
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.compound.BoostingQuery
+import com.melvic.archia.ast.compound.ConstantScoreQuery
 import com.melvic.archia.ast.leaf.MatchQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
@@ -33,6 +34,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is RangeQuery -> interpret(objectOrEmpty)
         is BoolQuery -> interpret(objectOrEmpty)
         is BoostingQuery -> interpret(objectOrEmpty)
+        is ConstantScoreQuery -> interpret(objectOrEmpty)
         else -> json {}.success()
     }
 }
@@ -152,6 +154,17 @@ fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
 
     val boostingOut = parent { "boosting" to propsOut }
     return boostingOut.success()
+}
+
+fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
+    if (_filter == null) return missingField(::filter)
+
+    return parent {
+        "constant_score" to json {
+            propWithAlt(::_filter, ::filter) { it.interpret() }
+            prop(::boost) { it.json() }
+        }
+    }.success()
 }
 
 fun MultiClause.interpret(): Evaluation {

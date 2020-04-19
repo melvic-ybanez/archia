@@ -10,13 +10,13 @@ data class BoostingQuery(
     var _negative: Clause? = null,
     var negativeBoost: Float? = null
 ): Clause, WithNum {
+    private var builder: ClauseBuilder = ClauseBuilder()
+
     fun positive(init: Init<ClauseBuilder>) {
-        val builder = ClauseBuilder().apply(init)
-        _positive = builder.clause
+        _positive = builder.apply(init).clause
     }
 
     fun negative(init: Init<ClauseBuilder>) {
-        val builder = ClauseBuilder().apply(init)
-        _negative = builder.clause
+        _negative = builder.apply(init).clause
     }
 }
