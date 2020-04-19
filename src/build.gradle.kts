@@ -7,5 +7,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jre7"))
+    implementation(kotlin("stdlib-jre8"))
 }
