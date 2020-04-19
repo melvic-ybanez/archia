@@ -21,7 +21,7 @@ val result = interpret {
                 }
             }
             should {
-                term { "tag" to "wow" }
+                term { "message" to "go beyond plus ultra" }
                 term {
                     "tag" {
                         value = "elasticsearch"
@@ -73,7 +73,7 @@ The transformer will then produce the following JSON string:
             "term": { "user":"melvic" }
          },
          "should": [
-            { "term": { "tag":"wow" } },
+            { "term": { "message": "go beyond plus ultra" } },
             {
                "term": {
                   "tag": {
@@ -84,7 +84,7 @@ The transformer will then produce the following JSON string:
             }
          ],
          "filter": {
-            "term": { "tag":"tech" }
+            "term": { "tag": "tech" }
          },
          "must_not": {
             "range": {

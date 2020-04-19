@@ -4,6 +4,7 @@ import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.compound.BoostingQuery
 import com.melvic.archia.ast.compound.ConstantScoreQuery
+import com.melvic.archia.ast.compound.DisMaxQuery
 import com.melvic.archia.ast.leaf.MatchQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
@@ -35,6 +36,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is BoolQuery -> interpret(objectOrEmpty)
         is BoostingQuery -> interpret(objectOrEmpty)
         is ConstantScoreQuery -> interpret(objectOrEmpty)
+        is DisMaxQuery -> interpret(objectOrEmpty)
         else -> json {}.success()
     }
 }
@@ -163,6 +165,17 @@ fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
         "constant_score" to json {
             propWithAlt(::_filter, ::filter) { it.interpret() }
             prop(::boost) { it.json() }
+        }
+    }.success()
+}
+
+fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
+    if (_queries == null) return missingField(::queries)
+
+    return parent {
+        "dis_max" to json {
+            propWithAlt(::_queries, ::queries) { it.interpret() }
+            prop(::tieBreaker) { it.json() }
         }
     }.success()
 }

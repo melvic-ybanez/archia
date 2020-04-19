@@ -5,7 +5,7 @@ import com.melvic.archia.ast.*
 data class ConstantScoreQuery(
     var _filter: Clause? = null,
     var boost: Boost? = null
-): Clause, WithNum {
+): Clause {
     private var builder: ClauseBuilder = ClauseBuilder()
 
     fun filter(init: Init<ClauseBuilder>) {
