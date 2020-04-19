@@ -1,10 +1,7 @@
-package main.kotlin.com.melvic.archia.output
+package com.melvic.archia.output
 
-import main.kotlin.com.melvic.archia.ast.Init
-import main.kotlin.com.melvic.archia.interpreter.ErrorCode
-import main.kotlin.com.melvic.archia.interpreter.Evaluation
-import main.kotlin.com.melvic.archia.interpreter.Failed
-import main.kotlin.com.melvic.archia.interpreter.validate
+import com.melvic.archia.ast.Init
+import com.melvic.archia.interpreter.*
 
 /**
  * Javascript Object Notation.
@@ -47,13 +44,9 @@ data class JsonObject(
         else entries[this] = eval.value()
     }
 
-    fun array(vararg value: JsonValue) = jsonArray(
-        *value
-    )
+    fun array(vararg value: JsonValue) = jsonArray(*value)
 
-    fun array(values: List<JsonValue>) = JsonArray(
-        values.toMutableList()
-    )
+    fun array(values: List<JsonValue>) = JsonArray(values.toMutableList())
 
     fun Number.json() = JsonNumber(this)
     fun String.json() = JsonString(this)
@@ -74,8 +67,6 @@ fun <T, J : JsonValue> J.transform(transformer: Transformer<T>): T {
 
 fun json(init: Init<JsonObject>) = JsonObject().apply(init)
 
-fun jsonArray(vararg value: JsonValue) = JsonArray(
-    mutableListOf(*value)
-)
+fun jsonArray(vararg value: JsonValue) = JsonArray(mutableListOf(*value))
 
 

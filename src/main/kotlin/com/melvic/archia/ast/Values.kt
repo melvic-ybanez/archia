@@ -1,11 +1,10 @@
-package main.kotlin.com.melvic.archia.ast
+package com.melvic.archia.ast
 
-import main.kotlin.com.melvic.archia.ast.leaf.MatchQueryValue
-import main.kotlin.com.melvic.archia.ast.leaf.RangeValue
+import com.melvic.archia.ast.leaf.MatchQueryValue
+import com.melvic.archia.ast.leaf.RangeValue
 import java.util.*
 
-data class ANumber(val value: Number) : MatchQueryValue,
-    SimpleMSM, RangeValue
+data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue
 data class AString(val value: String) : MatchQueryValue
 data class ABoolean(val value: Boolean) : MatchQueryValue
 data class ADate(val value: Date) : MatchQueryValue

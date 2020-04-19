@@ -1,7 +1,7 @@
-package main.kotlin.com.melvic.archia.interpreter
+package com.melvic.archia.interpreter
 
-import main.kotlin.com.melvic.archia.output.JsonObject
-import main.kotlin.com.melvic.archia.output.JsonValue
+import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.JsonValue
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 

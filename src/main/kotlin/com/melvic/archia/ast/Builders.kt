@@ -1,10 +1,10 @@
-package main.kotlin.com.melvic.archia.ast
+package com.melvic.archia.ast
 
-import main.kotlin.com.melvic.archia.ast.compound.BoolQuery
-import main.kotlin.com.melvic.archia.ast.compound.BoostingQuery
-import main.kotlin.com.melvic.archia.ast.leaf.MatchQuery
-import main.kotlin.com.melvic.archia.ast.leaf.RangeQuery
-import main.kotlin.com.melvic.archia.ast.leaf.TermQuery
+import com.melvic.archia.ast.compound.BoolQuery
+import com.melvic.archia.ast.compound.BoostingQuery
+import com.melvic.archia.ast.leaf.MatchQuery
+import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.TermQuery
 
 interface Builder {
     fun <C : Clause> registerClause(clause: C, init: Init<C>)
@@ -30,15 +30,13 @@ interface Builder {
     }
 }
 
-data class ClauseBuilder(var clause: Clause? = null) :
-    Builder {
+data class ClauseBuilder(var clause: Clause? = null) : Builder {
     override fun <C : Clause> registerClause(clause: C, init: Init<C>) {
         this.clause = clause.apply(init)
     }
 }
 
-data class ClauseArrayBuilder(val clauses: MutableList<Clause> = mutableListOf()) :
-    Builder {
+data class ClauseArrayBuilder(val clauses: MutableList<Clause> = mutableListOf()) : Builder {
     override fun <C : Clause> registerClause(clause: C, init: Init<C>) {
         clauses.add(clause.apply(init))
     }

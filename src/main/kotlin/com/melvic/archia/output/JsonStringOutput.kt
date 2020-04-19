@@ -1,7 +1,7 @@
-package main.kotlin.com.melvic.archia.output
+package com.melvic.archia.output
 
 object JsonStringOutput : Transformer<String> {
-    const val SEPARATOR = ","
+    private const val SEPARATOR = ","
 
     override fun jsonNull(json: JsonNull): String = "null"
 
@@ -11,9 +11,7 @@ object JsonStringOutput : Transformer<String> {
     override fun jsonNumber(json: JsonNumber): String =
         json.value.toString()
 
-    override fun jsonString(json: JsonString): String = fromString(
-        json.value
-    )
+    override fun jsonString(json: JsonString): String = fromString(json.value)
 
     override fun jsonObject(json: JsonObject): String {
         val stringEntries = json.entries.map { (key, value) ->

@@ -1,9 +1,9 @@
-package main.kotlin.com.melvic.archia.ast.leaf
+package com.melvic.archia.ast.leaf
 
-import main.kotlin.com.melvic.archia.ast.DateFormat
-import main.kotlin.com.melvic.archia.ast.Init
-import main.kotlin.com.melvic.archia.ast.Clause
-import main.kotlin.com.melvic.archia.ast.WithNum
+import com.melvic.archia.ast.DateFormat
+import com.melvic.archia.ast.Init
+import com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.WithNum
 
 data class RangeQuery(var field: RangeField? = null) :
     Clause {

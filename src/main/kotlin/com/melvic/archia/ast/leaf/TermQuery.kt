@@ -1,10 +1,9 @@
-package main.kotlin.com.melvic.archia.ast.leaf
+package com.melvic.archia.ast.leaf
 
-import main.kotlin.com.melvic.archia.ast.Boost
-import main.kotlin.com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.Boost
+import com.melvic.archia.ast.Clause
 
-data class TermQuery(var field: TermField? = null):
-    Clause {
+data class TermQuery(var field: TermField? = null): Clause {
     var customProp: Pair<String, String>? = null
 
     operator fun String.invoke(init: TermField.() -> Unit) {

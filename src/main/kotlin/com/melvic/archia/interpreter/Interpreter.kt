@@ -1,19 +1,17 @@
-package main.kotlin.com.melvic.archia.interpreter
+package com.melvic.archia.interpreter
 
-import main.kotlin.com.melvic.archia.ast.*
-import main.kotlin.com.melvic.archia.ast.compound.BoolQuery
-import main.kotlin.com.melvic.archia.ast.compound.BoostingQuery
-import main.kotlin.com.melvic.archia.ast.leaf.MatchQuery
-import main.kotlin.com.melvic.archia.ast.leaf.RangeQuery
-import main.kotlin.com.melvic.archia.ast.leaf.TermQuery
-import main.kotlin.com.melvic.archia.output.*
+import com.melvic.archia.ast.*
+import com.melvic.archia.ast.compound.BoolQuery
+import com.melvic.archia.ast.compound.BoostingQuery
+import com.melvic.archia.ast.leaf.MatchQuery
+import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.TermQuery
+import com.melvic.archia.output.*
 import kotlin.reflect.KCallable
 
 typealias Evaluation = Result<JsonValue>
 
-fun interpret(init: Init<Query>) = buildQuery(
-    init
-).interpret()
+fun interpret(init: Init<Query>) = buildQuery(init).interpret()
 
 fun Query.interpret(): Evaluation {
     val output = this.queryClause?.interpret() ?: missingField(this::query)

@@ -1,9 +1,8 @@
-package main.kotlin.com.melvic.archia.ast.leaf
+package com.melvic.archia.ast.leaf
 
-import main.kotlin.com.melvic.archia.ast.*
+import com.melvic.archia.ast.*
 
-data class MatchQuery(var field: MatchField? = null) :
-    Clause {
+data class MatchQuery(var field: MatchField? = null) : Clause {
     /**
      * Constructs es match field from es string
      */
@@ -26,9 +25,7 @@ data class MatchField(
     var operator: Operator? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var zeroTermsQuery: ZeroTermsQuery? = null
-): WithText, WithNum,
-    WithBool,
-    WithDate
+): WithText, WithNum, WithBool, WithDate
 
 interface MatchQueryValue
 

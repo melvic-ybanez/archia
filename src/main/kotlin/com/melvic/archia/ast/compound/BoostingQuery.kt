@@ -1,9 +1,9 @@
-package main.kotlin.com.melvic.archia.ast.compound
+package com.melvic.archia.ast.compound
 
-import main.kotlin.com.melvic.archia.ast.Clause
-import main.kotlin.com.melvic.archia.ast.ClauseBuilder
-import main.kotlin.com.melvic.archia.ast.Init
-import main.kotlin.com.melvic.archia.ast.WithNum
+import com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.ClauseBuilder
+import com.melvic.archia.ast.Init
+import com.melvic.archia.ast.WithNum
 
 data class BoostingQuery(
     var _positive: Clause? = null,
