@@ -1,5 +1,7 @@
 package com.melvic.archia.ast
 
+import com.melvic.archia.interpreter.toSnakeCase
+
 typealias Init<A> = A.() -> Unit
 
 data class Query(var queryClause: Clause? = null) {
@@ -9,7 +11,14 @@ data class Query(var queryClause: Clause? = null) {
     }
 }
 
-interface Clause
+interface Clause {
+    fun esName(): String {
+        val simpleName = this::class.java.simpleName
+        val noPrefix = simpleName.replace("Query", "")
+        return noPrefix.toSnakeCase()
+    }
+}
+
 typealias MultiClause = MutableList<Clause>
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)

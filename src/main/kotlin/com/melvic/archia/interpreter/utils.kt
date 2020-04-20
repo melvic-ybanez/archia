@@ -1,5 +1,6 @@
 package com.melvic.archia.interpreter
 
+import com.melvic.archia.ast.Clause
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import kotlin.reflect.KCallable

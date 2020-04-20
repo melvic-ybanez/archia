@@ -28,17 +28,17 @@ fun Query.interpret(): Evaluation {
 }
 
 fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
-    val objectOrEmpty = if (parent is JsonObject) parent else json {}
+    val newParent = if (parent is JsonObject) parent else json {}
 
     return when (this) {
-        is TermQuery -> interpret(objectOrEmpty)
-        is MatchQuery -> interpret(objectOrEmpty)
-        is MatchAllQuery -> interpret(objectOrEmpty)
-        is RangeQuery -> interpret(objectOrEmpty)
-        is BoolQuery -> interpret(objectOrEmpty)
-        is BoostingQuery -> interpret(objectOrEmpty)
-        is ConstantScoreQuery -> interpret(objectOrEmpty)
-        is DisMaxQuery -> interpret(objectOrEmpty)
+        is TermQuery -> interpret(newParent)
+        is MatchQuery -> interpret(newParent)
+        is MatchAllQuery -> interpret(newParent)
+        is RangeQuery -> interpret(newParent)
+        is BoolQuery -> interpret(newParent)
+        is BoostingQuery -> interpret(newParent)
+        is ConstantScoreQuery -> interpret(newParent)
+        is DisMaxQuery -> interpret(newParent)
         else -> json {}.success()
     }
 }
@@ -56,7 +56,7 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
         }
     }
 
-    val termOut = parent { "term" to termFieldOut }
+    val termOut = parent { esName() to termFieldOut }
     return termOut.success()
 }
 
@@ -99,13 +99,13 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
         }
     }
 
-    val matchOut = parent { "match" to json { field.name to matchFieldOut } }
+    val matchOut = parent { esName() to json { field.name to matchFieldOut } }
     return matchOut.success()
 }
 
 fun MatchAllQuery.interpret(parent: JsonObject): Evaluation {
     return parent {
-        "match_all" to json { prop(::boost) { it.json() } }
+        esName() to json { prop(::boost) { it.json() } }
     }.success()
 }
 
@@ -135,7 +135,7 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
         }
     }
 
-    val rangeOut = parent { "range" to json { field.name to rangeFieldOut } }
+    val rangeOut = parent { esName() to json { field.name to rangeFieldOut } }
     return rangeOut.success()
 }
 
@@ -148,7 +148,7 @@ fun BoolQuery.interpret(parent: JsonObject): Evaluation {
         prop(::minimumShouldMatch) { it.interpret(this) }
         prop(::boost) { it.json() }
     }
-    val boolOut = parent { "bool" to propsOut }
+    val boolOut = parent { esName() to propsOut }
     return boolOut.validate()
 }
 
@@ -162,7 +162,7 @@ fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
         prop(::negativeBoost) { it.json() }
     }
 
-    val boostingOut = parent { "boosting" to propsOut }
+    val boostingOut = parent { esName() to propsOut }
     return boostingOut.success()
 }
 
@@ -170,7 +170,7 @@ fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
     if (_filter == null) return missingField(::filter)
 
     return parent {
-        "constant_score" to json {
+        esName() to json {
             propWithAlt(::_filter, ::filter) { it.interpret() }
             prop(::boost) { it.json() }
         }
@@ -181,7 +181,7 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
     if (_queries == null) return missingField(::queries)
 
     return parent {
-        "dis_max" to json {
+        esName() to json {
             propWithAlt(::_queries, ::queries) { it.interpret() }
             prop(::tieBreaker) { it.json() }
         }
