@@ -5,10 +5,7 @@ import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.compound.BoostingQuery
 import com.melvic.archia.ast.compound.ConstantScoreQuery
 import com.melvic.archia.ast.compound.DisMaxQuery
-import com.melvic.archia.ast.leaf.MatchAllQuery
-import com.melvic.archia.ast.leaf.MatchQuery
-import com.melvic.archia.ast.leaf.RangeQuery
-import com.melvic.archia.ast.leaf.TermQuery
+import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
 import kotlin.reflect.KCallable
 
@@ -28,17 +25,18 @@ fun Query.interpret(): Evaluation {
 }
 
 fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
-    val newParent = if (parent is JsonObject) parent else json {}
+    val parentObject = if (parent is JsonObject) parent else json {}
 
     return when (this) {
-        is TermQuery -> interpret(newParent)
-        is MatchQuery -> interpret(newParent)
-        is MatchAllQuery -> interpret(newParent)
-        is RangeQuery -> interpret(newParent)
-        is BoolQuery -> interpret(newParent)
-        is BoostingQuery -> interpret(newParent)
-        is ConstantScoreQuery -> interpret(newParent)
-        is DisMaxQuery -> interpret(newParent)
+        is TermQuery -> interpret(parentObject)
+        is MatchQuery -> interpret(parentObject)
+        is MatchAllQuery -> interpret(parentObject)
+        is MatchNoneQuery -> interpret(parentObject)
+        is RangeQuery -> interpret(parentObject)
+        is BoolQuery -> interpret(parentObject)
+        is BoostingQuery -> interpret(parentObject)
+        is ConstantScoreQuery -> interpret(parentObject)
+        is DisMaxQuery -> interpret(parentObject)
         else -> json {}.success()
     }
 }
@@ -107,6 +105,10 @@ fun MatchAllQuery.interpret(parent: JsonObject): Evaluation {
     return parent {
         esName() to json { prop(::boost) { it.json() } }
     }.success()
+}
+
+fun MatchNoneQuery.interpret(parent: JsonObject): Evaluation {
+    return parent { esName() to json {} }.success()
 }
 
 fun RangeQuery.interpret(parent: JsonObject): Evaluation {
