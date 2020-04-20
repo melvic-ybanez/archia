@@ -16,8 +16,7 @@ data class JsonString(val value: String) : JsonValue()
 data class JsonNumber(val value: Number) : JsonValue()
 data class JsonBoolean(val value: Boolean) : JsonValue()
 
-data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(),
-    Compound<JsonArray> {
+data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(), Compound<JsonArray> {
     override fun instance() = this
 
     fun add(json: JsonValue) {
@@ -27,8 +26,9 @@ data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(),
 
 data class JsonObject(
     val entries: MutableMap<String, JsonValue> = mutableMapOf()
-) : JsonValue(),
-    Compound<JsonObject> {
+) : JsonValue(), Compound<JsonObject> {
+    // Due to the side-effecting nature of the DSl, errors are sometimes accumulated in
+    // the body of the JSON result.
     val errors: MutableList<ErrorCode> = mutableListOf()
 
     infix fun String.to(json: JsonValue) {

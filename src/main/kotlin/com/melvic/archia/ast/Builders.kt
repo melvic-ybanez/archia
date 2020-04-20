@@ -1,9 +1,6 @@
 package com.melvic.archia.ast
 
-import com.melvic.archia.ast.compound.BoolQuery
-import com.melvic.archia.ast.compound.BoostingQuery
-import com.melvic.archia.ast.compound.ConstantScoreQuery
-import com.melvic.archia.ast.compound.DisMaxQuery
+import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.leaf.*
 
 interface Builder {
@@ -43,6 +40,10 @@ interface Builder {
 
     fun disMax(init: Init<DisMaxQuery>) {
         registerClause(DisMaxQuery(), init)
+    }
+
+    fun functionScore(init: Init<FunctionScoreQuery>) {
+        registerClause(FunctionScoreQuery(), init)
     }
 }
 

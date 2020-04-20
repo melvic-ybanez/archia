@@ -1,29 +1,31 @@
 package com.melvic.archia.ast.compound
 
-import com.melvic.archia.ast.Boost
-import com.melvic.archia.ast.Clause
-import com.melvic.archia.ast.Init
+import com.melvic.archia.ast.*
 import com.melvic.archia.script.Script
 
 data class FunctionScoreQuery(
-    var query: Clause? = null,
-    var boost: Boost? = null,
-    var _functions: MutableList<Function>? = null,
+    var _query: Clause? = null,
+    var boost: String? = null,
+    var _functions: MutableList<FunctionClause>? = null,
     var maxBoost: Boost? = null,
     var scoreMode: ScoreMode? = null,
     var boostMode: BoostMode? = null,
     var minScore: Float? = null
-) : Function() {
-    fun function(init: Init<Function>) {
-        val newFunction = Function().also(init)
+) : FunctionClause() {
+    fun query(init: Init<ClauseBuilder>) {
+        _query = ClauseBuilder().apply(init).clause
+    }
+
+    fun function(init: Init<FunctionClause>) {
+        val newFunction = FunctionClause().also(init)
         _functions?.add(newFunction) ?: run {
             _functions = mutableListOf(newFunction)
         }
     }
 }
 
-open class Function(
-    var filter: Clause? = null,
+open class FunctionClause(
+    var _filter: Clause? = null,
     // score functions (plus decay functions below)
     var _scriptScore: Script? = null,
     var weight: Number? = null,
@@ -35,6 +37,10 @@ open class Function(
     var _exp: DecayFunction? = null,
     var _linear: DecayFunction? = null
 ) : Clause {
+    fun filter(init: Init<ClauseBuilder>) {
+        _filter = ClauseBuilder().apply(init).clause
+    }
+
     fun scriptScore(init: Init<Script>) {
         _scriptScore = Script().apply(init)
     }
