@@ -4,6 +4,7 @@ import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.compound.BoostingQuery
 import com.melvic.archia.ast.compound.ConstantScoreQuery
 import com.melvic.archia.ast.compound.DisMaxQuery
+import com.melvic.archia.ast.leaf.MatchAllQuery
 import com.melvic.archia.ast.leaf.MatchQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
@@ -17,6 +18,10 @@ interface Builder {
 
     fun match(init: Init<MatchQuery>) {
         registerClause(MatchQuery(), init)
+    }
+
+    fun matchAll(init: Init<MatchAllQuery>) {
+        registerClause(MatchAllQuery(), init)
     }
 
     fun range(init: Init<RangeQuery>) {

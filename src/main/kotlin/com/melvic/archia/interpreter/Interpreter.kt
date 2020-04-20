@@ -5,6 +5,7 @@ import com.melvic.archia.ast.compound.BoolQuery
 import com.melvic.archia.ast.compound.BoostingQuery
 import com.melvic.archia.ast.compound.ConstantScoreQuery
 import com.melvic.archia.ast.compound.DisMaxQuery
+import com.melvic.archia.ast.leaf.MatchAllQuery
 import com.melvic.archia.ast.leaf.MatchQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
@@ -32,6 +33,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
     return when (this) {
         is TermQuery -> interpret(objectOrEmpty)
         is MatchQuery -> interpret(objectOrEmpty)
+        is MatchAllQuery -> interpret(objectOrEmpty)
         is RangeQuery -> interpret(objectOrEmpty)
         is BoolQuery -> interpret(objectOrEmpty)
         is BoostingQuery -> interpret(objectOrEmpty)
@@ -99,6 +101,12 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
 
     val matchOut = parent { "match" to json { field.name to matchFieldOut } }
     return matchOut.success()
+}
+
+fun MatchAllQuery.interpret(parent: JsonObject): Evaluation {
+    return parent {
+        "match_all" to json { prop(::boost) { it.json() } }
+    }.success()
 }
 
 fun RangeQuery.interpret(parent: JsonObject): Evaluation {
