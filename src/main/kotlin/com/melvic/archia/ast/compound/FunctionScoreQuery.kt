@@ -27,7 +27,7 @@ data class FunctionScoreQuery(
 open class FunctionClause(
     var _filter: Clause? = null,
     // score functions (plus decay functions below)
-    var _scriptScore: Script? = null,
+    var _scriptScore: ScriptScore? = null,
     var weight: Number? = null,
     var _randomScore: RandomScore? = null,
     var _fieldValueFactor: FieldValueFactor? = null,
@@ -41,8 +41,8 @@ open class FunctionClause(
         _filter = ClauseBuilder().apply(init).clause
     }
 
-    fun scriptScore(init: Init<Script>) {
-        _scriptScore = Script().apply(init)
+    fun scriptScore(init: Init<ScriptScore>) {
+        _scriptScore = ScriptScore().apply(init)
     }
 
     fun randomScore(init: Init<RandomScore>) {
@@ -67,6 +67,12 @@ open class FunctionClause(
 }
 
 data class RandomScore(var seed: Number? = null, var field: String? = null)
+
+data class ScriptScore(var _script: Script? = null) {
+    fun script(init: Init<Script>) {
+        _script = Script().apply(init)
+    }
+}
 
 data class FieldValueFactor(
     var field: String? = null,

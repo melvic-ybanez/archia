@@ -56,13 +56,13 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
 fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
     if (_query == null) return missingField(::query)
 
-    val out = json {
+    val propsOut = json {
         propWithAlt(::_query, ::query) { it.interpret() }
         propStr(::boost)
         _functions?.let {
             val functions = array()
             for (function in it) {
-                when (val result = function.interpret()) {
+                when (val result = function.interpretFunction(json {})) {
                     is Failed -> errors.addAll(result.errors)
                     is Success<*> -> functions.add(result.value())
                 }
@@ -75,7 +75,9 @@ fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
         propNum(::minScore)
     }
 
-    return parent { esName() to out }.validate()
+    val functionScoreOut = this.interpretFunction(propsOut)
+
+    return parent { esName() to functionScoreOut }.validate()
 }
 
 fun MultiClause.interpret(): Evaluation {
@@ -111,12 +113,18 @@ fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
     }
 }
 
-fun FunctionClause.interpret(): Evaluation {
-    return json {
+fun FunctionClause.interpretFunction(parent: JsonObject): Evaluation {
+    return parent {
         propWithAlt(::_filter, ::filter) { it.interpret() }
         propWithAlt(::_scriptScore, ::scriptScore) { it.interpret() }
         propNum(::weight)
         propWithAlt(::_randomScore, ::randomScore) { it.interpret() }
+    }.success()
+}
+
+fun ScriptScore.interpret(): Evaluation {
+    return json {
+        propWithAlt(::_script, ::script) { it.interpret() }
     }.success()
 }
 
