@@ -61,7 +61,7 @@ interface Compound<C> {
     operator fun invoke(init: Init<C>): C = instance().apply(init)
 }
 
-fun <T, J : JsonValue> J.transform(transformer: Transformer<T>): T {
+fun <T, J : JsonValue> J.to(transformer: Transformer<T>): T {
     return transformer.transform(this)
 }
 

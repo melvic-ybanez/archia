@@ -1,5 +1,6 @@
 package com.melvic.archia.ast
 
+import com.melvic.archia.interpreter.interpret
 import com.melvic.archia.interpreter.toSnakeCase
 
 typealias Init<A> = A.() -> Unit
@@ -22,3 +23,7 @@ interface Clause {
 typealias MultiClause = MutableList<Clause>
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
+
+fun evalQuery(init: Init<ClauseBuilder>) = interpret {
+    query(init)
+}
