@@ -58,8 +58,6 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
-    if (_query == null) return missingField(::query)
-
     val propsOut = json {
         propWithAlt(::_query, ::query) { it.interpret() }
         propStr(::boost)

@@ -78,7 +78,7 @@ data class FieldValueFactor(
     var field: String? = null,
     var factor: Float? = null,
     var modifier: Modifier? = null,
-    var missing: Float? = null
+    var missing: Int? = null
 )
 
 data class DecayFunction(
