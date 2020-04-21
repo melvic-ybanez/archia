@@ -2,12 +2,20 @@ package com.melvic.archia.ast
 
 import com.melvic.archia.ast.leaf.MatchQueryValue
 import com.melvic.archia.ast.leaf.RangeValue
+import java.time.LocalDate
 import java.util.*
 
-data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue
+data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue, DecayFieldType
 data class AString(val value: String) : MatchQueryValue
 data class ABoolean(val value: Boolean) : MatchQueryValue
-data class ADate(val value: Date) : MatchQueryValue
+data class ADate(val value: LocalDate) : MatchQueryValue, DecayFieldType
+
+sealed class Geo : DecayFieldType
+data class GeoObject(val lat: Double, val long: Double) : Geo()
+data class GeoString(val lat: Double, val long: Double) : Geo()
+data class GeoHash(val hash: String) : Geo()
+data class GeoArray(val lat: Double, val long: Double) : Geo()
+data class GeoWktPoint(val lat: Double, val long: Double) : Geo()
 
 interface WithNum {
     fun num(value: Number) = ANumber(value)
@@ -28,7 +36,7 @@ interface WithBool {
 }
 
 interface WithDate {
-    fun date(value: Date) = ADate(value)
+    fun date(year: Int, month: Int, day: Int) = ADate(LocalDate.of(year, month, day))
 
-    fun Date.es() = ADate(this)
+    fun LocalDate.es() = ADate(this)
 }

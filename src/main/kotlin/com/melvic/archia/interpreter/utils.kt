@@ -48,7 +48,7 @@ fun JsonObject.propBool(field: KCallable<Boolean>) {
     this { prop(field) { it.json() } }
 }
 
-inline fun <R> JsonObject.propWithAlt(
+inline fun <R> JsonObject.propFunc(
     field: KCallable<R?>,
     altField: KCallable<Unit>,
     f: (R) -> Evaluation

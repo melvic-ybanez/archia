@@ -23,6 +23,8 @@ enum class Rewrite {
 interface MinimumShouldMatch
 interface SimpleMSM : MinimumShouldMatch
 
+interface DecayFieldType
+
 data class Percent(val value: Int) : SimpleMSM
 data class Combination(val value: Int, val simple: SimpleMSM) : MinimumShouldMatch
 data class Multiple(val values: List<Combination>) : MinimumShouldMatch

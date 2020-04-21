@@ -6,10 +6,10 @@ import com.melvic.archia.output.*
 
 fun BoolQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
-        propWithAlt(::_must, ::must) { it.interpret() }
-        propWithAlt(::_should, ::should) { it.interpret() }
-        propWithAlt(::_filter, ::filter) { it.interpret() }
-        propWithAlt(::_mustNot, ::mustNot) { it.interpret() }
+        propFunc(::_must, ::must) { it.interpret() }
+        propFunc(::_should, ::should) { it.interpret() }
+        propFunc(::_filter, ::filter) { it.interpret() }
+        propFunc(::_mustNot, ::mustNot) { it.interpret() }
         prop(::minimumShouldMatch) { it.interpret(this) }
         prop(::boost) { it.json() }
     }
@@ -26,8 +26,8 @@ fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
     if (errors.isNotEmpty()) return Failed(errors)
 
     val propsOut = json {
-        propWithAlt(::_positive, ::positive) { it.interpret() }
-        propWithAlt(::_negative, ::negative) { it.interpret() }
+        propFunc(::_positive, ::positive) { it.interpret() }
+        propFunc(::_negative, ::negative) { it.interpret() }
         prop(::negativeBoost) { it.json() }
     }
 
@@ -40,7 +40,7 @@ fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
 
     return parent {
         esName() to json {
-            propWithAlt(::_filter, ::filter) { it.interpret() }
+            propFunc(::_filter, ::filter) { it.interpret() }
             prop(::boost) { it.json() }
         }
     }.success()
@@ -51,7 +51,7 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
 
     return parent {
         esName() to json {
-            propWithAlt(::_queries, ::queries) { it.interpret() }
+            propFunc(::_queries, ::queries) { it.interpret() }
             prop(::tieBreaker) { it.json() }
         }
     }.success()
@@ -59,7 +59,7 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
 
 fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
-        propWithAlt(::_query, ::query) { it.interpret() }
+        propFunc(::_query, ::query) { it.interpret() }
         propStr(::boost)
         _functions?.let {
             val functions = array()
@@ -117,17 +117,22 @@ fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
 
 fun FunctionClause.interpretFunction(parent: JsonObject): Evaluation {
     return parent {
-        propWithAlt(::_filter, ::filter) { it.interpret() }
-        propWithAlt(::_scriptScore, ::scriptScore) { it.interpret() }
+        propFunc(::_filter, ::filter) { it.interpret() }
+        propFunc(::_scriptScore, ::scriptScore) { it.interpret() }
         propNum(::weight)
-        propWithAlt(::_randomScore, ::randomScore) { it.interpret() }
-        propWithAlt(::_fieldValueFactor, ::fieldValueFactor) { it.interpret() }
+        propFunc(::_randomScore, ::randomScore) { it.interpret() }
+        propFunc(::_fieldValueFactor, ::fieldValueFactor) { it.interpret() }
+
+        // decay functions
+        propFunc(::_gauss, ::gauss) { it.interpret() }
+        propFunc(::_exp, ::exp) { it.interpret() }
+        propFunc(::_linear, ::linear) { it.interpret() }
     }.success()
 }
 
 fun ScriptScore.interpret(): Evaluation {
     return json {
-        propWithAlt(::_script, ::script) { it.interpret() }
+        propFunc(::_script, ::script) { it.interpret() }
     }.success()
 }
 
@@ -145,4 +150,36 @@ fun FieldValueFactor.interpret(): Evaluation {
         propEnum(::modifier)
         propNum(::missing)
     }.success()
+}
+
+fun DecayFunction.interpret(): Evaluation {
+    val field = this.field ?: return missingField(this::field)
+
+    val decayFieldOut = json {
+        with(field) {
+            prop(::origin) { fieldType -> when (fieldType) {
+                is Geo -> fieldType.interpret()
+                is ANumber -> fieldType.value.json()
+                is ADate  -> fieldType.value.toString().json()
+                else -> JsonNull
+            } }
+            propStr(::scale)
+            propStr(::offset)
+            propNum(::decay)
+        }
+    }
+    val decayOut = json { field.name to decayFieldOut }
+    return decayOut.success()
+}
+
+fun Geo.interpret(): JsonValue {
+    return when (this) {
+        is GeoObject -> with(this) {
+            json { propNum(::lat); propNum(::long) }
+        }
+        is GeoString -> JsonString("${this.lat},${this.long}")
+        is GeoHash -> JsonString(this.hash)
+        is GeoArray -> jsonArray(JsonNumber(lat), JsonNumber(long))
+        is GeoWktPoint -> JsonString("POINT (${this.lat} )")
+    }
 }

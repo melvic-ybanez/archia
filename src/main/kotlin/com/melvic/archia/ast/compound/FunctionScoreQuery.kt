@@ -36,7 +36,7 @@ open class FunctionClause(
     var _gauss: DecayFunction? = null,
     var _exp: DecayFunction? = null,
     var _linear: DecayFunction? = null
-) : Clause {
+) : Clause, WithDate {
     fun filter(init: Init<ClauseBuilder>) {
         _filter = ClauseBuilder().apply(init).clause
     }
@@ -86,13 +86,13 @@ data class DecayFunction(
     var multiValueMode: MultiValueMode? = null
 ) {
     operator fun String.invoke(init: Init<DecayFunctionField>) {
-        field = DecayFunctionField().apply(init)
+        field = DecayFunctionField(this).apply(init)
     }
 }
 
 data class DecayFunctionField(
-    var name: String? = null,
-    var origin: String? = null,
+    val name: String,
+    var origin: DecayFieldType? = null,
     var scale: String? = null,
     var offset: String? = null,
     var decay: Float? = null

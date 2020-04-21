@@ -7,6 +7,9 @@ import com.melvic.archia.output.JsonStringOutput
 import com.melvic.archia.output.mapTo
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import java.time.LocalDate
+import java.time.Month
+import java.util.*
 
 class FunctionScoreQueryTests : BehaviorSpec({
     given("function score query") {
@@ -209,6 +212,37 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 """.strip()
             }
+        }
+        `when`("it has a decay function of gauss") {
+            val output = evalQuery {
+                functionScore {
+                    gauss {
+                        "date" {
+                            origin = date(2013, 9, 17)
+                            scale = "10d"
+                            offset = "5d"
+                            decay = 0.5f
+                        }
+                    }
+                }
+            }.output()
+
+            output.mapTo(JsonStringOutput).strip() shouldBe """
+                {
+                    "query": {
+                        "function_score": {
+                            "gauss": {
+                                "date": {
+                                      "origin": "2013-09-17", 
+                                      "scale": "10d",
+                                      "offset": "5d", 
+                                      "decay" : 0.5 
+                                }
+                            }
+                        }
+                    }
+                }
+            """.strip()
         }
     }
 })
