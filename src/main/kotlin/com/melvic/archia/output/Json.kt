@@ -29,6 +29,8 @@ data class JsonObject(
 ) : JsonValue(), Compound<JsonObject> {
     // Due to the side-effecting nature of the DSl, errors are sometimes accumulated in
     // the body of the JSON result.
+    // Note that during query interpretation, this is only used when it is
+    // inconvenient or impossible to capture errors outside of JSON object construction.
     val errors: MutableList<ErrorCode> = mutableListOf()
 
     infix fun String.to(json: JsonValue) {

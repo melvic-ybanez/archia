@@ -18,8 +18,12 @@ fun BoolQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
-    if (_positive == null) return missingField(::positive)
-    if (_negative == null) return missingField(::negative)
+    val errors = mutableListOf<ErrorCode>()
+
+    if (_positive == null) errors.add(missingFieldCode(::positive))
+    if (_negative == null) errors.add(missingFieldCode(::negative))
+
+    if (errors.isNotEmpty()) return Failed(errors)
 
     val propsOut = json {
         propWithAlt(::_positive, ::positive) { it.interpret() }
