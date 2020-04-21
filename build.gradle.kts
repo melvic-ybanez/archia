@@ -14,6 +14,11 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.0.3")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {

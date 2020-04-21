@@ -3,6 +3,7 @@ package com.melvic.archia.interpreter
 import com.melvic.archia.ast.Clause
 import com.melvic.archia.output.JsonArray
 import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
 import kotlin.reflect.KCallable
 
@@ -48,6 +49,8 @@ fun errorMessageOf(code: ErrorCode) = when (code) {
 
 fun <R> missingField(callable: KCallable<R>) = missingFieldCode(callable).fail()
 
+fun missingField(fieldName: String) = MissingField(fieldName).fail()
+
 fun <R> missingFieldCode(callable: KCallable<R>) = MissingField(nameOf(callable))
 
 fun ErrorCode.fail() = Failed(listOf(this))
@@ -58,4 +61,9 @@ fun JsonObject.validate(): Evaluation {
     return if (this.errors.isEmpty()) {
         this.success()
     } else Failed(this.errors)
+}
+
+fun Evaluation.output(): JsonValue = when (this) {
+    is Failed -> show()
+    is Success<*> -> value()
 }
