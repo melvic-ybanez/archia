@@ -1,7 +1,7 @@
 import com.melvic.archia.ast.evalQuery
 import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonStringOutput
-import com.melvic.archia.output.to
+import com.melvic.archia.output.mapTo
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
@@ -31,7 +31,7 @@ class TermQueryTests : BehaviorSpec({
                         }
                     }
                 }
-                val output = result.output().to(JsonStringOutput)
+                val output = result.output().mapTo(JsonStringOutput)
                 output.strip() shouldBe """
                     {
                         "query": {
@@ -51,7 +51,7 @@ class TermQueryTests : BehaviorSpec({
                 val result = evalQuery {
                     term { "user" to "melvic" }
                 }
-                val output = result.output().to(JsonStringOutput)
+                val output = result.output().mapTo(JsonStringOutput)
                 output.strip() shouldBe """
                     {
                         "query": {
