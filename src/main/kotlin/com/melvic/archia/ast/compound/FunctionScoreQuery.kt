@@ -7,10 +7,10 @@ data class FunctionScoreQuery(
     var _query: Clause? = null,
     var boost: String? = null,
     var _functions: MutableList<FunctionClause>? = null,
-    var maxBoost: Boost? = null,
+    var maxBoost: Int? = null,
     var scoreMode: ScoreMode? = null,
     var boostMode: BoostMode? = null,
-    var minScore: Float? = null
+    var minScore: Int? = null
 ) : FunctionClause() {
     fun query(init: Init<ClauseBuilder>) {
         _query = ClauseBuilder().apply(init).clause
