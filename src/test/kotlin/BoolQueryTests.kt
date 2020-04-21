@@ -27,7 +27,7 @@ class BoolQueryTests : BehaviorSpec({
                             term { "tag" to "elasticsearch" }
                         }
                         minimumShouldMatch = 1.es()
-                        boost = 1.0f
+                        boost = 1.0
                     }
                 }.output()
                 output.mapTo(JsonStringOutput).strip() shouldBe """

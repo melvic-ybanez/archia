@@ -2,7 +2,7 @@ package com.melvic.archia.ast
 
 import com.melvic.archia.ast.leaf.RangeValue
 
-typealias Boost = Float
+typealias Boost = Double
 
 sealed class Fuzziness {
     object _0 : Fuzziness()

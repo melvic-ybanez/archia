@@ -190,7 +190,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     functionScore {
                         fieldValueFactor {
                             field = "likes"
-                            factor = 1.2f
+                            factor = 1.2
                             modifier = Modifier.SQRT
                             missing = 1
                         }
@@ -221,7 +221,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             origin = date(2013, 9, 17)
                             scale = "10d"
                             offset = "5d"
-                            decay = 0.5f
+                            decay = 0.5
                         }
                     }
                 }

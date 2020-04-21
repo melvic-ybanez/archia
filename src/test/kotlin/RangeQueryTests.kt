@@ -21,7 +21,7 @@ class RangeQueryTests : BehaviorSpec({
                         "age" {
                             gte = 10.es()
                             lte = 20.es()
-                            boost = 2.0f
+                            boost = 2.0
                         }
                     }
                 }.output()

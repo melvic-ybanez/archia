@@ -13,7 +13,7 @@ class BoostingQueryTests : BehaviorSpec({
         `when`("there are missing required fields") {
             then("report missing field errors") {
                 val result = evalQuery {
-                    boosting { negativeBoost = 0.5f }
+                    boosting { negativeBoost = 0.5 }
                 }
                 result shouldBe Failed(mutableListOf(
                     MissingField("positive"),
@@ -31,7 +31,7 @@ class BoostingQueryTests : BehaviorSpec({
                         negative {
                             term { "text" to "pie tart fruit crumble tree" }
                         }
-                        negativeBoost = 0.5f
+                        negativeBoost = 0.5
                     }
                 }.output()
                 output.mapTo(JsonStringOutput).strip() shouldBe """

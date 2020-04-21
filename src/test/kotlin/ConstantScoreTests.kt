@@ -11,7 +11,7 @@ class ConstantScoreTests : BehaviorSpec({
         `when`("the field parameter is not supplied") {
             then("it should report missing field error") {
                 val result = evalQuery {
-                    constantScore { boost = 1.2f }
+                    constantScore { boost = 1.2 }
                 }
                 result shouldBe missingField("filter")
             }
@@ -23,7 +23,7 @@ class ConstantScoreTests : BehaviorSpec({
                         filter {
                             term { "user" to "kimchy" }
                         }
-                        boost = 1.2f
+                        boost = 1.2
                     }
                 }.output()
                 output.mapTo(JsonStringOutput).strip() shouldBe """

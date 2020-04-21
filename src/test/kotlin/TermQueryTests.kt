@@ -16,7 +16,7 @@ class TermQueryTests : BehaviorSpec({
         `when`("value paramater of field is not supplied") {
             then("it should report a missing field error") {
                 val result = evalQuery {
-                    term { "user" { boost = 1.2f }}
+                    term { "user" { boost = 1.2 }}
                 }
                 result shouldBe missingField("value")
             }
@@ -27,7 +27,7 @@ class TermQueryTests : BehaviorSpec({
                     term {
                         "user" {
                             value = "Kimchy"
-                            boost = 1.0f
+                            boost = 1.0
                         }
                     }
                 }

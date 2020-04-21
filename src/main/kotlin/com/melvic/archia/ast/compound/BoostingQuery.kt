@@ -8,7 +8,7 @@ import com.melvic.archia.ast.WithNum
 data class BoostingQuery(
     var _positive: Clause? = null,
     var _negative: Clause? = null,
-    var negativeBoost: Float? = null
+    var negativeBoost: Double? = null
 ): Clause, WithNum {
     private var builder: ClauseBuilder = ClauseBuilder()
 

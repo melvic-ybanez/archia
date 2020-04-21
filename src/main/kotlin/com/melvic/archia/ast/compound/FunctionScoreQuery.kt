@@ -76,7 +76,7 @@ data class ScriptScore(var _script: Script? = null) {
 
 data class FieldValueFactor(
     var field: String? = null,
-    var factor: Float? = null,
+    var factor: Double? = null,
     var modifier: Modifier? = null,
     var missing: Int? = null
 )
@@ -95,7 +95,7 @@ data class DecayFunctionField(
     var origin: DecayFieldType? = null,
     var scale: String? = null,
     var offset: String? = null,
-    var decay: Float? = null
+    var decay: Double? = null
 )
 
 enum class Modifier {

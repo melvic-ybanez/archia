@@ -25,12 +25,12 @@ val result = interpret {
                 term {
                     "tag" {
                         value = "elasticsearch"
-                        boost = 1.4f
+                        boost = 1.4
                     }
                 }
             }
             minimumShouldMatch = 1.es()
-            boost = 1.0f
+            boost = 1.0
         }
     }
 }

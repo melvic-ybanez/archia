@@ -11,7 +11,7 @@ class DisMaxQueryTests : BehaviorSpec({
         `when`("the queries parameter is not supplied") {
             then("it should report missing field error") {
                 val result = evalQuery {
-                    disMax { tieBreaker = 0.7f }
+                    disMax { tieBreaker = 0.7 }
                 }
                 result shouldBe missingField("queries")
             }
@@ -24,7 +24,7 @@ class DisMaxQueryTests : BehaviorSpec({
                             term { "title" to "Quick pets" }
                             term { "body" to "Quick pets" }
                         }
-                        tieBreaker = 0.7f
+                        tieBreaker = 0.7
                     }
                 }.output()
                 output.mapTo(JsonStringOutput).strip() shouldBe """
