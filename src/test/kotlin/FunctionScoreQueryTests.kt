@@ -192,7 +192,22 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             missing = 1
                         }
                     }
-                }
+                }.output()
+
+                output.mapTo(JsonStringOutput).strip() shouldBe """
+                    {
+                        "query": {
+                            "function_score": {
+                                "field_value_factor": {
+                                    "field": "likes",
+                                    "factor": 1.2,
+                                    "modifier": "sqrt",
+                                    "missing": 1
+                                }
+                            }
+                        }
+                    }
+                """.strip()
             }
         }
     }

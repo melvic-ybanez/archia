@@ -121,6 +121,7 @@ fun FunctionClause.interpretFunction(parent: JsonObject): Evaluation {
         propWithAlt(::_scriptScore, ::scriptScore) { it.interpret() }
         propNum(::weight)
         propWithAlt(::_randomScore, ::randomScore) { it.interpret() }
+        propWithAlt(::_fieldValueFactor, ::fieldValueFactor) { it.interpret() }
     }.success()
 }
 
@@ -141,5 +142,7 @@ fun FieldValueFactor.interpret(): Evaluation {
     return json {
         propStr(::field)
         propNum(::factor)
+        propEnum(::modifier)
+        propNum(::missing)
     }.success()
 }
