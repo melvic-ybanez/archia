@@ -43,7 +43,7 @@ class TermQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.trimIndent().strip()
+                """.strip()
             }
         }
         `when`("in simplified form") {
@@ -58,7 +58,7 @@ class TermQueryTests : BehaviorSpec({
                             "term": { "user": "melvic" }
                         }
                     }
-                """.trimIndent().strip()
+                """.strip()
             }
         }
     }

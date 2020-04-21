@@ -1,3 +1,3 @@
 fun String.strip(): String {
-    return replace(" ", "").replace("\n", "")
+    return trimIndent().replace(" ", "").replace("\n", "")
 }

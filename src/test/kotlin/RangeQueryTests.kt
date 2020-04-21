@@ -37,7 +37,7 @@ class RangeQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.trimIndent().strip()
+                """.strip()
             }
         }
     }

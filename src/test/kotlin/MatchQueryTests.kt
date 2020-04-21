@@ -44,7 +44,7 @@ class MatchQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.trimIndent().strip()
+                """.strip()
             }
         }
     }
