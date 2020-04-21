@@ -43,5 +43,20 @@ class TermQueryTests : BehaviorSpec({
                 """.trimIndent().strip()
             }
         }
+        `when`("in simplified form") {
+            then("it should not display the field param") {
+                val result = evalQuery {
+                    term { "user" to "melvic" }
+                }
+                val output = result.output().transform(JsonStringOutput)
+                output.strip() shouldBe """
+                    {
+                        "query": {
+                            "term": { "user": "melvic" }
+                        }
+                    }
+                """.trimIndent().strip()
+            }
+        }
     }
 })
