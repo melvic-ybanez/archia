@@ -73,7 +73,7 @@ of your liking.
 ### Transformers
 
 So far, the only built-in _transformer_ converts the JSON object into its string representation.
-Using it requires the application of the `transform` method to the `JsonStringOutput` transformer:
+Using it requires the application of the `mapTo` method to the `JsonStringOutput` transformer:
 ```kotlin
 ...
 import main.kotlin.archia.output.*
