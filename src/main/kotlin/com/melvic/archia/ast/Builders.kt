@@ -1,6 +1,7 @@
 package com.melvic.archia.ast
 
 import com.melvic.archia.ast.compound.*
+import com.melvic.archia.ast.fulltext.IntervalsQuery
 import com.melvic.archia.ast.leaf.*
 
 interface Builder {
@@ -44,6 +45,10 @@ interface Builder {
 
     fun functionScore(init: Init<FunctionScoreQuery>) {
         registerClause(FunctionScoreQuery(), init)
+    }
+
+    fun intervals(init: Init<IntervalsQuery>) {
+        registerClause(IntervalsQuery(), init)
     }
 }
 

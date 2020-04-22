@@ -2,8 +2,7 @@ package com.melvic.archia.ast.leaf
 
 import com.melvic.archia.ast.*
 
-data class RangeQuery(var field: RangeField? = null) :
-    Clause {
+data class RangeQuery(var field: RangeField? = null) : Clause {
     operator fun String.invoke(init: Init<RangeField>) {
         field = RangeField(this).apply(init)
     }

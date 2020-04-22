@@ -5,6 +5,8 @@ import com.melvic.archia.ast.leaf.RangeValue
 import java.time.LocalDate
 import java.util.*
 
+typealias Analyzer = String
+
 data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue, DecayFieldType
 data class AString(val value: String) : MatchQueryValue
 data class ABoolean(val value: Boolean) : MatchQueryValue
