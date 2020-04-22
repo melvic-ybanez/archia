@@ -1,5 +1,6 @@
 import com.melvic.archia.ast.compound.BoostMode
 import com.melvic.archia.ast.compound.Modifier
+import com.melvic.archia.ast.compound.MultiValueMode
 import com.melvic.archia.ast.compound.ScoreMode
 import com.melvic.archia.ast.evalQuery
 import com.melvic.archia.interpreter.output
@@ -223,6 +224,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             offset = "5d"
                             decay = 0.5
                         }
+                        multiValueMode = MultiValueMode.AVG
                     }
                 }
             }.output()
@@ -237,7 +239,8 @@ class FunctionScoreQueryTests : BehaviorSpec({
                                       "scale": "10d",
                                       "offset": "5d", 
                                       "decay" : 0.5 
-                                }
+                                },
+                                "multi_value_mode": "avg"
                             }
                         }
                     }

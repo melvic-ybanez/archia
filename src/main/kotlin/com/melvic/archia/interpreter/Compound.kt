@@ -168,7 +168,10 @@ fun DecayFunction.interpret(): Evaluation {
             propNum(::decay)
         }
     }
-    val decayOut = json { field.name to decayFieldOut }
+    val decayOut = json {
+        field.name to decayFieldOut
+        propEnum(::multiValueMode)
+    }
     return decayOut.success()
 }
 
