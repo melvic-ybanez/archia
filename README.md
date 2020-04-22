@@ -1,7 +1,29 @@
 # Archia
 Archia is an [Elastic Search Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html) DSL for Kotlin.
 
-**Note**: This project's first and upcoming release is still work-in-progress.
+To reduce learning curve, Archia tries to mimic Elasticsearch's own query language as close as
+possible. This means you can take advantage of any existing knowledge you have on Elasticsearch.
+Even if you didn't have much Elasticsearch knowledge, Elasticsearch queries you have googled should be 
+easily convertible into Archia's DSL.
+
+### Why do we need this DSL?
+Off the top of my head:
+* **Type-safety**. Most of the values are type-checked.
+* **Compile-time structural validation**. You can't just create any random JSON objects and pretend it's a 
+valid query.
+* **Leverage the power of the host-language**. Archia code is Kotlin code. So you can
+reuse all of Kotlin's high-level abstractions and advanced language features to construct your
+queries.
+
+**Note**: This project's first and upcoming release is still work-in-progress. 
+_Contributions are welcome_.
+
+### Running the tests
+You can run the tests using the Gradle test command:
+```kotlin
+gradle clean test -i
+```
+If you are using Intellij, you can also just run the tests from within the IDE itself.
 
 ### A Quick Example:
 
