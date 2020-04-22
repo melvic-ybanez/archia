@@ -1,3 +1,4 @@
+import com.melvic.archia.ast.GeoString
 import com.melvic.archia.ast.compound.BoostMode
 import com.melvic.archia.ast.compound.Modifier
 import com.melvic.archia.ast.compound.MultiValueMode
@@ -215,21 +216,22 @@ class FunctionScoreQueryTests : BehaviorSpec({
             }
         }
         `when`("it has a decay function of gauss") {
-            val output = evalQuery {
-                functionScore {
-                    gauss {
-                        "date" {
-                            origin = date(2013, 9, 17)
-                            scale = "10d"
-                            offset = "5d"
-                            decay = 0.5
+            then("it should contain the gauss fields") {
+                val output = evalQuery {
+                    functionScore {
+                        gauss {
+                            "date" {
+                                origin = date(2013, 9, 17)
+                                scale = "10d"
+                                offset = "5d"
+                                decay = 0.5
+                            }
+                            multiValueMode = MultiValueMode.AVG
                         }
-                        multiValueMode = MultiValueMode.AVG
                     }
-                }
-            }.output()
+                }.output()
 
-            output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).strip() shouldBe """
                 {
                     "query": {
                         "function_score": {
@@ -246,6 +248,70 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }
             """.strip()
+            }
+        }
+        `when`("it has multiple decay functions") {
+            then("it should contain all the decay functions in the `functions` field") {
+                val output = evalQuery {
+                    functionScore {
+                        function {
+                            gauss {
+                                "price" {
+                                    origin = 0.es()
+                                    scale = "20"
+                                }
+                            }
+                        }
+                        function {
+                            gauss {
+                                "location" {
+                                    origin = GeoString(11, 12)
+                                    scale = "2km"
+                                }
+                            }
+                        }
+                        query {
+                            term {
+                                "properties" to "balcony"
+                            }
+                        }
+                        scoreMode = ScoreMode.MULTIPLY
+                    }
+                }.output()
+
+                output.mapTo(JsonStringOutput).strip() shouldBe """
+                    {
+                        "query": {
+                            "function_score": {
+                                "query": {
+                                    "term": {
+                                      "properties": "balcony"
+                                    }
+                                },
+                                "functions": [
+                                    {
+                                      "gauss": {
+                                        "price": {
+                                          "origin": "0",
+                                          "scale": "20"
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "gauss": {
+                                        "location": {
+                                          "origin": "11, 12",
+                                          "scale": "2km"
+                                        }
+                                      }
+                                    }
+                                ],
+                                "score_mode": "multiply"
+                            }
+                        }
+                    }
+                """.strip()
+            }
         }
     }
 })

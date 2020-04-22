@@ -96,7 +96,7 @@ data class DecayFunctionField(
     var scale: String? = null,
     var offset: String? = null,
     var decay: Double? = null
-)
+) : WithNum
 
 enum class Modifier {
     NONE, LOG, LOG1P, LOG2P, LN, LN1P, LN2P, SQUARE, SQRT, RECIPROCAL

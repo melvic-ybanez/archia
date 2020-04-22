@@ -159,7 +159,9 @@ fun DecayFunction.interpret(): Evaluation {
         with(field) {
             prop(::origin) { fieldType -> when (fieldType) {
                 is Geo -> fieldType.interpret()
-                is ANumber -> fieldType.value.json()
+                is ANumber ->
+                    // numeric for origin are still represented as strings
+                    fieldType.value.toString().json()
                 is ADate  -> fieldType.value.toString().json()
                 else -> JsonNull
             } }

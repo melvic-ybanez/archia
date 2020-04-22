@@ -4,7 +4,7 @@ import com.melvic.archia.ast.*
 
 data class MatchQuery(var field: MatchField? = null) : Clause {
     /**
-     * Constructs es match field from es string
+     * Constructs an elasticsearch match field from a string
      */
     operator fun String.invoke(init: Init<MatchField>) {
         field = MatchField(this).apply(init)
