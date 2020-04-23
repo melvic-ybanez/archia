@@ -2,6 +2,7 @@ package com.melvic.archia.ast
 
 import com.melvic.archia.interpreter.interpret
 import com.melvic.archia.interpreter.toSnakeCase
+import kotlin.reflect.KCallable
 
 typealias Init<A> = A.() -> Unit
 
@@ -21,6 +22,10 @@ interface Clause {
         val simpleName = this::class.java.simpleName
         val noPrefix = simpleName.replace("Query", "")
         return noPrefix.toSnakeCase()
+    }
+
+    fun <A> param(callable: KCallable<Unit>, value: A): Param<A> {
+        return Pair(callable.name, value)
     }
 }
 

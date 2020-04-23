@@ -6,10 +6,10 @@ import com.melvic.archia.output.*
 
 fun BoolQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
-        propWithAlt(::_must, ::must) { it.interpret() }
-        propWithAlt(::_should, ::should) { it.interpret() }
-        propWithAlt(::_filter, ::filter) { it.interpret() }
-        propWithAlt(::_mustNot, ::mustNot) { it.interpret() }
+        propFunc(::_must) { it.interpret() }
+        propFunc(::_should) { it.interpret() }
+        propFunc(::_filter) { it.interpret() }
+        propFunc(::_mustNot) { it.interpret() }
         prop(::minimumShouldMatch) { it.interpret(this) }
         prop(::boost) { it.json() }
     }
@@ -118,16 +118,20 @@ fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
 fun FunctionClause.interpretFunction(parent: JsonObject): Evaluation {
     return parent {
         propWithAlt(::_filter, ::filter) { it.interpret() }
-        propWithAlt(::_scriptScore, ::scriptScore) { it.interpret() }
         propNum(::weight)
-        propWithAlt(::_randomScore, ::randomScore) { it.interpret() }
-        propWithAlt(::_fieldValueFactor, ::fieldValueFactor) { it.interpret() }
+        propParam(scoreFunction) { it.interpret() }
 
-        // decay functions
-        propWithAlt(::_gauss, ::gauss) { it.interpret() }
-        propWithAlt(::_exp, ::exp) { it.interpret() }
-        propWithAlt(::_linear, ::linear) { it.interpret() }
     }.success()
+}
+
+fun ScoreFunction.interpret(): Evaluation {
+    return when (this) {
+        is ScriptScore -> interpret()
+        is RandomScore -> interpret()
+        is FieldValueFactor -> interpret()
+        is DecayFunction -> interpret()
+        else -> JsonNull.success()
+    }
 }
 
 fun ScriptScore.interpret(): Evaluation {

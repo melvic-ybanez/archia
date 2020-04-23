@@ -2,6 +2,7 @@ package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.script.Script
+import kotlin.reflect.KCallable
 
 data class FunctionScoreQuery(
     var _query: Clause? = null,
@@ -26,49 +27,47 @@ data class FunctionScoreQuery(
 
 open class FunctionClause(
     var _filter: Clause? = null,
-    // score functions (plus decay functions below)
-    var _scriptScore: ScriptScore? = null,
-    var weight: Number? = null,
-    var _randomScore: RandomScore? = null,
-    var _fieldValueFactor: FieldValueFactor? = null,
-
-    // decay functions
-    var _gauss: DecayFunction? = null,
-    var _exp: DecayFunction? = null,
-    var _linear: DecayFunction? = null
+    var scoreFunction: Param<ScoreFunction>? = null,
+    var weight: Number? = null
 ) : Clause, WithDate, BuilderHelper {
+    fun saveFunction(callable: KCallable<Unit>, sf: ScoreFunction) {
+        scoreFunction = param(callable, sf)
+    }
+
     fun filter(init: Init<ClauseBuilder>) {
         setClause(init) { _filter = it }
     }
 
     fun scriptScore(init: Init<ScriptScore>) {
-        setProp(init) { _scriptScore = it}
+        setProp(init) { saveFunction(::scriptScore, it) }
     }
 
     fun randomScore(init: Init<RandomScore>) {
-        setProp(init) { _randomScore = it }
+        setProp(init) { saveFunction(::randomScore, it) }
     }
 
     fun fieldValueFactor(init: Init<FieldValueFactor>) {
-        setProp(init) { _fieldValueFactor = it }
+        setProp(init) { saveFunction(::fieldValueFactor, it) }
     }
 
     fun gauss(init: Init<DecayFunction>) {
-        setProp(init) { _gauss = it }
+        setProp(init) { saveFunction(::gauss, it) }
     }
 
     fun exp(init: Init<DecayFunction>) {
-        setProp(init) { _exp = it }
+        setProp(init) { saveFunction(::exp, it) }
     }
 
     fun linear(init: Init<DecayFunction>) {
-        setProp(init) { _linear = it }
+        setProp(init) { saveFunction(::linear, it) }
     }
 }
 
-data class RandomScore(var seed: Number? = null, var field: String? = null)
+interface ScoreFunction
 
-data class ScriptScore(var _script: Script? = null) {
+data class RandomScore(var seed: Number? = null, var field: String? = null) : ScoreFunction
+
+data class ScriptScore(var _script: Script? = null) : ScoreFunction {
     fun script(init: Init<Script>) {
         setProp(init) { _script = it }
     }
@@ -79,12 +78,12 @@ data class FieldValueFactor(
     var factor: Double? = null,
     var modifier: Modifier? = null,
     var missing: Int? = null
-)
+) : ScoreFunction
 
 data class DecayFunction(
     var field: DecayFunctionField? = null,
     var multiValueMode: MultiValueMode? = null
-) {
+) : ScoreFunction {
     operator fun String.invoke(init: Init<DecayFunctionField>) {
         field = DecayFunctionField(this).apply(init)
     }

@@ -1,5 +1,6 @@
 package com.melvic.archia.interpreter
 
+import com.melvic.archia.ast.Param
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import kotlin.reflect.KCallable
@@ -79,12 +80,16 @@ inline fun <R> JsonObject.propWithAlt(
  */
 inline fun <R> JsonObject.propFunc(field: KCallable<R?>, f: (R) -> Evaluation) {
     if (!field.name.startsWith("_")) return
-    val altName = field.name.substring(1)
+    val altName = field.name.substring(1).toSnakeCase()
     propWithAlt(field, altName, f)
 }
 
 fun <E : Enum<E>> JsonObject.propEnum(callable: KCallable<E?>) {
     this.prop(callable) { it.lowerName().json() }
+}
+
+fun <A> JsonObject.propParam(param: Param<A>?, f: (A) -> Evaluation) {
+    param?.let { it.first.toSnakeCase() to f(it.second) }
 }
 
 fun <E : Enum<E>> E.lowerName(): String = this.name.toLowerCase()
