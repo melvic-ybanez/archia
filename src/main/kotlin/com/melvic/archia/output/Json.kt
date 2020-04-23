@@ -55,6 +55,10 @@ data class JsonObject(
     fun Boolean.json() = JsonBoolean(this)
 
     override fun instance() = this
+
+    fun error(code: ErrorCode) {
+        errors.add(code)
+    }
 }
 
 interface Compound<C> {

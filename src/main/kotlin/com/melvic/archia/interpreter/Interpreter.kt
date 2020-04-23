@@ -10,9 +10,7 @@ typealias Evaluation = Result<JsonValue>
 fun interpret(init: Init<Query>) = buildQuery(init).interpret()
 
 fun Query.interpret(): Evaluation {
-    val output = this.queryClause?.interpret() ?: missingField(this::query)
-
-    return when (output) {
+    return when (val output = this.clause?.interpret() ?: missingField(this::query)) {
         is Failed -> output
         is Success<*> -> json {
             "query" to output.value()
@@ -47,8 +45,8 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
  * the function will yield a missing field error.
  * @param build builder for the field. It only gets executed if the field exists.
  */
-fun <F : Field> WithField<F>.interpret(parent: JsonObject, build: (F) -> JsonValue): Evaluation {
+fun <F : Field> WithField<F>.interpret(parent: JsonObject, build: F.() -> JsonValue): Evaluation {
     val field = this.field ?: return missingField(this::field)
     val out = parent { esName() to json { field.name to build(field) }}
-    return out.success()
+    return out.validate()
 }

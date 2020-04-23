@@ -25,10 +25,11 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MatchQuery.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return missingField(this::field)
-    if (field.query == null) return missingField(field::query)
+    return interpret(parent) inner@ {
+        if (query == null) return@inner json {
+            error(missingFieldCode(::query))
+        }
 
-    val matchFieldOut = with(field) {
         json {
             prop(::query) {
                 when (it) {
@@ -62,9 +63,6 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
             propEnum(::zeroTermsQuery)
         }
     }
-
-    val matchOut = parent { esName() to json { field.name to matchFieldOut } }
-    return matchOut.success()
 }
 
 fun MatchAllQuery.interpret(parent: JsonObject): Evaluation {
@@ -78,9 +76,7 @@ fun MatchNoneQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun RangeQuery.interpret(parent: JsonObject): Evaluation {
-    val field = this.field ?: return missingField(this::field)
-
-    val rangeFieldOut = with(field) {
+    return interpret(parent) {
         json {
             fun <R, C : KCallable<R>> propFieldParam(callable: C) {
                 prop(callable) {
@@ -102,7 +98,4 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
             prop(::boost) { it.json() }
         }
     }
-
-    val rangeOut = parent { esName() to json { field.name to rangeFieldOut } }
-    return rangeOut.success()
 }

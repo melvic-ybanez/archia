@@ -2,8 +2,10 @@ package com.melvic.archia.ast.leaf
 
 import com.melvic.archia.ast.Boost
 import com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.Field
+import com.melvic.archia.ast.WithField
 
-data class TermQuery(var field: TermField? = null): Clause {
+class TermQuery: WithField<TermField>() {
     var customProp: Pair<String, String>? = null
 
     operator fun String.invoke(init: TermField.() -> Unit) {
@@ -16,9 +18,9 @@ data class TermQuery(var field: TermField? = null): Clause {
     }
 }
 
-data class TermField(
-    val name: String,
+class TermField(
+    name: String,
     var value: String? = null,
     var boost: Boost? = null
-)
+) : Field(name)
 

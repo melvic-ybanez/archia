@@ -3,17 +3,17 @@ package com.melvic.archia.ast.fulltext
 import com.melvic.archia.ast.*
 import com.melvic.archia.script.Script
 
-data class IntervalsQuery(var field: IntervalField? = null) : Clause
+class IntervalsQuery : WithField<IntervalField>()
 
-data class IntervalField(
-    val name: String,
+class IntervalField(
+    name: String,
     var _match: MatchRule? = null,
     var _prefix: PrefixRule? = null,
     var _wildcard: WildCardRule? = null,
     var _fuzzy: FuzzyRule? = null,
     var _allOf: AllOfRule? = null,
     var _anyOf: AnyOfRule? = null
-) {
+) : Field(name) {
     fun match(init: Init<MatchRule>) {
         setProp(init) { _match = it }
     }

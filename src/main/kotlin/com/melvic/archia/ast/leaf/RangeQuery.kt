@@ -2,14 +2,14 @@ package com.melvic.archia.ast.leaf
 
 import com.melvic.archia.ast.*
 
-data class RangeQuery(var field: RangeField? = null) : Clause {
+class RangeQuery : WithField<RangeField>() {
     operator fun String.invoke(init: Init<RangeField>) {
         field = RangeField(this).apply(init)
     }
 }
 
-data class RangeField(
-    val name: String,
+class RangeField(
+    name: String,
 
     var gt: RangeValue? = null,
     var gte: RangeValue? = null,
@@ -20,7 +20,7 @@ data class RangeField(
     var relation: Relation? = null,
     var timeZone: String? = null,
     var boost: Boost? = null
-): WithNum
+): Field(name), WithNum
 
 enum class Relation { INTERSECTS, CONTAINS, WITHIN }
 

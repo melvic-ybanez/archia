@@ -5,10 +5,10 @@ import com.melvic.archia.interpreter.toSnakeCase
 
 typealias Init<A> = A.() -> Unit
 
-data class Query(var queryClause: Clause? = null) {
+data class Query(var clause: Clause? = null) {
     fun query(init: Init<ClauseBuilder>) {
         val builder = ClauseBuilder().apply(init)
-        queryClause = builder.clause
+        clause = builder.clause
     }
 }
 
