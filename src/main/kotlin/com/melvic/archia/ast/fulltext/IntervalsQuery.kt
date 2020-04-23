@@ -1,8 +1,6 @@
 package com.melvic.archia.ast.fulltext
 
-import com.melvic.archia.ast.Analyzer
-import com.melvic.archia.ast.Clause
-import com.melvic.archia.ast.Fuzziness
+import com.melvic.archia.ast.*
 import com.melvic.archia.script.Script
 
 data class IntervalsQuery(var field: IntervalField? = null) : Clause
@@ -15,7 +13,31 @@ data class IntervalField(
     var _fuzzy: FuzzyRule? = null,
     var _allOf: AllOfRule? = null,
     var _anyOf: AnyOfRule? = null
-)
+) {
+    fun match(init: Init<MatchRule>) {
+        setProp(init) { _match = it }
+    }
+
+    fun prefix(init: Init<PrefixRule>) {
+        setProp(init) { _prefix = it }
+    }
+
+    fun wildcard(init: Init<WildCardRule>) {
+        setProp(init) { _wildcard = it }
+    }
+
+    fun fuzzy(init: Init<FuzzyRule>) {
+        setProp(init) { _fuzzy = it }
+    }
+
+    fun allOf(init: Init<AllOfRule>) {
+        setProp(init) { _allOf = it }
+    }
+
+    fun anyOf(init: Init<AnyOfRule>) {
+        setProp(init) { _anyOf = it }
+    }
+}
 
 sealed class IntervalRule
 

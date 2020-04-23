@@ -36,33 +36,33 @@ open class FunctionClause(
     var _gauss: DecayFunction? = null,
     var _exp: DecayFunction? = null,
     var _linear: DecayFunction? = null
-) : Clause, WithDate {
+) : Clause, WithDate, BuilderHelper {
     fun filter(init: Init<ClauseBuilder>) {
-        _filter = ClauseBuilder().apply(init).clause
+        setClause(init) { _filter = it }
     }
 
     fun scriptScore(init: Init<ScriptScore>) {
-        _scriptScore = ScriptScore().apply(init)
+        setProp(init) { _scriptScore = it}
     }
 
     fun randomScore(init: Init<RandomScore>) {
-        _randomScore = RandomScore().apply(init)
+        setProp(init) { _randomScore = it }
     }
 
     fun fieldValueFactor(init: Init<FieldValueFactor>) {
-        _fieldValueFactor = FieldValueFactor().apply(init)
+        setProp(init) { _fieldValueFactor = it }
     }
 
     fun gauss(init: Init<DecayFunction>) {
-        _gauss = DecayFunction().apply(init)
+        setProp(init) { _gauss = it }
     }
 
     fun exp(init: Init<DecayFunction>) {
-        _exp = DecayFunction().apply(init)
+        setProp(init) { _exp = it }
     }
 
     fun linear(init: Init<DecayFunction>) {
-        _linear = DecayFunction().apply(init)
+        setProp(init) { _linear = it }
     }
 }
 
@@ -70,7 +70,7 @@ data class RandomScore(var seed: Number? = null, var field: String? = null)
 
 data class ScriptScore(var _script: Script? = null) {
     fun script(init: Init<Script>) {
-        _script = Script().apply(init)
+        setProp(init) { _script = it }
     }
 }
 

@@ -9,25 +9,20 @@ data class BoolQuery(
     var _mustNot: MultiClause? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var boost: Boost? = null
-): Clause, WithNum {
-    private fun setArrayClause(init: Init<ClauseArrayBuilder>, set: (MultiClause) -> Unit) {
-        val builder = ClauseArrayBuilder().apply(init)
-        set(builder.clauses)
-    }
-
+): Clause, WithNum, BuilderHelper {
     fun must(init: Init<ClauseArrayBuilder>) {
-        setArrayClause(init) { _must = it }
+        setClauseArray(init) { _must = it }
     }
 
     fun filter(init: Init<ClauseArrayBuilder>) {
-        setArrayClause(init) { _filter = it }
+        setClauseArray(init) { _filter = it }
     }
 
     fun should(init: Init<ClauseArrayBuilder>) {
-        setArrayClause(init) { _should = it }
+        setClauseArray(init) { _should = it }
     }
 
     fun mustNot(init: Init<ClauseArrayBuilder>) {
-        setArrayClause(init) { _mustNot = it }
+        setClauseArray(init) { _mustNot = it }
     }
 }
