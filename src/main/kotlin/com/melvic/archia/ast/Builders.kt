@@ -91,17 +91,15 @@ interface BuilderHelper {
  * @param set A function that saves the instance
  */
 inline fun <B : Any, C> build(cls: KClass<B>, init: Init<B>, map: (B) -> C, set: (C) -> Unit) {
-    cls.primaryConstructor?.let {
-        val constructor = it.call()
-        val builder = constructor.apply(init)
-        set(map(builder))
-    }
+    val constructor = cls.primaryConstructor!!.callBy(emptyMap())
+    val builder = constructor.apply(init)
+    set(map(builder))
 }
 
 inline fun <reified B : Any, reified C> build(init: Init<B>, f: (B) -> C, set: (C) -> Unit) {
     build(B::class, init, f, set)
 }
 
-inline fun <reified P> setProp(init: Init<P>, set: (P) -> Unit) {
+inline fun <reified P : Any> setProp(init: Init<P>, set: (P) -> Unit) {
     build(init, ::identity) { set(it) }
 }
