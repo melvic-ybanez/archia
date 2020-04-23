@@ -6,7 +6,7 @@ import com.melvic.archia.script.Script
 fun Script.interpret(): Evaluation {
     return json {
         propEnum(::lang)
-        propFunc(::_params, ::params) {
+        propWithAlt(::_params, ::params) {
             json {
                 for ((key, value) in it) {
                     key to value.json()

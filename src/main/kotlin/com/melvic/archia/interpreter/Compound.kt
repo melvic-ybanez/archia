@@ -6,10 +6,10 @@ import com.melvic.archia.output.*
 
 fun BoolQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
-        propFunc(::_must, ::must) { it.interpret() }
-        propFunc(::_should, ::should) { it.interpret() }
-        propFunc(::_filter, ::filter) { it.interpret() }
-        propFunc(::_mustNot, ::mustNot) { it.interpret() }
+        propWithAlt(::_must, ::must) { it.interpret() }
+        propWithAlt(::_should, ::should) { it.interpret() }
+        propWithAlt(::_filter, ::filter) { it.interpret() }
+        propWithAlt(::_mustNot, ::mustNot) { it.interpret() }
         prop(::minimumShouldMatch) { it.interpret(this) }
         prop(::boost) { it.json() }
     }
@@ -26,8 +26,8 @@ fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
     if (errors.isNotEmpty()) return Failed(errors)
 
     val propsOut = json {
-        propFunc(::_positive, ::positive) { it.interpret() }
-        propFunc(::_negative, ::negative) { it.interpret() }
+        propWithAlt(::_positive, ::positive) { it.interpret() }
+        propWithAlt(::_negative, ::negative) { it.interpret() }
         prop(::negativeBoost) { it.json() }
     }
 
@@ -40,7 +40,7 @@ fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
 
     return parent {
         esName() to json {
-            propFunc(::_filter, ::filter) { it.interpret() }
+            propWithAlt(::_filter, ::filter) { it.interpret() }
             prop(::boost) { it.json() }
         }
     }.success()
@@ -51,7 +51,7 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
 
     return parent {
         esName() to json {
-            propFunc(::_queries, ::queries) { it.interpret() }
+            propWithAlt(::_queries, ::queries) { it.interpret() }
             prop(::tieBreaker) { it.json() }
         }
     }.success()
@@ -59,7 +59,7 @@ fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
 
 fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
-        propFunc(::_query, ::query) { it.interpret() }
+        propWithAlt(::_query, ::query) { it.interpret() }
         propStr(::boost)
         _functions?.let {
             val functions = array()
@@ -117,22 +117,22 @@ fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
 
 fun FunctionClause.interpretFunction(parent: JsonObject): Evaluation {
     return parent {
-        propFunc(::_filter, ::filter) { it.interpret() }
-        propFunc(::_scriptScore, ::scriptScore) { it.interpret() }
+        propWithAlt(::_filter, ::filter) { it.interpret() }
+        propWithAlt(::_scriptScore, ::scriptScore) { it.interpret() }
         propNum(::weight)
-        propFunc(::_randomScore, ::randomScore) { it.interpret() }
-        propFunc(::_fieldValueFactor, ::fieldValueFactor) { it.interpret() }
+        propWithAlt(::_randomScore, ::randomScore) { it.interpret() }
+        propWithAlt(::_fieldValueFactor, ::fieldValueFactor) { it.interpret() }
 
         // decay functions
-        propFunc(::_gauss, ::gauss) { it.interpret() }
-        propFunc(::_exp, ::exp) { it.interpret() }
-        propFunc(::_linear, ::linear) { it.interpret() }
+        propWithAlt(::_gauss, ::gauss) { it.interpret() }
+        propWithAlt(::_exp, ::exp) { it.interpret() }
+        propWithAlt(::_linear, ::linear) { it.interpret() }
     }.success()
 }
 
 fun ScriptScore.interpret(): Evaluation {
     return json {
-        propFunc(::_script, ::script) { it.interpret() }
+        propWithAlt(::_script, ::script) { it.interpret() }
     }.success()
 }
 
