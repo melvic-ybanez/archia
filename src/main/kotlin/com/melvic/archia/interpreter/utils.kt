@@ -77,7 +77,7 @@ inline fun <R> JsonObject.propWithAlt(
  * the leading underscore. If the name doesn't have an underscore, the
  * function doesn't do anything.
  */
-inline fun <R> JsonObject.propFunc(field: KCallable<R>, f: (R) -> Evaluation) {
+inline fun <R> JsonObject.propFunc(field: KCallable<R?>, f: (R) -> Evaluation) {
     if (!field.name.startsWith("_")) return
     val altName = field.name.substring(1)
     propWithAlt(field, altName, f)

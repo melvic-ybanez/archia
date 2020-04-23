@@ -1,12 +1,13 @@
 package com.melvic.archia.script
 
+import com.melvic.archia.ast.Clause
 import com.melvic.archia.ast.Init
 
 data class Script(
     var lang: ScriptLang? = null,
     var source: String? = null,
     var _params: MutableMap<String, Number>? = null
-) {
+) : Clause {
     fun params(init: Init<Params>) {
         _params = Params().apply(init).params
     }

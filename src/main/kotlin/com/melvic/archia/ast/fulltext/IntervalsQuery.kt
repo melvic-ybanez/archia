@@ -1,41 +1,36 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.script.Script
 
 class IntervalsQuery : WithField<IntervalField>()
 
-class IntervalField(
-    name: String,
-    var _match: MatchRule? = null,
-    var _prefix: PrefixRule? = null,
-    var _wildcard: WildCardRule? = null,
-    var _fuzzy: FuzzyRule? = null,
-    var _allOf: AllOfRule? = null,
-    var _anyOf: AnyOfRule? = null
-) : Field(name) {
+class IntervalField(name: String, var rule: IntervalRule? = null) : Field(name) {
+    private fun <R : IntervalRule> save(rule: R) {
+        this.rule = rule
+    }
+
     fun match(init: Init<MatchRule>) {
-        setProp(init) { _match = it }
+        setProp(init, ::save)
     }
 
     fun prefix(init: Init<PrefixRule>) {
-        setProp(init) { _prefix = it }
+        setProp(init, ::save)
     }
 
     fun wildcard(init: Init<WildCardRule>) {
-        setProp(init) { _wildcard = it }
+        setProp(init, ::save)
     }
 
     fun fuzzy(init: Init<FuzzyRule>) {
-        setProp(init) { _fuzzy = it }
+        setProp(init, ::save)
     }
 
     fun allOf(init: Init<AllOfRule>) {
-        setProp(init) { _allOf = it }
+        setProp(init, ::save)
     }
 
     fun anyOf(init: Init<AnyOfRule>) {
-        setProp(init) { _anyOf = it }
+        setProp(init, ::save)
     }
 }
 
@@ -44,6 +39,23 @@ sealed class IntervalRule
 open class WithAnalyzer : IntervalRule() {
     var analyzer: String? = null
     var useField: String? = null
+}
+
+open class IntervalOptions : IntervalRule() {
+    var _intervals: MutableList<IntervalsQuery>? = null
+    var _filter: FilterRule? = null
+
+    fun intervals(init: Init<IntervalsQuery>) {
+        setProp(init) {
+            _intervals?.add(it) ?: run {
+                _intervals = mutableListOf(it)
+            }
+        }
+    }
+
+    fun filter(init: Init<FilterRule>) {
+        setProp(init) { _filter = it }
+    }
 }
 
 data class MatchRule(
@@ -65,25 +77,50 @@ data class FuzzyRule(
 ) : WithAnalyzer()
 
 data class AllOfRule(
-    var intervals: List<IntervalRule>? = null,
     var maxGaps: Int? = null,
-    var ordered: Boolean? = null,
-    var filter: FilterRule? = null
-) : IntervalRule()
+    var ordered: Boolean? = null
+) : IntervalOptions()
 
-data class AnyOfRule(
-    var intervals: IntervalRule? = null,
-    var filter: FilterRule? = null
-) : IntervalRule()
+object AnyOfRule : IntervalOptions()
 
-data class FilterRule(
-    var after: Clause? = null,
-    var before: Clause? = null,
-    var containedBy: Clause? = null,
-    var containing: Clause? = null,
-    var notContainedBy: Clause? = null,
-    var notContaining: Clause? = null,
-    var notOverlapping: Clause? = null,
-    var overlapping: Clause? = null,
-    var script: Script? = null
-) : IntervalRule()
+data class FilterRule(var query: Clause? = null): IntervalRule(), BuilderHelper {
+    private fun save(query: Clause) {
+        this.query = query
+    }
+
+    fun after(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun before(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun containedBy(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun containing(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun notContainedBy(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun notContaining(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun notOverlapping(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun overlapping(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+
+    fun script(init: Init<ClauseBuilder>) {
+        setClause(init, ::save)
+    }
+}
