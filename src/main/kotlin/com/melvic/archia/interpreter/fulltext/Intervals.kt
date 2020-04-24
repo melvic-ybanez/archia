@@ -1,8 +1,6 @@
 package com.melvic.archia.interpreter.fulltext
 
-import com.melvic.archia.ast.fulltext.IntervalsQuery
-import com.melvic.archia.ast.fulltext.MatchRule
-import com.melvic.archia.ast.fulltext.PrefixRule
+import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
@@ -22,20 +20,33 @@ fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
     }
 }
 
+fun WithAnalyzer.interpretAnalyzer(parent: JsonObject): JsonObject {
+    return parent {
+        propStr(::analyzer)
+        propStr(::useField)
+    }
+}
+
 fun MatchRule.interpret(): Evaluation {
     return require(::query) {
         propStr(::query)
         propNum(::maxGaps)
         propBool(::ordered)
-        propStr(::analyzer)
+        interpretAnalyzer(this)
         // TODO: filter rule
-        propStr(::useField)
     }
 }
 
 fun PrefixRule.interpret(): Evaluation {
     return require(::prefix) {
-        propStr(::analyzer)
-        propStr(::useField)
+        propStr(::prefix)
+        interpretAnalyzer(this)
+    }
+}
+
+fun WildCardRule.interpret(): Evaluation {
+    return require(::pattern) {
+        propStr(::pattern)
+        interpretAnalyzer(this)
     }
 }
