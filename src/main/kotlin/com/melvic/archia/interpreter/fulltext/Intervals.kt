@@ -32,7 +32,7 @@ fun MatchRule.interpret(): Evaluation {
         propNum(::maxGaps)
         propBool(::ordered)
         interpretAnalyzer(this)
-        // TODO: filter rule
+        propFunc(AnyOfRule::_filter) { it.interpret(this) }
     }
 }
 
@@ -61,13 +61,13 @@ fun AllOfRule.interpret(): Evaluation {
     return require(::intervals) {
         propNum(::maxGaps)
         propBool(::ordered)
-        // TODO: filter rule
+        propFunc(::_filter) { it.interpret(this) }
     }
 }
 
 fun AnyOfRule.interpret(): Evaluation {
     return require(::intervals) {
-        // TODO: filter rule
+        propFunc(::_filter) { it.interpret(this) }
     }
 }
 
