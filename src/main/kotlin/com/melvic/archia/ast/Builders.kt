@@ -13,48 +13,52 @@ import kotlin.reflect.full.primaryConstructor
 interface Builder {
     fun <C : Clause> save(clause: C)
 
+    private inline fun <reified C : Clause> save(init: Init<C>) {
+        setProp(init) { save(it) }
+    }
+
     fun term(termInit: Init<TermQuery>) {
-        setProp(termInit) { save(it) }
+        save(termInit)
     }
 
     fun match(matchInit: Init<MatchQuery>) {
-        setProp(matchInit) { save(it) }
+        save(matchInit)
     }
 
     fun matchAll(matchAllInit: Init<MatchAllQuery>) {
-        setProp(matchAllInit) { save(it) }
+        save(matchAllInit)
     }
 
     fun matchNone(matchNoneInit: Init<MatchNoneQuery>) {
-        setProp(matchNoneInit) { save(it) }
+        save(matchNoneInit)
     }
 
     fun range(rangeInit: Init<RangeQuery>) {
-        setProp(rangeInit) { save(it) }
+        save(rangeInit)
     }
 
     fun bool(boolInit: Init<BoolQuery>) {
-        setProp(boolInit) { save(it) }
+        save(boolInit)
     }
 
     fun boosting(boostingInit: Init<BoostingQuery>) {
-        setProp(boostingInit) { save(it) }
+        save(boostingInit)
     }
 
     fun constantScore(constantScoreInit: Init<ConstantScoreQuery>) {
-        setProp(constantScoreInit) { save(it) }
+        save(constantScoreInit)
     }
 
     fun disMax(disMaxInit: Init<DisMaxQuery>) {
-        setProp(disMaxInit) { save(it) }
+        save(disMaxInit)
     }
 
     fun functionScore(functionScoreInit: Init<FunctionScoreQuery>) {
-        setProp(functionScoreInit) { save(it) }
+        save(functionScoreInit)
     }
 
     fun intervals(intervalsInit: Init<IntervalsQuery>) {
-        setProp(intervalsInit) { save(it) }
+        save(intervalsInit)
     }
 }
 
@@ -96,8 +100,8 @@ inline fun <B : Any, C> build(cls: KClass<B>, init: Init<B>, map: (B) -> C, set:
     set(map(builder))
 }
 
-inline fun <reified B : Any, reified C> build(init: Init<B>, f: (B) -> C, set: (C) -> Unit) {
-    build(B::class, init, f, set)
+inline fun <reified B : Any, reified C> build(init: Init<B>, map: (B) -> C, set: (C) -> Unit) {
+    build(B::class, init, map, set)
 }
 
 inline fun <reified P : Any> setProp(init: Init<P>, set: (P) -> Unit) {

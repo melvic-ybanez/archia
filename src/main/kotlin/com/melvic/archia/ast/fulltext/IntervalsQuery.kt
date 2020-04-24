@@ -1,40 +1,77 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.leaf.MatchField
 import kotlin.reflect.KCallable
 
 class IntervalsQuery : WithField<IntervalField>() {
     override fun getField(name: String) = IntervalField(name)
 }
 
-class IntervalField(name: String, var rule: Param<IntervalRule>? = null) : Field(name), ParamHelper {
+class IntervalField(
+    name: String,
+    var rule: Param<IntervalRule>? = null
+) : Field(name), ParamHelper, IntervalBuilder {
     private inline fun <reified R : IntervalRule> save(init: Init<R>, field: KCallable<Unit>) {
         setProp(init) { this.rule = param(field, it) }
     }
 
-    fun match(init: Init<MatchRule>) {
+    override fun match(init: Init<MatchRule>) {
         save(init, ::match)
     }
 
-    fun prefix(init: Init<PrefixRule>) {
+    override fun prefix(init: Init<PrefixRule>) {
         save(init, ::prefix)
     }
 
-    fun wildcard(init: Init<WildCardRule>) {
+    override fun wildcard(init: Init<WildCardRule>) {
         save(init, ::wildcard)
     }
 
-    fun fuzzy(init: Init<FuzzyRule>) {
+    override fun fuzzy(init: Init<FuzzyRule>) {
         save(init, ::fuzzy)
     }
 
-    fun allOf(init: Init<AllOfRule>) {
+    override fun allOf(init: Init<AllOfRule>) {
         save(init, ::allOf)
     }
 
-    fun anyOf(init: Init<AnyOfRule>) {
+    override fun anyOf(init: Init<AnyOfRule>) {
         save(init, ::anyOf)
+    }
+}
+
+class MultiIntervals : IntervalBuilder, ParamHelper {
+    val intervals: MutableList<Param<IntervalRule>> = mutableListOf()
+
+    private inline fun <reified R : IntervalRule> addInterval(init: Init<R>, field: KCallable<Unit>) {
+        setProp(init) {
+            val rule = param(field, it)
+            intervals.add(rule)
+        }
+    }
+
+    override fun match(init: Init<MatchRule>) {
+        addInterval(init, ::match)
+    }
+
+    override fun prefix(init: Init<PrefixRule>) {
+        addInterval(init, ::prefix)
+    }
+
+    override fun wildcard(init: Init<WildCardRule>) {
+        addInterval(init, ::wildcard)
+    }
+
+    override fun fuzzy(init: Init<FuzzyRule>) {
+        addInterval(init, ::fuzzy)
+    }
+
+    override fun allOf(init: Init<AllOfRule>) {
+        addInterval(init, ::allOf)
+    }
+
+    override fun anyOf(init: Init<AnyOfRule>) {
+        addInterval(init, ::anyOf)
     }
 }
 
@@ -46,15 +83,11 @@ open class WithAnalyzer : IntervalRule() {
 }
 
 open class IntervalOptions : IntervalRule() {
-    var _intervals: MutableList<IntervalsQuery>? = null
+    var _intervals: MutableList<Param<IntervalRule>>? = null
     var _filter: FilterRule? = null
 
-    fun intervals(init: Init<IntervalsQuery>) {
-        setProp(init) {
-            _intervals?.add(it) ?: run {
-                _intervals = mutableListOf(it)
-            }
-        }
+    fun intervals(init: Init<MultiIntervals>) {
+        setProp(init) { _intervals = it.intervals }
     }
 
     fun filter(init: Init<FilterRule>) {
@@ -127,4 +160,18 @@ data class FilterRule(var query: Param<Clause>? = null): IntervalRule(), ParamHe
     fun script(init: Init<ClauseBuilder>) {
         saveParam(init, ::script)
     }
+}
+
+interface IntervalBuilder : ParamHelper {
+    fun match(init: Init<MatchRule>)
+
+    fun prefix(init: Init<PrefixRule>)
+
+    fun wildcard(init: Init<WildCardRule>)
+
+    fun fuzzy(init: Init<FuzzyRule>)
+
+    fun allOf(init: Init<AllOfRule>)
+
+    fun anyOf(init: Init<AnyOfRule>)
 }
