@@ -29,7 +29,6 @@ fun WithAnalyzer.interpretAnalyzer(parent: JsonObject): JsonObject {
 
 fun MatchRule.interpret(): Evaluation {
     return require(::query) {
-        propStr(::query)
         propNum(::maxGaps)
         propBool(::ordered)
         interpretAnalyzer(this)
@@ -39,14 +38,21 @@ fun MatchRule.interpret(): Evaluation {
 
 fun PrefixRule.interpret(): Evaluation {
     return require(::prefix) {
-        propStr(::prefix)
         interpretAnalyzer(this)
     }
 }
 
 fun WildCardRule.interpret(): Evaluation {
     return require(::pattern) {
-        propStr(::pattern)
+        interpretAnalyzer(this)
+    }
+}
+
+fun FuzzyRule.interpret(): Evaluation {
+    return require(::term) {
+        propStr(::prefixLength)
+        propBool(::transpositions)
+        prop(::fuzziness) { it.interpret(this) }
         interpretAnalyzer(this)
     }
 }

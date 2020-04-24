@@ -1,9 +1,6 @@
 package com.melvic.archia
 
-import com.melvic.archia.interpreter.Evaluation
-import com.melvic.archia.interpreter.Failed
-import com.melvic.archia.interpreter.missingField
-import com.melvic.archia.interpreter.success
+import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.json
 import kotlin.reflect.KCallable
@@ -29,6 +26,18 @@ fun JsonObject.validate(): Evaluation {
  * @param f function to execute when the required fields are provided
  */
 fun <F> require(field: KCallable<F?>, f: JsonObject.() -> Unit): Evaluation {
-    if (field.call() == null) return missingField(field.name)
-    return json {}.apply(f).validate()
+    val fieldValue = field.call() ?: return missingField(field.name)
+    val fieldName = field.esNameFormat()
+
+    return json {
+        // If the field is a JSON primitive value, register it as
+        // one of the props
+        fieldValue.let {
+            when (it) {
+                is Number -> fieldName to it.json()
+                is String -> fieldName to it.json()
+                is Boolean -> fieldName to it.json()
+            }
+        }
+    }.apply(f).validate()
 }
