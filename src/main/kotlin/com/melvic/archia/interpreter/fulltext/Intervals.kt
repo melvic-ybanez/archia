@@ -56,3 +56,11 @@ fun FuzzyRule.interpret(): Evaluation {
         interpretAnalyzer(this)
     }
 }
+
+fun AllOfRule.interpret(): Evaluation {
+    return require(::intervals) {
+        propNum(::maxGaps)
+        propBool(::ordered)
+        // TODO: filter rule
+    }
+}
