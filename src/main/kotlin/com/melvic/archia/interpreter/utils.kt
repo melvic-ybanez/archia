@@ -6,12 +6,17 @@ import com.melvic.archia.output.JsonValue
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
+/**
+ * Yields the snake case form of a given string.
+ * This is used to format the names of the class and callables
+ * to match the elasticsearch field name format.
+ */
 fun String.toSnakeCase(): String {
     val snake = StringBuilder()
 
     for (char in this) {
         if (char.isUpperCase()) {
-            if (!snake.isEmpty()) snake.append("_")
+            if (snake.isNotEmpty()) snake.append("_")
             snake.append(char.toLowerCase())
         } else snake.append(char)
     }
@@ -19,15 +24,28 @@ fun String.toSnakeCase(): String {
     return snake.toString()
 }
 
-fun <R> nameOf(callable: KCallable<R>): String = callable.name
+/**
+ * Yields the callable's name, formatted based on the
+ * elasticsearch field name format.
+ */
+fun <R> KCallable<R>.esNameFormat(): String {
+    // Currently, callable names assumed to be in camel case format.
+    // This might change in the future
+    return this.name.toSnakeCase()
+}
 
-fun <R> snakeCaseNameOf(callable: KCallable<R>): String = nameOf(callable).toSnakeCase()
-
-fun <C : Any> snakeCaseNameOf(clazz: KClass<C>): String =
-    clazz.simpleName?.toSnakeCase() ?: "unknown_type"
+/**
+ * Yields the class name, formatted based on the
+ * elasticsearch field name format.
+ */
+fun <C : Any> KClass<C>.esNameFormat(): String {
+    // Currently, class names assumed to be in camel case format.
+    // This might change in the future
+    return simpleName?.toSnakeCase() ?: "unknown_type"
+}
 
 inline fun <R> JsonObject.propEval(field: KCallable<R?>, f: (R) -> Evaluation) {
-    field.call()?.let { snakeCaseNameOf(field) to f(it) }
+    field.call()?.let { field.esNameFormat() to f(it) }
 }
 
 inline fun <R> JsonObject.prop(field: KCallable<R?>, f: (R) -> JsonValue) {
@@ -58,7 +76,7 @@ inline fun <R> JsonObject.propWithAlt(
     altField: KCallable<Unit>,
     f: (R) -> Evaluation
 ) {
-    propWithAlt(field, snakeCaseNameOf(altField), f)
+    propWithAlt(field, altField.esNameFormat(), f)
 }
 
 /**

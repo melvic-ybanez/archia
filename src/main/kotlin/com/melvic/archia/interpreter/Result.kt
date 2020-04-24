@@ -35,9 +35,9 @@ data class InvalidValue<A>(val fieldName: String, val value: A) : ErrorCode()
 
 fun ErrorCode.show(): String {
     return when (this) {
-        is MissingField -> snakeCaseNameOf(MissingField::class)
-        is UnknownQuery -> snakeCaseNameOf(UnknownQuery::class)
-        is InvalidValue<*> -> snakeCaseNameOf(InvalidValue::class)
+        is MissingField -> MissingField::class.esNameFormat()
+        is UnknownQuery -> UnknownQuery::class.esNameFormat()
+        is InvalidValue<*> -> InvalidValue::class.esNameFormat()
     }
 }
 
@@ -51,7 +51,7 @@ fun <R> missingField(callable: KCallable<R>) = missingFieldCode(callable).fail()
 
 fun missingField(fieldName: String) = MissingField(fieldName).fail()
 
-fun <R> missingFieldCode(callable: KCallable<R>) = MissingField(nameOf(callable))
+fun <R> missingFieldCode(callable: KCallable<R>) = MissingField(callable.esNameFormat())
 
 fun ErrorCode.fail() = Failed(listOf(this))
 
