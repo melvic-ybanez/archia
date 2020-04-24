@@ -60,7 +60,7 @@ fun JsonObject.propNum(field: KCallable<Number?>) {
     this { prop(field) { it.json() } }
 }
 
-fun JsonObject.propBool(field: KCallable<Boolean>) {
+fun JsonObject.propBool(field: KCallable<Boolean?>) {
     this { prop(field) { it.json() } }
 }
 
