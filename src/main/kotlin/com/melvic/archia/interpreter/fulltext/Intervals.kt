@@ -6,16 +6,16 @@ import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
 import com.melvic.archia.require
+import com.melvic.archia.validate
 
 /**
- * Interprets an intervals query
+ * Interprets intervals query
  * @param parent the json object that will contain the interpreted
  * form of the given intervals query
  */
 fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
     return interpret(parent) {
         json {
-            // TODO implement interpreter
         }
     }
 }
@@ -72,4 +72,7 @@ fun AnyOfRule.interpret(): Evaluation {
 }
 
 fun FilterRule.interpret(parent: JsonObject): Evaluation =
-    query?.interpret(parent) ?: json {}.success()
+    query?.let {
+        val (name, clause) = it
+        parent { name to clause.interpret(json {})}.validate()
+    } ?: json {}.success()

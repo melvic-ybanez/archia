@@ -23,10 +23,6 @@ interface Clause {
         val noPrefix = simpleName.replace("Query", "")
         return noPrefix.toSnakeCase()
     }
-
-    fun <A> param(callable: KCallable<Unit>, value: A): Param<A> {
-        return Pair(callable.name, value)
-    }
 }
 
 typealias MultiClause = MutableList<Clause>

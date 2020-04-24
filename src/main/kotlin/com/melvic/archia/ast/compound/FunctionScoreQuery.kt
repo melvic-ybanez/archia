@@ -29,7 +29,7 @@ open class FunctionClause(
     var _filter: Clause? = null,
     var scoreFunction: Param<ScoreFunction>? = null,
     var weight: Number? = null
-) : Clause, WithDate, BuilderHelper {
+) : Clause, ParamHelper, WithDate, BuilderHelper {
     fun saveFunction(callable: KCallable<Unit>, sf: ScoreFunction) {
         scoreFunction = param(callable, sf)
     }

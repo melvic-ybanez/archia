@@ -1,36 +1,37 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
+import kotlin.reflect.KCallable
 
 class IntervalsQuery : WithField<IntervalField>()
 
-class IntervalField(name: String, var rule: IntervalRule? = null) : Field(name) {
-    private fun <R : IntervalRule> save(rule: R) {
-        this.rule = rule
+class IntervalField(name: String, var rule: Param<IntervalRule>? = null) : Field(name), ParamHelper {
+    private inline fun <reified R : IntervalRule> save(init: Init<R>, field: KCallable<Unit>) {
+        setProp(init) { this.rule = param(field, it) }
     }
 
     fun match(init: Init<MatchRule>) {
-        setProp(init, ::save)
+        save(init, ::match)
     }
 
     fun prefix(init: Init<PrefixRule>) {
-        setProp(init, ::save)
+        save(init, ::prefix)
     }
 
     fun wildcard(init: Init<WildCardRule>) {
-        setProp(init, ::save)
+        save(init, ::wildcard)
     }
 
     fun fuzzy(init: Init<FuzzyRule>) {
-        setProp(init, ::save)
+        save(init, ::fuzzy)
     }
 
     fun allOf(init: Init<AllOfRule>) {
-        setProp(init, ::save)
+        save(init, ::allOf)
     }
 
     fun anyOf(init: Init<AnyOfRule>) {
-        setProp(init, ::save)
+        save(init, ::anyOf)
     }
 }
 
@@ -83,44 +84,44 @@ data class AllOfRule(
 
 object AnyOfRule : IntervalOptions()
 
-data class FilterRule(var query: Clause? = null): IntervalRule(), BuilderHelper {
-    private fun save(query: Clause) {
-        this.query = query
+data class FilterRule(var query: Param<Clause>? = null): IntervalRule(), ParamHelper, BuilderHelper {
+    private fun saveParam(init: Init<ClauseBuilder>, field: KCallable<Unit>) {
+        setClause(init) { this.query = param(field, it) }
     }
 
     fun after(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::after)
     }
 
     fun before(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::before)
     }
 
     fun containedBy(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::containedBy)
     }
 
     fun containing(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::containing)
     }
 
     fun notContainedBy(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::notContainedBy)
     }
 
     fun notContaining(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::notContaining)
     }
 
     fun notOverlapping(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::notOverlapping)
     }
 
     fun overlapping(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::overlapping)
     }
 
     fun script(init: Init<ClauseBuilder>) {
-        setClause(init, ::save)
+        saveParam(init, ::script)
     }
 }
