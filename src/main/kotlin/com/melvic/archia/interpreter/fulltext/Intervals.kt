@@ -16,6 +16,7 @@ import com.melvic.archia.validate
 fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
     return interpret(parent) {
         json {
+
         }
     }
 }

@@ -30,8 +30,8 @@ open class FunctionClause(
     var scoreFunction: Param<ScoreFunction>? = null,
     var weight: Number? = null
 ) : Clause, ParamHelper, WithDate, BuilderHelper {
-    fun saveFunction(callable: KCallable<Unit>, sf: ScoreFunction) {
-        scoreFunction = param(callable, sf)
+    private inline fun <reified R : ScoreFunction> save(init: Init<R>, field: KCallable<Unit>) {
+        setProp(init) { scoreFunction = param(field, it) }
     }
 
     fun filter(init: Init<ClauseBuilder>) {
@@ -39,27 +39,27 @@ open class FunctionClause(
     }
 
     fun scriptScore(init: Init<ScriptScore>) {
-        setProp(init) { saveFunction(::scriptScore, it) }
+        save(init, ::scriptScore)
     }
 
     fun randomScore(init: Init<RandomScore>) {
-        setProp(init) { saveFunction(::randomScore, it) }
+        save(init, ::randomScore)
     }
 
     fun fieldValueFactor(init: Init<FieldValueFactor>) {
-        setProp(init) { saveFunction(::fieldValueFactor, it) }
+        save(init, ::fieldValueFactor)
     }
 
     fun gauss(init: Init<DecayFunction>) {
-        setProp(init) { saveFunction(::gauss, it) }
+        save(init, ::gauss)
     }
 
     fun exp(init: Init<DecayFunction>) {
-        setProp(init) { saveFunction(::exp, it) }
+        save(init, ::exp)
     }
 
     fun linear(init: Init<DecayFunction>) {
-        setProp(init) { saveFunction(::linear, it) }
+        save(init, ::linear)
     }
 }
 
