@@ -70,3 +70,6 @@ fun AnyOfRule.interpret(): Evaluation {
         // TODO: filter rule
     }
 }
+
+fun FilterRule.interpret(parent: JsonObject): Evaluation =
+    query?.interpret(parent) ?: json {}.success()

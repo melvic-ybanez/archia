@@ -44,6 +44,10 @@ fun <C : Any> KClass<C>.esNameFormat(): String {
     return simpleName?.toSnakeCase() ?: "unknown_type"
 }
 
+/**
+ * Evaluates a property. Add it to the JSON object if successful.
+ * Otherwise, append the errors to the JSON's error list.
+ */
 inline fun <R> JsonObject.propEval(field: KCallable<R?>, f: (R) -> Evaluation) {
     field.call()?.let { field.esNameFormat() to f(it) }
 }
