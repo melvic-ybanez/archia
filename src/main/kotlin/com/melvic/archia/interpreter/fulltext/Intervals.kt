@@ -64,3 +64,9 @@ fun AllOfRule.interpret(): Evaluation {
         // TODO: filter rule
     }
 }
+
+fun AnyOfRule.interpret(): Evaluation {
+    return require(::intervals) {
+        // TODO: filter rule
+    }
+}
