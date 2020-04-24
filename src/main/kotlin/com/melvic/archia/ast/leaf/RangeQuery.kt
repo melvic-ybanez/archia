@@ -3,9 +3,7 @@ package com.melvic.archia.ast.leaf
 import com.melvic.archia.ast.*
 
 class RangeQuery : WithField<RangeField>() {
-    operator fun String.invoke(init: Init<RangeField>) {
-        field = RangeField(this).apply(init)
-    }
+    override fun getField(name: String) = RangeField(name)
 }
 
 class RangeField(

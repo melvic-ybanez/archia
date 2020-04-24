@@ -8,9 +8,7 @@ import com.melvic.archia.ast.WithField
 class TermQuery: WithField<TermField>() {
     var customProp: Pair<String, String>? = null
 
-    operator fun String.invoke(init: TermField.() -> Unit) {
-        field = TermField(this).apply(init)
-    }
+    override fun getField(name: String) = TermField(name)
 
     infix fun String.to(_value: String) {
         customProp = Pair(this, _value)

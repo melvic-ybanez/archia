@@ -1,9 +1,12 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
+import com.melvic.archia.ast.leaf.MatchField
 import kotlin.reflect.KCallable
 
-class IntervalsQuery : WithField<IntervalField>()
+class IntervalsQuery : WithField<IntervalField>() {
+    override fun getField(name: String) = IntervalField(name)
+}
 
 class IntervalField(name: String, var rule: Param<IntervalRule>? = null) : Field(name), ParamHelper {
     private inline fun <reified R : IntervalRule> save(init: Init<R>, field: KCallable<Unit>) {

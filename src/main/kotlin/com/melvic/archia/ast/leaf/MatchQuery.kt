@@ -3,12 +3,7 @@ package com.melvic.archia.ast.leaf
 import com.melvic.archia.ast.*
 
 class MatchQuery : WithField<MatchField>() {
-    /**
-     * Constructs an elasticsearch match field from a string
-     */
-    operator fun String.invoke(init: Init<MatchField>) {
-        field = MatchField(this).apply(init)
-    }
+    override fun getField(name: String) = MatchField(name)
 }
 
 class MatchField(
