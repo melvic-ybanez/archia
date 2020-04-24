@@ -2,7 +2,6 @@ package com.melvic.archia.ast
 
 import com.melvic.archia.interpreter.interpret
 import com.melvic.archia.interpreter.toSnakeCase
-import kotlin.reflect.KCallable
 
 typealias Init<A> = A.() -> Unit
 

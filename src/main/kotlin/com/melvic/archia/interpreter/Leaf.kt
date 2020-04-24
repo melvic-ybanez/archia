@@ -25,7 +25,7 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MatchQuery.interpret(parent: JsonObject): Evaluation {
-    return interpret(parent) inner@ {
+    return withField(parent) inner@ {
         if (query == null) return@inner json {
             error(missingFieldCode(::query))
         }
@@ -66,7 +66,7 @@ fun MatchNoneQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun RangeQuery.interpret(parent: JsonObject): Evaluation {
-    return interpret(parent) {
+    return withField(parent) {
         json {
             fun <R, C : KCallable<R>> propFieldParam(callable: C) {
                 prop(callable) {

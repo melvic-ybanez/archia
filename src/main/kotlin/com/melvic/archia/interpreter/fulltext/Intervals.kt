@@ -2,8 +2,8 @@ package com.melvic.archia.interpreter.fulltext
 
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
+import com.melvic.archia.output.JsonNull
 import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
 import com.melvic.archia.require
 import com.melvic.archia.validate
@@ -14,9 +14,20 @@ import com.melvic.archia.validate
  * form of the given intervals query
  */
 fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
-    return interpret(parent) {
+    return withField(parent) {
         json {
-
+            rule?.let {
+                val (name, clause) = it
+                name to when (clause) {
+                    is MatchRule -> clause.interpret()
+                    is PrefixRule -> clause.interpret()
+                    is WildCardRule -> clause.interpret()
+                    is FuzzyRule -> clause.interpret()
+                    is AllOfRule -> clause.interpret()
+                    is AnyOfRule -> clause.interpret()
+                    else -> JsonNull
+                }
+            }
         }
     }
 }

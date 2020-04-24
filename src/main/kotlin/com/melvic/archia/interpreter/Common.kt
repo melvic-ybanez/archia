@@ -13,7 +13,7 @@ import com.melvic.archia.validate
  * the function will yield a missing field error.
  * @param build builder for the field. It only gets executed if the field exists.
  */
-fun <F : Field> WithField<F>.interpret(parent: JsonObject, build: F.() -> JsonValue): Evaluation {
+fun <F : Field> WithField<F>.withField(parent: JsonObject, build: F.() -> JsonValue): Evaluation {
     val field = this.field ?: return missingField(this::field)
     val out = parent { esName() to json { field.name to build(field) } }
     return out.validate()
