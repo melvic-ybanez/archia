@@ -4,6 +4,7 @@ import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
+import com.melvic.archia.validate
 
 typealias Evaluation = Result<JsonValue>
 

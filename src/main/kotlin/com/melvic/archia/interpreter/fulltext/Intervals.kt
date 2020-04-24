@@ -2,10 +2,12 @@ package com.melvic.archia.interpreter.fulltext
 
 import com.melvic.archia.ast.fulltext.IntervalsQuery
 import com.melvic.archia.ast.fulltext.MatchRule
+import com.melvic.archia.ast.fulltext.PrefixRule
 import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
+import com.melvic.archia.require
 
 /**
  * Interprets an intervals query
@@ -21,14 +23,19 @@ fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MatchRule.interpret(): Evaluation {
-    if (query == null) return missingField(::query)
-
-    return json {
+    return require(::query) {
         propStr(::query)
         propNum(::maxGaps)
         propBool(::ordered)
         propStr(::analyzer)
         // TODO: filter rule
         propStr(::useField)
-    }.success()
+    }
+}
+
+fun PrefixRule.interpret(): Evaluation {
+    return require(::prefix) {
+        propStr(::analyzer)
+        propStr(::useField)
+    }
 }

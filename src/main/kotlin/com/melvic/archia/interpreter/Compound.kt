@@ -3,6 +3,7 @@ package com.melvic.archia.interpreter
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.output.*
+import com.melvic.archia.validate
 
 fun BoolQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
