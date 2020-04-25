@@ -48,7 +48,7 @@ fun MatchRule.interpret(): Evaluation {
         propNum(::maxGaps)
         propBool(::ordered)
         interpretAnalyzer(this)
-        propFunc(::_filter) { it.interpret(this) }
+        propFunc(::_filter) { it.interpret(json {}) }
     }
 }
 
@@ -96,7 +96,7 @@ fun IntervalOptions.interpretIntervalOptions(body: JsonObject.() -> Unit): Evalu
             }
             intervalRules.success()
         }
-        propFunc(::_filter) { it.interpret(this) }
+        propFunc(::_filter) { it.interpret(json {}) }
     }
 }
 

@@ -63,5 +63,46 @@ class IntervalsQueryTests : BehaviorSpec({
                 """.strip()
             }
         }
+        `when`("the rule has a filter field") {
+            then("the resulting JSON should contain filter properties") {
+                val output = evalQuery {
+                    intervals {
+                        "my_text" {
+                            match {
+                                query = "hot porridge"
+                                maxGaps = 10
+                                filter {
+                                    notContaining {
+                                        term { "query" to "salty" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }.output()
+
+                output.mapTo(JsonStringOutput).strip() shouldBe """
+                    {
+                      "query": {
+                        "intervals" : {
+                          "my_text" : {
+                            "match" : {
+                              "query" : "hot porridge",
+                              "max_gaps" : 10,
+                              "filter" : {
+                                "not_containing" : {
+                                  "term" : {
+                                    "query" : "salty"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                """.strip()
+            }
+        }
     }
 })
