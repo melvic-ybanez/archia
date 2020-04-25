@@ -23,10 +23,12 @@ fun JsonObject.validate(): Evaluation {
  * return the error immediately, instead of aggregating all the possible
  * errors.
  * @param field the required field
+ * @param out the result of calling the field. If you don't want to provide
+ * this, use the other version of this overloaded function.
  * @param f function to execute when the required fields are provided
  */
-fun <F> require(field: KCallable<F?>, f: JsonObject.() -> Unit): Evaluation {
-    val fieldValue = field.call() ?: return missingField(field.name)
+fun <F> require(field: KCallable<F?>, out: F?, f: JsonObject.() -> Unit): Evaluation {
+    val fieldValue = out?: return missingField(field.name)
     val fieldName = field.esNameFormat()
 
     return json {
@@ -40,4 +42,8 @@ fun <F> require(field: KCallable<F?>, f: JsonObject.() -> Unit): Evaluation {
             }
         }
     }.apply(f).validate()
+}
+
+fun <F> require(field: KCallable<F?>, f: JsonObject.() -> Unit): Evaluation {
+    return require(field, field.call(), f)
 }

@@ -1,12 +1,12 @@
 package com.melvic.archia.interpreter.fulltext
 
+import com.melvic.archia.ast.Param
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
-import com.melvic.archia.output.JsonNull
-import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.json
+import com.melvic.archia.output.*
 import com.melvic.archia.require
 import com.melvic.archia.validate
+import org.omg.CORBA.DynAnyPackage.Invalid
 
 /**
  * Interprets intervals query
@@ -16,18 +16,22 @@ import com.melvic.archia.validate
 fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
     return withField(parent) {
         json {
-            rule?.let {
-                val (name, clause) = it
-                name to when (clause) {
-                    is MatchRule -> clause.interpret()
-                    is PrefixRule -> clause.interpret()
-                    is WildCardRule -> clause.interpret()
-                    is FuzzyRule -> clause.interpret()
-                    is AllOfRule -> clause.interpret()
-                    is AnyOfRule -> clause.interpret()
-                    else -> JsonNull
-                }
-            }
+            rule?.interpret(this)
+        }
+    }
+}
+
+fun Param<IntervalRule>.interpret(parent: JsonObject): JsonObject {
+    val (name, clause) = this
+    return parent {
+        name to when (clause) {
+            is MatchRule -> clause.interpret()
+            is PrefixRule -> clause.interpret()
+            is WildCardRule -> clause.interpret()
+            is FuzzyRule -> clause.interpret()
+            is AllOfRule -> clause.interpret()
+            is AnyOfRule -> clause.interpret()
+            else -> InvalidValue(name, clause).fail()
         }
     }
 }
@@ -44,7 +48,7 @@ fun MatchRule.interpret(): Evaluation {
         propNum(::maxGaps)
         propBool(::ordered)
         interpretAnalyzer(this)
-        propFunc(AnyOfRule::_filter) { it.interpret(this) }
+        propFunc(::_filter) { it.interpret(this) }
     }
 }
 
@@ -70,15 +74,28 @@ fun FuzzyRule.interpret(): Evaluation {
 }
 
 fun AllOfRule.interpret(): Evaluation {
-    return require(::intervals) {
+    return interpretIntervalOptions {
         propNum(::maxGaps)
         propBool(::ordered)
-        propFunc(::_filter) { it.interpret(this) }
     }
 }
 
 fun AnyOfRule.interpret(): Evaluation {
-    return require(::intervals) {
+    return interpretIntervalOptions {}
+}
+
+fun IntervalOptions.interpretIntervalOptions(body: JsonObject.() -> Unit): Evaluation {
+    return require(::intervals, _intervals) {
+        body()
+        propFunc(::_intervals) prop@ {
+            val intervalRules = jsonArray()
+            for (interval in it) {
+                val eval = interval.interpret(json {}).validate()
+                if (eval is Failed) return@prop eval
+                intervalRules.add(eval.value())
+            }
+            intervalRules.success()
+        }
         propFunc(::_filter) { it.interpret(this) }
     }
 }

@@ -99,8 +99,12 @@ data class MatchRule(
     var query: String? = null,
     var maxGaps: Int? = null,
     var ordered: Boolean? = null,
-    var filter: FilterRule? = null
-) : WithAnalyzer()
+    var _filter: FilterRule? = null
+) : WithAnalyzer() {
+    fun filter(init: Init<FilterRule>) {
+        setProp(init) { _filter = it }
+    }
+}
 
 data class PrefixRule(var prefix: String? = null): WithAnalyzer()
 
@@ -118,7 +122,7 @@ data class AllOfRule(
     var ordered: Boolean? = null
 ) : IntervalOptions()
 
-object AnyOfRule : IntervalOptions()
+class AnyOfRule : IntervalOptions()
 
 data class FilterRule(var query: Param<Clause>? = null): IntervalRule(), ParamHelper, BuilderHelper {
     private fun saveParam(init: Init<ClauseBuilder>, field: KCallable<Unit>) {
@@ -162,7 +166,7 @@ data class FilterRule(var query: Param<Clause>? = null): IntervalRule(), ParamHe
     }
 }
 
-interface IntervalBuilder : ParamHelper {
+interface IntervalBuilder {
     fun match(init: Init<MatchRule>)
 
     fun prefix(init: Init<PrefixRule>)

@@ -60,6 +60,8 @@ data class JsonObject(
     fun error(code: ErrorCode) {
         errors.add(code)
     }
+
+    fun isValid(): Boolean = errors.isEmpty()
 }
 
 interface Compound<C> {

@@ -2,8 +2,10 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
+import com.melvic.archia.ast.fulltext.IntervalsQuery
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
+import com.melvic.archia.interpreter.fulltext.interpret
 
 typealias Evaluation = Result<JsonValue>
 
@@ -35,6 +37,9 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is ConstantScoreQuery -> interpret(parentObject)
         is DisMaxQuery -> interpret(parentObject)
         is FunctionScoreQuery -> interpret(parentObject)
+
+        // Full text
+        is IntervalsQuery -> interpret(parentObject)
 
         else -> json {}.success()
     }
