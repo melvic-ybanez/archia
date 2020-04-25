@@ -13,6 +13,6 @@ fun Script.interpret(): Evaluation {
                 }
             }.success()
         }
-        prop(::source) { it.json() }
+        propStr(::source)
     }.success()
 }

@@ -4,6 +4,7 @@ import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.IntervalsQuery
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.identity
+import com.melvic.archia.script.Script
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 

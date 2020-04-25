@@ -104,5 +104,42 @@ class IntervalsQueryTests : BehaviorSpec({
                 """.strip()
             }
         }
+        `when`("it has a script filter") {
+            then("the resulting JSON should contain a script object") {
+                val output = evalQuery {
+                    intervals {
+                        "my_text" {
+                            match {
+                                query = "hot porridge"
+                                filter {
+                                    script {
+                                        source = "interval.start > 10 && interval.end < 20 && interval.gaps == 0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }.output()
+
+                output.mapTo(JsonStringOutput).strip() shouldBe """
+                    {
+                      "query": {
+                        "intervals" : {
+                          "my_text" : {
+                            "match" : {
+                              "query" : "hot porridge",
+                              "filter" : {
+                                "script" : {
+                                  "source" : "interval.start > 10 && interval.end < 20 && interval.gaps == 0"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                """.strip()
+            }
+        }
     }
 })

@@ -1,6 +1,7 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
+import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
 class IntervalsQuery : WithField<IntervalField>() {
@@ -161,8 +162,8 @@ data class FilterRule(var query: Param<Clause>? = null): IntervalRule(), ParamHe
         saveParam(init, ::overlapping)
     }
 
-    fun script(init: Init<ClauseBuilder>) {
-        saveParam(init, ::script)
+    fun script(init: Init<Script>) {
+        setProp(init) { query = param(::script, it) }
     }
 }
 

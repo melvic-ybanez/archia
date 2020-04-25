@@ -6,6 +6,7 @@ import com.melvic.archia.ast.fulltext.IntervalsQuery
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
 import com.melvic.archia.interpreter.fulltext.interpret
+import com.melvic.archia.script.Script
 
 typealias Evaluation = Result<JsonValue>
 
@@ -40,6 +41,9 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
 
         // Full text
         is IntervalsQuery -> interpret(parentObject)
+
+        // Scripts
+        is Script -> interpret()
 
         else -> json {}.success()
     }
