@@ -1,13 +1,15 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
+import com.melvic.archia.ast.fulltext.MatchField
+import com.melvic.archia.ast.fulltext.MatchQuery
 import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
 data class FunctionScoreQuery(
     var _query: Clause? = null,
     var boost: String? = null,
-    var _functions: MutableList<FunctionClause>? = null,
+    var _functions: List<FunctionClause>? = null,
     var maxBoost: Int? = null,
     var scoreMode: ScoreMode? = null,
     var boostMode: BoostMode? = null,
@@ -17,11 +19,8 @@ data class FunctionScoreQuery(
         _query = ClauseBuilder().apply(init).clause
     }
 
-    fun function(init: Init<FunctionClause>) {
-        val newFunction = FunctionClause().also(init)
-        _functions?.add(newFunction) ?: run {
-            _functions = mutableListOf(newFunction)
-        }
+    fun functions(vararg init: Init<FunctionClause>) {
+        _functions = init.map { FunctionClause().apply(it) }.toMutableList()
     }
 }
 

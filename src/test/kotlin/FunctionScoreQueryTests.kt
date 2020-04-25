@@ -46,15 +46,17 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     functionScore {
                         query { matchAll {} }
                         boost = "5"
-                        function {
-                            filter { term { "test" to "bar" } }
-                            randomScore {  }
-                            weight = 23
-                        }
-                        function {
-                            filter { term { "test" to "cat" } }
-                            weight = 42
-                        }
+                        functions(
+                            {
+                                filter { term { "test" to "bar" } }
+                                randomScore {  }
+                                weight = 23
+                            },
+                            {
+                                filter { term { "test" to "cat" } }
+                                weight = 42
+                            }
+                        )
                         maxBoost = 42
                         scoreMode = ScoreMode.MAX
                         boostMode = BoostMode.MULTIPLY
@@ -254,22 +256,24 @@ class FunctionScoreQueryTests : BehaviorSpec({
             then("it should contain all the decay functions in the `functions` field") {
                 val output = evalQuery {
                     functionScore {
-                        function {
-                            gauss {
-                                "price" {
-                                    origin = 0.es()
-                                    scale = "20"
+                        functions(
+                            {
+                                gauss {
+                                    "price" {
+                                        origin = 0.es()
+                                        scale = "20"
+                                    }
+                                }
+                            },
+                            {
+                                gauss {
+                                    "location" {
+                                        origin = GeoString(11, 12)
+                                        scale = "2km"
+                                    }
                                 }
                             }
-                        }
-                        function {
-                            gauss {
-                                "location" {
-                                    origin = GeoString(11, 12)
-                                    scale = "2km"
-                                }
-                            }
-                        }
+                        )
                         query {
                             term {
                                 "properties" to "balcony"
