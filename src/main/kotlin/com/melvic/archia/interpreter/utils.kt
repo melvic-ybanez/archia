@@ -71,9 +71,11 @@ fun JsonObject.propBool(field: KCallable<Boolean?>) {
 }
 
 fun JsonObject.propArray(field: KCallable<List<String>?>) {
-    this { prop(field) {
-        jsonArray(it.map { it.json() })
-    } }
+    this {
+        prop(field) {
+            jsonArray(it.map { str -> str.json() })
+        }
+    }
 }
 
 /**

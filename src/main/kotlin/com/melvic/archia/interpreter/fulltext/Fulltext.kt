@@ -8,11 +8,9 @@ import com.melvic.archia.ast.ANumber
 import com.melvic.archia.ast.AString
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
-import com.melvic.archia.output.JsonNull
-import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.JsonValue
-import com.melvic.archia.output.json
+import com.melvic.archia.output.*
 import com.melvic.archia.require
+import com.melvic.archia.validate
 
 fun MatchQuery.interpret(parent: JsonObject): Evaluation {
     fun JsonObject.toJson(query: MatchQueryValue): JsonValue {
@@ -92,8 +90,8 @@ fun MatchPhrasePrefixQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MultiMatchQuery.interpret(parent: JsonObject): Evaluation {
-    return require(::query) {
-        json {
+    return parent {
+        esName() to require(::query) {
             propArray(::fields)
             propNum(::tieBreaker)
             propStr(::analyzer)
@@ -111,5 +109,5 @@ fun MultiMatchQuery.interpret(parent: JsonObject): Evaluation {
             propBool(::fuzzyTranspositions)
             propNum(::slop)
         }
-    }
+    }.validate()
 }
