@@ -1,10 +1,9 @@
 package com.melvic.archia.ast
 
 import com.melvic.archia.ast.compound.*
-import com.melvic.archia.ast.fulltext.IntervalsQuery
+import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.identity
-import com.melvic.archia.script.Script
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -18,49 +17,29 @@ interface Builder {
         setProp(init) { save(it) }
     }
 
-    fun term(termInit: Init<TermQuery>) {
-        save(termInit)
-    }
+    fun term(init: Init<TermQuery>) = save(init)
 
-    fun match(matchInit: Init<MatchQuery>) {
-        save(matchInit)
-    }
+    fun match(init: Init<MatchQuery>) = save(init)
 
-    fun matchAll(matchAllInit: Init<MatchAllQuery>) {
-        save(matchAllInit)
-    }
+    fun matchAll(init: Init<MatchAllQuery>) = save(init)
 
-    fun matchNone(matchNoneInit: Init<MatchNoneQuery>) {
-        save(matchNoneInit)
-    }
+    fun matchNone(init: Init<MatchNoneQuery>) = save(init)
 
-    fun range(rangeInit: Init<RangeQuery>) {
-        save(rangeInit)
-    }
+    fun range(init: Init<RangeQuery>) = save(init)
 
-    fun bool(boolInit: Init<BoolQuery>) {
-        save(boolInit)
-    }
+    fun bool(init: Init<BoolQuery>) = save(init)
 
-    fun boosting(boostingInit: Init<BoostingQuery>) {
-        save(boostingInit)
-    }
+    fun boosting(init: Init<BoostingQuery>) = save(init)
 
-    fun constantScore(constantScoreInit: Init<ConstantScoreQuery>) {
-        save(constantScoreInit)
-    }
+    fun constantScore(init: Init<ConstantScoreQuery>) = save(init)
 
-    fun disMax(disMaxInit: Init<DisMaxQuery>) {
-        save(disMaxInit)
-    }
+    fun disMax(init: Init<DisMaxQuery>) = save(init)
 
-    fun functionScore(functionScoreInit: Init<FunctionScoreQuery>) {
-        save(functionScoreInit)
-    }
+    fun functionScore(init: Init<FunctionScoreQuery>) = save(init)
 
-    fun intervals(intervalsInit: Init<IntervalsQuery>) {
-        save(intervalsInit)
-    }
+    fun intervals(init: Init<IntervalsQuery>) = save(init)
+
+    fun matchBoolPrefix(init: Init<MatchBoolPrefixQuery>) = save(init)
 }
 
 data class ClauseBuilder(var clause: Clause? = null) : Builder {

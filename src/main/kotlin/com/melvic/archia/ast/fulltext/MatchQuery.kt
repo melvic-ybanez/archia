@@ -1,8 +1,8 @@
-package com.melvic.archia.ast.leaf
+package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
 
-class MatchQuery : WithShortForm<MatchField, MatchQueryValue>(), WithMatchQueryValue {
+open class MatchQuery : WithShortForm<MatchField, MatchQueryValue>(), WithMatchQueryValue {
     override fun getField(name: String) = MatchField(name)
 
     override fun MatchField.updateValue(value: MatchQueryValue) {

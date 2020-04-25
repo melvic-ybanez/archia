@@ -1,9 +1,8 @@
 package com.melvic.archia.ast
 
-import com.melvic.archia.ast.leaf.MatchQueryValue
+import com.melvic.archia.ast.fulltext.MatchQueryValue
 import com.melvic.archia.ast.leaf.RangeValue
 import java.time.LocalDate
-import java.util.*
 
 typealias Analyzer = String
 

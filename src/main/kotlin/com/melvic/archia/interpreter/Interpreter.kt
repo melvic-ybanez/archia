@@ -2,7 +2,7 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
-import com.melvic.archia.ast.fulltext.IntervalsQuery
+import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
 import com.melvic.archia.interpreter.fulltext.interpret
@@ -27,7 +27,6 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
     return when (this) {
         // Leaf clauses
         is TermQuery -> interpret(parentObject)
-        is MatchQuery -> interpret(parentObject)
         is MatchAllQuery -> interpret(parentObject)
         is MatchNoneQuery -> interpret(parentObject)
         is RangeQuery -> interpret(parentObject)
@@ -41,6 +40,8 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
 
         // Full text
         is IntervalsQuery -> interpret(parentObject)
+        is MatchQuery -> interpret(parentObject)
+        is MatchBoolPrefixQuery -> interpret(parentObject)
 
         // Scripts
         is Script -> interpret()
