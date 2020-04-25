@@ -58,10 +58,10 @@ val result = interpret {
 }
 ```
 
-There is also a shorter form, `evalQuery` that asks for a query and wraps it with
+There is also a shorter form, `evalQuery`, that asks for a query and wraps it in a
 `interpret { query { ... }}`. 
 
-Here's another example showing `evalQuery` in action:
+Here's another example showing `evalQuery` (along with other features) in action:
 ```kotlin
 val output = evalQuery {
     functionScore {
@@ -86,7 +86,7 @@ val output = evalQuery {
 }
 ```
 
-The last example also shows a different way of writing arrays of query clauses. 
+It also shows a different way of writing arrays of query clauses. 
 
 You are expected to handle errors, if any:
 
