@@ -14,5 +14,6 @@ class MatchPhraseField(
     name: String,
     var query: String? = null,
     var analyzer: Analyzer? = null,
-    var zeroTermsQuery: ZeroTermsQuery? = null
+    var zeroTermsQuery: ZeroTermsQuery? = null,
+    var slop: Int? = null
 ) : Field(name)
