@@ -4,6 +4,7 @@ import com.melvic.archia.ast.*
 
 data class MultiMatchQuery (
     var query: String? = null,
+    var type: MultiMatchType? = null,
     var fields: List<String>? = null,
     var tieBreaker: Double? = null,
 

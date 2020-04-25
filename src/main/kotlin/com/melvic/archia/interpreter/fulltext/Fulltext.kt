@@ -92,6 +92,7 @@ fun MatchPhrasePrefixQuery.interpret(parent: JsonObject): Evaluation {
 fun MultiMatchQuery.interpret(parent: JsonObject): Evaluation {
     return parent {
         esName() to require(::query) {
+            propEnum(::type)
             propArray(::fields)
             propNum(::tieBreaker)
             propStr(::analyzer)

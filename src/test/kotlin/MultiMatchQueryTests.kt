@@ -1,4 +1,5 @@
 import com.melvic.archia.ast.evalQuery
+import com.melvic.archia.ast.fulltext.MultiMatchType
 import com.melvic.archia.interpreter.output
 import com.melvic.archia.output.JsonStringOutput
 import com.melvic.archia.output.mapTo
@@ -22,6 +23,31 @@ class MultiMatchQueryTests : BehaviorSpec({
                         "multi_match" : {
                           "query":    "Will Smith",
                           "fields": [ "title", "*_name" ] 
+                        }
+                      }
+                    }
+                """.strip()
+            }
+        }
+        `when`("a type is provided") {
+            then("it contain the type and other related params in the result") {
+                val output = evalQuery {
+                    multiMatch {
+                        query = "brown fox"
+                        type = MultiMatchType.BEST_FIELDS
+                        fields = listOf("subject", "message")
+                        tieBreaker = 0.3
+                    }
+                }.output()
+
+                output.mapTo(JsonStringOutput).strip() shouldBe """
+                    {
+                      "query": {
+                        "multi_match" : {
+                          "query":      "brown fox",
+                          "type":       "best_fields",
+                          "fields":     [ "subject", "message" ],
+                          "tie_breaker": 0.3
                         }
                       }
                     }
