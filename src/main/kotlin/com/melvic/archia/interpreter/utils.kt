@@ -1,8 +1,10 @@
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.Param
+import com.melvic.archia.output.JsonArray
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
+import com.melvic.archia.output.jsonArray
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
@@ -66,6 +68,12 @@ fun JsonObject.propNum(field: KCallable<Number?>) {
 
 fun JsonObject.propBool(field: KCallable<Boolean?>) {
     this { prop(field) { it.json() } }
+}
+
+fun JsonObject.propArray(field: KCallable<List<String>?>) {
+    this { prop(field) {
+        jsonArray(it.map { it.json() })
+    } }
 }
 
 /**

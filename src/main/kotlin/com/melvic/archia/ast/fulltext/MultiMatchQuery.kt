@@ -2,14 +2,7 @@ package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
 
-class MultiMatchQuery : WithField<MultiMatchField>() {
-    override fun getField(name: String): MultiMatchField {
-        return MultiMatchField(name)
-    }
-}
-
-class MultiMatchField(
-    name: String,
+data class MultiMatchQuery (
     var query: String? = null,
     var fields: List<String>? = null,
     var tieBreaker: Double? = null,
@@ -41,7 +34,7 @@ class MultiMatchField(
 
     // phrase & prefix
     var slop: Int? = null
-) : Field(name)
+) : Clause
 
 enum class MultiMatchType {
     BEST_FIELDS, MOST_FIELDS, CROSS_FIELDS, PHRASE, PHRASE_PREFIX, BOOL_PREFIX

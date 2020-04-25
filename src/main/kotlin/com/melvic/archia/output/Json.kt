@@ -78,5 +78,7 @@ fun json(init: Init<JsonObject>) = JsonObject().apply(init)
 
 fun jsonArray(vararg value: JsonValue) = JsonArray(mutableListOf(*value))
 
+fun jsonArray(values: List<JsonValue>) = JsonArray(values.toMutableList())
+
 
 
