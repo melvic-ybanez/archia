@@ -1,10 +1,8 @@
+@file:Suppress("MoveSuspiciousCallableReferenceIntoParentheses")
+
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.fulltext.MatchAllQuery
-import com.melvic.archia.ast.fulltext.MatchNoneQuery
-import com.melvic.archia.ast.fulltext.MatchQuery
-import com.melvic.archia.ast.fulltext.MatchQueryValue
 import com.melvic.archia.ast.leaf.*
 import com.melvic.archia.output.*
 import kotlin.reflect.KCallable
@@ -14,11 +12,7 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
         json { it.first to it.second.json() }
     }
 
-    return withField(parent, namedProp = namedPropOut) inner@ {
-        if (value == null) return@inner json {
-            error(missingFieldCode(::value))
-        }
-
+    return withField(parent, namedProp = namedPropOut, required = { ::value }) {
         json {
             prop(::value) { it.json() }
             prop(::boost) { it.json() }

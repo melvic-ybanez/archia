@@ -1,3 +1,5 @@
+@file:Suppress("MoveSuspiciousCallableReferenceIntoParentheses")
+
 package com.melvic.archia.interpreter.fulltext
 
 import com.melvic.archia.ast.ABoolean
@@ -28,11 +30,7 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
         jsonObj { it.first to toJson(it.second) }
     }
 
-    return withField(parent, namedProp = namedPropOut) inner@ {
-        if (query == null) return@inner json {
-            error(missingFieldCode(::query))
-        }
-
+    return withField(parent, namedProp = namedPropOut, required = { ::query }) {
         json {
             prop(::query) { toJson(it) }
             propStr(::analyzer)
@@ -61,11 +59,7 @@ fun MatchNoneQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MatchBoolPrefixQuery.interpret(parent: JsonObject): Evaluation {
-    return withField(parent) inner@ {
-        if (query == null) return@inner json {
-            error(missingFieldCode(::query))
-        }
-
+    return withField(parent, required = { ::query }) {
         json {
             propStr(::query)
             propStr(::analyzer)
@@ -76,14 +70,22 @@ fun MatchBoolPrefixQuery.interpret(parent: JsonObject): Evaluation {
 }
 
 fun MatchPhraseQuery.interpret(parent: JsonObject): Evaluation {
-    return withField(parent) inner@ {
-        if (query == null) return@inner json {
-            error(missingFieldCode(::query))
-        }
-
+    return withField(parent, required = { ::query }) {
         json {
             propStr(::query)
             propStr(::analyzer)
+            propEnum(::zeroTermsQuery)
+        }
+    }
+}
+
+fun MatchPhrasePrefixQuery.interpret(parent: JsonObject): Evaluation {
+    return withField(parent, required = { ::query }) {
+        json {
+            propStr(::query)
+            propStr(::analyzer)
+            propNum(::maxExpansions)
+            propNum(::slop)
             propEnum(::zeroTermsQuery)
         }
     }

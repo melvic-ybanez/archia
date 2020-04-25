@@ -42,6 +42,8 @@ interface Builder {
     fun matchBoolPrefix(init: Init<MatchBoolPrefixQuery>) = save(init)
 
     fun matchPhrase(init: Init<MatchPhraseQuery>) = save(init)
+
+    fun matchPhrasePrefix(init: Init<MatchPhrasePrefixQuery>) = save(init)
 }
 
 data class ClauseBuilder(var clause: Clause? = null) : Builder {
