@@ -42,6 +42,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is IntervalsQuery -> interpret(parentObject)
         is MatchQuery -> interpret(parentObject)
         is MatchBoolPrefixQuery -> interpret(parentObject)
+        is MatchPhraseQuery -> interpret(parentObject)
 
         // Scripts
         is Script -> interpret()

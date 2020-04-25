@@ -40,6 +40,8 @@ interface Builder {
     fun intervals(init: Init<IntervalsQuery>) = save(init)
 
     fun matchBoolPrefix(init: Init<MatchBoolPrefixQuery>) = save(init)
+
+    fun matchPhrase(init: Init<MatchPhraseQuery>) = save(init)
 }
 
 data class ClauseBuilder(var clause: Clause? = null) : Builder {

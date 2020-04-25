@@ -74,3 +74,17 @@ fun MatchBoolPrefixQuery.interpret(parent: JsonObject): Evaluation {
         }
     }
 }
+
+fun MatchPhraseQuery.interpret(parent: JsonObject): Evaluation {
+    return withField(parent) inner@ {
+        if (query == null) return@inner json {
+            error(missingFieldCode(::query))
+        }
+
+        json {
+            propStr(::query)
+            propStr(::analyzer)
+            propEnum(::zeroTermsQuery)
+        }
+    }
+}
