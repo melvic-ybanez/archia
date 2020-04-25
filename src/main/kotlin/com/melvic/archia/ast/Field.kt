@@ -14,3 +14,14 @@ abstract class WithField<F : Field> : Clause {
 
     abstract fun getField(name: String): F
 }
+
+abstract class WithShortForm<F : Field, V> : WithField<F>() {
+    var namedProp: Pair<String, V>? = null
+
+    infix fun String.to(_value: V) {
+        namedProp = Pair(this, _value)
+        this { this.updateValue(_value) }
+    }
+
+    abstract fun F.updateValue(value: V)
+}

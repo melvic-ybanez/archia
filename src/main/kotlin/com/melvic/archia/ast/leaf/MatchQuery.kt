@@ -2,8 +2,12 @@ package com.melvic.archia.ast.leaf
 
 import com.melvic.archia.ast.*
 
-class MatchQuery : WithField<MatchField>() {
+class MatchQuery : WithShortForm<MatchField, MatchQueryValue>(), WithMatchQueryValue {
     override fun getField(name: String) = MatchField(name)
+
+    override fun MatchField.updateValue(value: MatchQueryValue) {
+        this.query = value
+    }
 }
 
 class MatchField(
@@ -20,9 +24,11 @@ class MatchField(
     var operator: Operator? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var zeroTermsQuery: ZeroTermsQuery? = null
-): Field(name), WithText, WithNum, WithBool, WithDate
+): Field(name), WithMatchQueryValue
 
 interface MatchQueryValue
+
+interface WithMatchQueryValue : WithText, WithNum, WithBool, WithDate
 
 data class MatchAllQuery(var boost: Boost? = null) : Clause
 class MatchNoneQuery : Clause

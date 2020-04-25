@@ -47,5 +47,24 @@ class MatchQueryTests : BehaviorSpec({
                 """.strip()
             }
         }
+        `when`("short form is provided") {
+            then("it should not require the query param of the field") {
+                val output = evalQuery {
+                    match {
+                        "message" to "this is a test".es()
+                    }
+                }.output()
+
+                output.mapTo(JsonStringOutput).strip() shouldBe """
+                    {
+                        "query": {
+                            "match" : {
+                                "message" : "this is a test"
+                            }
+                        }
+                    }
+                """.strip()
+            }
+        }
     }
 })
