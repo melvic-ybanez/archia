@@ -58,6 +58,36 @@ val result = interpret {
 }
 ```
 
+There is also a shorter form, `evalQuery` that asks for a query and wraps it with
+`interpret { query { ... }}`. 
+
+Here's another example showing `evalQuery` in action:
+```kotlin
+val output = evalQuery {
+    functionScore {
+        query { matchAll {} }
+        boost = "5"
+        functions(
+            {
+                filter { term { "test" to "bar" } }
+                randomScore {  }
+                weight = 23
+            },
+            {
+                filter { term { "test" to "cat" } }
+                weight = 42
+            }
+        )
+        maxBoost = 42
+        scoreMode = ScoreMode.MAX
+        boostMode = BoostMode.MULTIPLY
+        minScore = 42
+    }
+}
+```
+
+The last example also shows a different way of writing arrays of query clauses. 
+
 You are expected to handle errors, if any:
 
 ```kotlin
@@ -86,7 +116,7 @@ val jsonString = output.mapTo(JsonStringOutput)
 println(jsonString)
 ```
 
-The transformer will then produce the following JSON string:
+For instance, the first example would produce the following JSON string:
 ```json
 {
    "query": {
