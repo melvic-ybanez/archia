@@ -2,6 +2,8 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
+import com.melvic.archia.ast.fulltext.CommonTermsField
+import com.melvic.archia.ast.fulltext.CommonTermsQuery
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
 
@@ -96,24 +98,6 @@ fun MultiClause.interpret(): Evaluation {
     }
 
     return result.success()
-}
-
-fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
-    val msm: MinimumShouldMatch = this
-    return with(parent) {
-        fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
-            is ANumber -> it.value.json()
-            is Percent -> "${it.value}%".json()
-            else -> JsonNull
-        }
-        fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
-            is SimpleMSM -> interpretSimple(it)
-            is Combination -> "${it.value}<${interpretSimple(it.simple)}".json()
-            is Multiple -> array(it.values.map { i -> interpretMin(i) })
-            else -> JsonNull
-        }
-        interpretMin(msm)
-    }
 }
 
 fun FunctionClause.interpretFunction(parent: JsonObject): Evaluation {

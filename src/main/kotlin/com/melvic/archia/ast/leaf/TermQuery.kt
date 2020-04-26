@@ -1,6 +1,8 @@
 package com.melvic.archia.ast.leaf
 
-import com.melvic.archia.ast.*
+import com.melvic.archia.ast.Boost
+import com.melvic.archia.ast.Field
+import com.melvic.archia.ast.WithShortForm
 
 class TermQuery: WithShortForm<TermField, String>() {
     override fun getField(name: String) = TermField(name)

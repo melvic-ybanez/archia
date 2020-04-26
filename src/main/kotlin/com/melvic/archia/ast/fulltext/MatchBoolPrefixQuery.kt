@@ -1,6 +1,9 @@
 package com.melvic.archia.ast.fulltext
 
-import com.melvic.archia.ast.*
+import com.melvic.archia.ast.Analyzer
+import com.melvic.archia.ast.Field
+import com.melvic.archia.ast.MinimumShouldMatch
+import com.melvic.archia.ast.WithField
 
 class MatchBoolPrefixQuery : WithField<MatchBoolPrefixField>() {
     override fun getField(name: String): MatchBoolPrefixField {

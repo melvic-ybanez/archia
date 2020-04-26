@@ -1,8 +1,8 @@
 package com.melvic.archia.interpreter
 
-import com.melvic.archia.ast.Field
-import com.melvic.archia.ast.Fuzziness
-import com.melvic.archia.ast.WithField
+import com.melvic.archia.ast.*
+import com.melvic.archia.ast.fulltext.CommonTermsField
+import com.melvic.archia.output.JsonNull
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
@@ -41,6 +41,31 @@ fun <F : Field> WithField<F>.withField(
 
     val out = parent { esName() to fieldOut }
     return out.validate()
+}
+
+fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
+    val msm: MinimumShouldMatch = this
+    return with(parent) {
+        fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
+            is ANumber -> it.value.json()
+            is Percent -> "${it.value}%".json()
+            else -> JsonNull
+        }
+        fun interpretMin(it: MinimumShouldMatch): JsonValue = when (it) {
+            is SimpleMSM -> interpretSimple(it)
+            is Combination -> "${it.value}<${interpretSimple(it.simple)}".json()
+            is Multiple -> array(it.values.map { i -> interpretMin(i) })
+
+            // extended form of MSM
+            is CommonTermsField.MinimumShouldMatchWithFreq -> json {
+                prop(it::lowFreq) { it.interpret(parent) }
+                prop(it::highFreq) { it.interpret(parent) }
+            }
+
+            else -> JsonNull
+        }
+        interpretMin(msm)
+    }
 }
 
 fun Fuzziness.interpret(parent: JsonObject): JsonValue {

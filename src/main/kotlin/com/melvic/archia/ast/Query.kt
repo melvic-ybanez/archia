@@ -15,7 +15,7 @@ data class Query(var clause: Clause? = null) {
 interface Clause {
     /**
      * Returns the name of the clause in lowercase snake format,
-     * removing the "Query" suffix, it one is found.
+     * removing the "Query" suffix, if one is found.
      */
     fun esName(): String {
         val simpleName = this::class.java.simpleName

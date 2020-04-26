@@ -1,7 +1,9 @@
 package com.melvic.archia.output
 
 import com.melvic.archia.ast.Init
-import com.melvic.archia.interpreter.*
+import com.melvic.archia.interpreter.ErrorCode
+import com.melvic.archia.interpreter.Evaluation
+import com.melvic.archia.interpreter.Failed
 import com.melvic.archia.validate
 
 /**

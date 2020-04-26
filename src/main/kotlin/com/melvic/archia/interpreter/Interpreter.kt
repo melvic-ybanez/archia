@@ -1,11 +1,17 @@
 package com.melvic.archia.interpreter
 
-import com.melvic.archia.ast.*
+import com.melvic.archia.ast.Clause
+import com.melvic.archia.ast.Init
+import com.melvic.archia.ast.Query
+import com.melvic.archia.ast.buildQuery
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
-import com.melvic.archia.ast.leaf.*
-import com.melvic.archia.output.*
+import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.interpreter.fulltext.interpret
+import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.JsonValue
+import com.melvic.archia.output.json
 import com.melvic.archia.script.Script
 
 typealias Evaluation = Result<JsonValue>
@@ -45,6 +51,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is MatchPhraseQuery -> interpret(parentObject)
         is MatchPhrasePrefixQuery -> interpret(parentObject)
         is MultiMatchQuery -> interpret(parentObject)
+        is CommonTermsQuery -> interpret(parentObject)
 
         // Scripts
         is Script -> interpret()

@@ -3,10 +3,11 @@ package com.melvic.archia.interpreter.fulltext
 import com.melvic.archia.ast.Param
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
-import com.melvic.archia.output.*
+import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.json
+import com.melvic.archia.output.jsonArray
 import com.melvic.archia.require
 import com.melvic.archia.validate
-import org.omg.CORBA.DynAnyPackage.Invalid
 
 /**
  * Interprets intervals query

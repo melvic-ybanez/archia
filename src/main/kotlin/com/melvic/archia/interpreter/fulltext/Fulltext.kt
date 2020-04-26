@@ -8,7 +8,10 @@ import com.melvic.archia.ast.ANumber
 import com.melvic.archia.ast.AString
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
-import com.melvic.archia.output.*
+import com.melvic.archia.output.JsonNull
+import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.JsonValue
+import com.melvic.archia.output.json
 import com.melvic.archia.require
 import com.melvic.archia.validate
 
@@ -111,4 +114,19 @@ fun MultiMatchQuery.interpret(parent: JsonObject): Evaluation {
             propNum(::slop)
         }
     }.validate()
+}
+
+fun CommonTermsQuery.interpret(parent: JsonObject): Evaluation {
+    return withField(parent, required = { ::query }) {
+        json {
+            propStr(::query)
+            propNum(::cutoffFrequency)
+            propEnum(::lowFreqOperator)
+
+            // Can't use the prop util function because of the name ambiguity
+            minimumShouldMatch?.let {
+                "minimum_should_match" to it.interpret(parent)
+            }
+        }
+    }
 }

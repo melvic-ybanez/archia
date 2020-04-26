@@ -2,9 +2,13 @@
 
 package com.melvic.archia.interpreter
 
-import com.melvic.archia.ast.*
-import com.melvic.archia.ast.leaf.*
-import com.melvic.archia.output.*
+import com.melvic.archia.ast.ANumber
+import com.melvic.archia.ast.DateFormat
+import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.TermQuery
+import com.melvic.archia.output.JsonNull
+import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.json
 import kotlin.reflect.KCallable
 
 fun TermQuery.interpret(parent: JsonObject): Evaluation {

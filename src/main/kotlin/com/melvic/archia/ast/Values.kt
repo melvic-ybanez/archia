@@ -5,6 +5,7 @@ import com.melvic.archia.ast.leaf.RangeValue
 import java.time.LocalDate
 
 typealias Analyzer = String
+typealias CutoffFrequency = Double
 
 data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue, DecayFieldType
 data class AString(val value: String) : MatchQueryValue

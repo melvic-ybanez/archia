@@ -2,7 +2,8 @@ package com.melvic.archia.ast
 
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
-import com.melvic.archia.ast.leaf.*
+import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.identity
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -46,6 +47,8 @@ interface Builder {
     fun matchPhrasePrefix(init: Init<MatchPhrasePrefixQuery>) = save(init)
 
     fun multiMatch(init: Init<MultiMatchQuery>) = save(init)
+
+    fun common(init: Init<CommonTermsQuery>) = save(init)
 }
 
 data class ClauseBuilder(var clause: Clause? = null) : Builder {

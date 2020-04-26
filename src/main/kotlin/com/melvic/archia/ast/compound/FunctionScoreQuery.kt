@@ -1,8 +1,6 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.fulltext.MatchField
-import com.melvic.archia.ast.fulltext.MatchQuery
 import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
