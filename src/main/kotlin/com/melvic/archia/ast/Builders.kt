@@ -1,5 +1,6 @@
 package com.melvic.archia.ast
 
+import QueryStringQuery
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.leaf.RangeQuery
@@ -49,6 +50,8 @@ interface Builder {
     fun multiMatch(init: Init<MultiMatchQuery>) = save(init)
 
     fun common(init: Init<CommonTermsQuery>) = save(init)
+
+    fun queryString(init: Init<QueryStringQuery>) = save(init)
 }
 
 data class ClauseBuilder(var clause: Clause? = null) : Builder {

@@ -6,6 +6,7 @@ import java.time.LocalDate
 
 typealias Analyzer = String
 typealias CutoffFrequency = Double
+typealias TimeZone = String
 
 data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue, DecayFieldType
 data class AString(val value: String) : MatchQueryValue

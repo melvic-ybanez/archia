@@ -2,8 +2,6 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
-import com.melvic.archia.ast.fulltext.CommonTermsField
-import com.melvic.archia.ast.fulltext.CommonTermsQuery
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
 
@@ -29,8 +27,8 @@ fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
     if (errors.isNotEmpty()) return Failed(errors)
 
     val propsOut = json {
-        propWithAlt(::_positive, ::positive) { it.interpret() }
-        propWithAlt(::_negative, ::negative) { it.interpret() }
+        propFunc(::_positive) { it.interpret() }
+        propFunc(::_negative) { it.interpret() }
         prop(::negativeBoost) { it.json() }
     }
 
@@ -43,7 +41,7 @@ fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
 
     return parent {
         esName() to json {
-            propWithAlt(::_filter, ::filter) { it.interpret() }
+            propFunc(::_filter) { it.interpret() }
             prop(::boost) { it.json() }
         }
     }.success()
@@ -74,10 +72,9 @@ fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
             }
             "functions" to functions
         }
-        propNum(::maxBoost)
+        propNum(::maxBoost, ::minScore)
         propEnum(::scoreMode)
         propEnum(::boostMode)
-        propNum(::minScore)
     }
 
     val functionScoreOut = this.interpretFunction(propsOut)
@@ -154,8 +151,7 @@ fun DecayFunction.interpret(): Evaluation {
                 is ADate  -> fieldType.value.toString().json()
                 else -> JsonNull
             } }
-            propStr(::scale)
-            propStr(::offset)
+            propStr(::scale, ::offset)
             propNum(::decay)
         }
     }

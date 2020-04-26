@@ -53,20 +53,22 @@ inline fun <R> JsonObject.propEval(field: KCallable<R?>, f: (R) -> Evaluation) {
     field.call()?.let { field.esNameFormat() to f(it) }
 }
 
-inline fun <R> JsonObject.prop(field: KCallable<R?>, f: (R) -> JsonValue) {
-    propEval(field) { f(it).success() }
+inline fun <R> JsonObject.prop(vararg fields: KCallable<R?>, f: (R) -> JsonValue) {
+    fields.forEach { field ->
+        propEval(field) { f(it).success() }
+    }
 }
 
-fun JsonObject.propStr(field: KCallable<String?>) {
-    this { prop(field) { it.json() } }
+fun JsonObject.propStr(vararg field: KCallable<String?>) {
+    this { prop(*field) { it.json() } }
 }
 
-fun JsonObject.propNum(field: KCallable<Number?>) {
-    this { prop(field) { it.json() } }
+fun JsonObject.propNum(vararg field: KCallable<Number?>) {
+    this { prop(*field) { it.json() } }
 }
 
-fun JsonObject.propBool(field: KCallable<Boolean?>) {
-    this { prop(field) { it.json() } }
+fun JsonObject.propBool(vararg field: KCallable<Boolean?>) {
+    this { prop(*field) { it.json() } }
 }
 
 fun JsonObject.propArray(field: KCallable<List<String>?>) {
@@ -115,8 +117,8 @@ inline fun <R> JsonObject.propFunc(field: KCallable<R?>, f: (R) -> Evaluation) {
     propWithAlt(field, altName, f)
 }
 
-fun <E : Enum<E>> JsonObject.propEnum(callable: KCallable<E?>) {
-    this.prop(callable) { it.lowerName().json() }
+fun <E : Enum<E>> JsonObject.propEnum(vararg callable: KCallable<E?>) {
+    this.prop(*callable) { it.lowerName().json() }
 }
 
 fun <A> JsonObject.propParam(param: Param<A>?, f: (A) -> Evaluation) {

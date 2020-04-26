@@ -19,7 +19,7 @@ interface Clause {
      */
     fun esName(): String {
         val simpleName = this::class.java.simpleName
-        val noPrefix = simpleName.replace("Query", "")
+        val noPrefix = simpleName.substringBeforeLast("Query")
         return noPrefix.toSnakeCase()
     }
 }

@@ -1,5 +1,6 @@
 package com.melvic.archia.interpreter
 
+import QueryStringQuery
 import com.melvic.archia.ast.Clause
 import com.melvic.archia.ast.Init
 import com.melvic.archia.ast.Query
@@ -52,6 +53,7 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is MatchPhrasePrefixQuery -> interpret(parentObject)
         is MultiMatchQuery -> interpret(parentObject)
         is CommonTermsQuery -> interpret(parentObject)
+        is QueryStringQuery -> interpret(parentObject)
 
         // Scripts
         is Script -> interpret()

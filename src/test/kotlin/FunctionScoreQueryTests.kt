@@ -82,9 +82,9 @@ class FunctionScoreQueryTests : BehaviorSpec({
                                   }
                               ],
                               "max_boost": 42,
+                              "min_score" : 42,
                               "score_mode": "max",
-                              "boost_mode": "multiply",
-                              "min_score" : 42
+                              "boost_mode": "multiply"
                             }
                         }
                     }

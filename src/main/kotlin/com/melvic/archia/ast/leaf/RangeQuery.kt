@@ -16,7 +16,7 @@ class RangeField(
 
     var format: DateFormat? = null,
     var relation: Relation? = null,
-    var timeZone: String? = null,
+    var timeZone: TimeZone? = null,
     var boost: Boost? = null
 ): Field(name), WithNum
 

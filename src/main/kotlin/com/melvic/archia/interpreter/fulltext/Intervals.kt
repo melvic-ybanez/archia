@@ -39,8 +39,7 @@ fun Param<IntervalRule>.interpret(parent: JsonObject): JsonObject {
 
 fun WithAnalyzer.interpretAnalyzer(parent: JsonObject): JsonObject {
     return parent {
-        propStr(::analyzer)
-        propStr(::useField)
+        propStr(::analyzer, ::useField)
     }
 }
 
