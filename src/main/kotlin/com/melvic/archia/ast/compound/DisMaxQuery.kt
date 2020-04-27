@@ -1,12 +1,16 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
+import kotlin.reflect.KProperty
 
-data class DisMaxQuery(
-    var _queries: MultiClause? = null,
-    var tieBreaker: Double? = null
-): Clause(), BuilderHelper {
+class DisMaxQuery: Clause(), BuilderHelper {
+    var queries: MultiClause by parameters
+    var tieBreaker: Double by parameters
+
     fun queries(init: Init<ClauseArrayBuilder>) {
-        setClauseArray(init) { _queries = it }
+        setClauseArray(init) { queries = it }
     }
+
+    override val requiredParams: List<KProperty<Any>>
+        get() = listOf(::queries)
 }

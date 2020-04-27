@@ -5,46 +5,6 @@ import com.melvic.archia.ast.compound.*
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
 
-fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
-    val errors = mutableListOf<ErrorCode>()
-
-    if (_positive == null) errors.add(missingFieldCode(::positive))
-    if (_negative == null) errors.add(missingFieldCode(::negative))
-
-    if (errors.isNotEmpty()) return Failed(errors)
-
-    val propsOut = json {
-        propFunc(::_positive) { it.interpret() }
-        propFunc(::_negative) { it.interpret() }
-        prop(::negativeBoost) { it.json() }
-    }
-
-    val boostingOut = parent { esName() to propsOut }
-    return boostingOut.success()
-}
-
-fun ConstantScoreQuery.interpret(parent: JsonObject): Evaluation {
-    if (_filter == null) return missingField(::filter)
-
-    return parent {
-        esName() to json {
-            propFunc(::_filter) { it.interpret() }
-            prop(::boost) { it.json() }
-        }
-    }.success()
-}
-
-fun DisMaxQuery.interpret(parent: JsonObject): Evaluation {
-    if (_queries == null) return missingField(::queries)
-
-    return parent {
-        esName() to json {
-            propWithAlt(::_queries, ::queries) { it.interpret() }
-            prop(::tieBreaker) { it.json() }
-        }
-    }.success()
-}
-
 fun FunctionScoreQuery.interpret(parent: JsonObject): Evaluation {
     val propsOut = json {
         propWithAlt(::_query, ::query) { it.interpret() }

@@ -1,12 +1,15 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
+import kotlin.reflect.KProperty
 
-data class ConstantScoreQuery(
-    var _filter: Clause? = null,
-    var boost: Boost? = null
-): Clause(), BuilderHelper {
+class ConstantScoreQuery: Clause(), BuilderHelper {
+    var filter: Clause by parameters
+    var boost: Boost by parameters
+
     fun filter(init: Init<ClauseBuilder>) {
-        setClause(init) { _filter = it }
+        setClause(init) { filter = it }
     }
+
+    override val requiredParams: List<KProperty<Any>> = listOf(::filter)
 }

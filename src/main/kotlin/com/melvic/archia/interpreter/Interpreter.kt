@@ -35,9 +35,6 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is RangeQuery -> interpret(parentObject)
 
         // Compound clauses
-        is BoostingQuery -> interpret(parentObject)
-        is ConstantScoreQuery -> interpret(parentObject)
-        is DisMaxQuery -> interpret(parentObject)
         is FunctionScoreQuery -> interpret(parentObject)
 
         // Full text

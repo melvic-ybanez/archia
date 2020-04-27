@@ -1,17 +1,21 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
+import kotlin.reflect.KProperty
 
-data class BoostingQuery(
-    var _positive: Clause? = null,
-    var _negative: Clause? = null,
-    var negativeBoost: Double? = null
-): Clause(), WithNum, BuilderHelper {
+class BoostingQuery: Clause(), WithNum, BuilderHelper {
+    var positive: Clause by parameters
+    var negative: Clause by parameters
+    var negativeBoost: Double by parameters
+
     fun positive(init: Init<ClauseBuilder>) {
-        setClause(init) { _positive = it }
+        setClause(init) { positive = it }
     }
 
     fun negative(init: Init<ClauseBuilder>) {
-       setClause(init) { _negative = it }
+       setClause(init) { negative = it }
     }
+
+    override val requiredParams: List<KProperty<Any>> =
+        listOf(::positive, ::negative)
 }
