@@ -32,8 +32,8 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             "function_score": {
                                 "query": { "match_all": {} },
                                 "boost": "5",
-                                "boost_mode":"multiply",
-                                "random_score": {}
+                                "random_score": {},
+                                "boost_mode":"multiply"
                             }
                         }
                     }
@@ -73,8 +73,8 @@ class FunctionScoreQueryTests : BehaviorSpec({
                               "functions": [
                                   {
                                       "filter": { "term": { "test": "bar" } },
-                                      "weight": 23,
-                                      "random_score": {} 
+                                      "random_score": {},
+                                      "weight": 23
                                   },
                                   {
                                       "filter": { "term": { "test": "cat" } },
@@ -82,9 +82,9 @@ class FunctionScoreQueryTests : BehaviorSpec({
                                   }
                               ],
                               "max_boost": 42,
-                              "min_score" : 42,
                               "score_mode": "max",
-                              "boost_mode": "multiply"
+                              "boost_mode": "multiply",
+                              "min_score" : 42
                             }
                         }
                     }
@@ -260,7 +260,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             {
                                 gauss {
                                     "price" {
-                                        origin = 0.es()
+                                        origin = "0".es()
                                         scale = "20"
                                     }
                                 }
@@ -287,11 +287,6 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     {
                         "query": {
                             "function_score": {
-                                "query": {
-                                    "term": {
-                                      "properties": "balcony"
-                                    }
-                                },
                                 "functions": [
                                     {
                                       "gauss": {
@@ -310,6 +305,11 @@ class FunctionScoreQueryTests : BehaviorSpec({
                                       }
                                     }
                                 ],
+                                "query": {
+                                    "term": {
+                                      "properties": "balcony"
+                                    }
+                                },
                                 "score_mode": "multiply"
                             }
                         }

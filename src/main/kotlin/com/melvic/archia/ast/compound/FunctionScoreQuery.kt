@@ -4,35 +4,37 @@ import com.melvic.archia.ast.*
 import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
-data class FunctionScoreQuery(
-    var _query: Clause? = null,
-    var boost: String? = null,
-    var _functions: List<FunctionClause>? = null,
-    var maxBoost: Int? = null,
-    var scoreMode: ScoreMode? = null,
-    var boostMode: BoostMode? = null,
-    var minScore: Int? = null
-) : FunctionClause() {
+class FunctionScoreQuery: FunctionClause() {
+    var query: Clause by parameters
+    var boost: String by parameters
+    var functions: List<FunctionClause> by parameters
+    var maxBoost: Int by parameters
+    var scoreMode: ScoreMode by parameters
+    var boostMode: BoostMode by parameters
+    var minScore: Int by parameters
+
     fun query(init: Init<ClauseBuilder>) {
-        _query = ClauseBuilder().apply(init).clause
+        query = ClauseBuilder().apply(init).clause
     }
 
     fun functions(vararg init: Init<FunctionClause>) {
-        _functions = init.map { FunctionClause().apply(it) }.toMutableList()
+        functions = init.map { FunctionClause().apply(it) }.toMutableList()
     }
 }
 
-open class FunctionClause(
-    var _filter: Clause? = null,
-    var scoreFunction: Param<ScoreFunction>? = null,
-    var weight: Number? = null
-) : Clause(), ParamHelper, WithDate, BuilderHelper {
+open class FunctionClause: Clause(), ParamHelper, WithDate, BuilderHelper {
+    var filter: Clause by parameters
+    var scoreFunction: Param<ScoreFunction> by parameters
+    var weight: Number by parameters
+
     private inline fun <reified R : ScoreFunction> save(init: Init<R>, field: KCallable<Unit>) {
         setProp(init) { scoreFunction = param(field, it) }
     }
 
+    override val topLevel: Boolean = false
+
     fun filter(init: Init<ClauseBuilder>) {
-        setClause(init) { _filter = it }
+        setClause(init) { filter = it }
     }
 
     fun scriptScore(init: Init<ScriptScore>) {
@@ -60,39 +62,43 @@ open class FunctionClause(
     }
 }
 
-interface ScoreFunction
+open class ScoreFunction : TreeNode()
 
-data class RandomScore(var seed: Number? = null, var field: String? = null) : ScoreFunction
+class RandomScore : ScoreFunction() {
+    var seed: Number by parameters
+    var field: String by parameters
+}
 
-data class ScriptScore(var _script: Script? = null) : ScoreFunction {
+class ScriptScore : ScoreFunction() {
+    var script: Script by parameters
+
     fun script(init: Init<Script>) {
-        setProp(init) { _script = it }
+        setProp(init) { script = it }
     }
 }
 
-data class FieldValueFactor(
-    var field: String? = null,
-    var factor: Double? = null,
-    var modifier: Modifier? = null,
-    var missing: Int? = null
-) : ScoreFunction
+class FieldValueFactor: ScoreFunction() {
+    var field: String by parameters
+    var factor: Double by parameters
+    var modifier: Modifier by parameters
+    var missing: Int by parameters
+}
 
-data class DecayFunction(
-    var field: DecayFunctionField? = null,
-    var multiValueMode: MultiValueMode? = null
-) : ScoreFunction {
+class DecayFunction: ScoreFunction() {
+    var field: DecayFunctionField by parameters
+    var multiValueMode: MultiValueMode by parameters
+
     operator fun String.invoke(init: Init<DecayFunctionField>) {
         field = DecayFunctionField(this).apply(init)
     }
 }
 
-data class DecayFunctionField(
-    val name: String,
-    var origin: DecayFieldType? = null,
-    var scale: String? = null,
-    var offset: String? = null,
-    var decay: Double? = null
-) : WithNum
+class DecayFunctionField(name: String): Field(name), WithText {
+    var origin: DecayFieldType by parameters
+    var scale: String by parameters
+    var offset: String by parameters
+    var decay: Double by parameters
+}
 
 enum class Modifier {
     NONE, LOG, LOG1P, LOG2P, LN, LN1P, LN2P, SQUARE, SQRT, RECIPROCAL

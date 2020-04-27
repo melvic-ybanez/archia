@@ -56,7 +56,9 @@ interface Builder {
     fun simpleQueryString(init: Init<SimpleQueryStringQuery>) = save(init)
 }
 
-data class ClauseBuilder(var clause: Clause? = null) : Builder {
+class ClauseBuilder : Builder {
+    var clause: Clause = Clause()
+
     override fun <C : Clause> save(clause: C) {
         this.clause = clause
     }
@@ -74,7 +76,7 @@ interface BuilderHelper {
     }
 
     fun setClause(init: Init<ClauseBuilder>, set: (Clause) -> Unit) {
-        build(init, { it.clause }) { it?.let { set(it) } }
+        build(init, { it.clause }) { set(it) }
     }
 }
 

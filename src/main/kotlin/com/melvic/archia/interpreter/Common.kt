@@ -2,10 +2,7 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.fulltext.CommonTermsField
-import com.melvic.archia.output.JsonNull
-import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.JsonValue
-import com.melvic.archia.output.json
+import com.melvic.archia.output.*
 import com.melvic.archia.validate
 import kotlin.reflect.KCallable
 
@@ -79,5 +76,17 @@ fun Fuzziness.interpret(parent: JsonObject = json {}): JsonValue {
                 "AUTO:[$low],[$high]".json()
             } ?: "AUTO".json()
         }
+    }
+}
+
+fun Geo.interpret(): JsonValue {
+    return when (this) {
+        is GeoObject -> with(this) {
+            json { propNum(::lat); propNum(::long) }
+        }
+        is GeoString -> JsonString("${this.lat},${this.long}")
+        is GeoHash -> JsonString(this.hash)
+        is GeoArray -> jsonArray(JsonNumber(lat), JsonNumber(long))
+        is GeoWktPoint -> JsonString("POINT (${this.lat} )")
     }
 }

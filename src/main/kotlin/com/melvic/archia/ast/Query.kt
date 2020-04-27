@@ -13,10 +13,7 @@ data class Query(var clause: Clause? = null) {
     }
 }
 
-open class Clause {
-    val parameters: MutableMap<String, Any?> = mutableMapOf()
-    open val requiredParams: List<KProperty<Any>> = listOf()
-
+open class Clause : TreeNode() {
     /**
      * Returns the name of the clause in lowercase snake format,
      * removing the "Query" suffix, if one is found.
@@ -26,6 +23,13 @@ open class Clause {
         val noPrefix = simpleName.substringBeforeLast("Query")
         return noPrefix.toSnakeCase()
     }
+
+    open val topLevel: Boolean = true
+}
+
+open class TreeNode {
+    val parameters: MutableMap<String, Any?> = mutableMapOf()
+    open val requiredParams: List<KProperty<Any>> = listOf()
 }
 
 typealias MultiClause = MutableList<Clause>

@@ -1,6 +1,6 @@
 package com.melvic.archia.ast
 
-open class Field(var name: String)
+open class Field(var name: String) : TreeNode()
 
 abstract class WithField<F : Field> : Clause() {
     var field: F? = null

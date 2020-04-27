@@ -8,8 +8,8 @@ typealias Analyzer = String
 typealias CutoffFrequency = Double
 typealias TimeZone = String
 
-data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue, DecayFieldType
-data class AString(val value: String) : MatchQueryValue
+data class ANumber(val value: Number) : MatchQueryValue, SimpleMSM, RangeValue
+data class AString(val value: String) : MatchQueryValue, DecayFieldType
 data class ABoolean(val value: Boolean) : MatchQueryValue
 data class ADate(val value: LocalDate) : MatchQueryValue, DecayFieldType
 

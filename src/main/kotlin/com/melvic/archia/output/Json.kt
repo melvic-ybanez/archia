@@ -28,7 +28,7 @@ data class JsonArray(val items: MutableList<JsonValue>) : JsonValue(), Compound<
 }
 
 data class JsonObject(
-    val entries: MutableMap<String, JsonValue> = mutableMapOf()
+    var entries: MutableMap<String, JsonValue> = mutableMapOf()
 ) : JsonValue(), Compound<JsonObject> {
     // Due to the side-effecting nature of the DSl, errors are sometimes accumulated in
     // the body of the JSON result.

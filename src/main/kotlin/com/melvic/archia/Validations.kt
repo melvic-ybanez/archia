@@ -1,5 +1,6 @@
 package com.melvic.archia
 
+import com.melvic.archia.ast.TreeNode
 import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
@@ -19,6 +20,14 @@ fun JsonObject.validate(): Evaluation {
 
 fun JsonValue.validate(): Evaluation {
     return if (this is JsonObject) this.validate() else this.success()
+}
+
+fun JsonObject.validateRequiredParams(tree: TreeNode) {
+    for (fieldName in tree.requiredParams) {
+        if (!tree.parameters.containsKey(fieldName.name)) {
+            error(missingFieldCode(fieldName))
+        }
+    }
 }
 
 /**
