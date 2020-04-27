@@ -2,7 +2,7 @@ package com.melvic.archia.ast
 
 open class Field(var name: String)
 
-abstract class WithField<F : Field> : Clause {
+abstract class WithField<F : Field> : Clause() {
     var field: F? = null
 
     /**

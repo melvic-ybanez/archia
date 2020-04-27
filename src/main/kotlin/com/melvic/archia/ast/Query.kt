@@ -2,6 +2,7 @@ package com.melvic.archia.ast
 
 import com.melvic.archia.interpreter.interpret
 import com.melvic.archia.interpreter.toSnakeCase
+import kotlin.reflect.KProperty
 
 typealias Init<A> = A.() -> Unit
 
@@ -12,12 +13,15 @@ data class Query(var clause: Clause? = null) {
     }
 }
 
-interface Clause {
+open class Clause {
+    val parameters: MutableMap<String, Any?> = mutableMapOf()
+    open val requiredParams: List<KProperty<Any>> = listOf()
+
     /**
      * Returns the name of the clause in lowercase snake format,
      * removing the "Query" suffix, if one is found.
      */
-    fun esName(): String {
+    open fun esName(): String {
         val simpleName = this::class.java.simpleName
         val noPrefix = simpleName.substringBeforeLast("Query")
         return noPrefix.toSnakeCase()

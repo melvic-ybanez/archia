@@ -35,7 +35,7 @@ data class MultiMatchQuery (
 
     // phrase & prefix
     var slop: Int? = null
-) : Clause
+) : Clause()
 
 enum class MultiMatchType {
     BEST_FIELDS, MOST_FIELDS, CROSS_FIELDS, PHRASE, PHRASE_PREFIX, BOOL_PREFIX

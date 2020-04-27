@@ -1,10 +1,7 @@
 package com.melvic.archia.interpreter
 
 import QueryStringQuery
-import com.melvic.archia.ast.Clause
-import com.melvic.archia.ast.Init
-import com.melvic.archia.ast.Query
-import com.melvic.archia.ast.buildQuery
+import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.leaf.RangeQuery
@@ -14,6 +11,7 @@ import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
 import com.melvic.archia.script.Script
+import com.melvic.archia.validate
 
 typealias Evaluation = Result<JsonValue>
 
@@ -58,6 +56,30 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         // Scripts
         is Script -> interpret()
 
-        else -> json {}.success()
+        else -> json {
+            for (fieldName in requiredParams) {
+                if (!parameters.containsKey(fieldName.name)) {
+                    error(missingFieldCode(fieldName))
+                }
+            }
+
+            for ((fieldName, value) in parameters) {
+                fieldName to when (value) {
+                    // primitive values
+                    is Number -> value.json()
+                    is Boolean -> value.json()
+                    is String -> value.json()
+
+                    // elasticsearch params
+                    is MinimumShouldMatch -> value.interpret()
+                    is Fuzziness -> value.interpret()
+
+                    // interpret child clause
+                    is Clause -> value.interpret()
+
+                    else -> InvalidValue(fieldName, value)
+                }
+            }
+        }.validate()
     }
 }

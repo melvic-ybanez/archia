@@ -26,7 +26,7 @@ open class FunctionClause(
     var _filter: Clause? = null,
     var scoreFunction: Param<ScoreFunction>? = null,
     var weight: Number? = null
-) : Clause, ParamHelper, WithDate, BuilderHelper {
+) : Clause(), ParamHelper, WithDate, BuilderHelper {
     private inline fun <reified R : ScoreFunction> save(init: Init<R>, field: KCallable<Unit>) {
         setProp(init) { scoreFunction = param(field, it) }
     }

@@ -24,4 +24,4 @@ data class QueryStringQuery(
     var quoteFieldSuffix: String? = null,
     var rewrite: Rewrite? = null,
     var timezone: TimeZone? = null
-) : Clause, WithNum
+) : Clause(), WithNum

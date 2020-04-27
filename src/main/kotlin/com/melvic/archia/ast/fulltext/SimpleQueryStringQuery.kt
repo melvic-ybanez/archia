@@ -1,25 +1,28 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.Analyzer
+import com.melvic.archia.ast.Clause
 import com.melvic.archia.ast.MinimumShouldMatch
 import kotlin.reflect.KProperty
 
-data class SimpleQueryStringQuery(
-    var query: String? = null,
-    var fields: List<String>? = null,
-    var defaultOperator: Operator? = null,
-    var allFields: Boolean? = null,
-    var analyzeWildCard: Boolean? = null,
-    var analyzer: Analyzer? = null,
-    var autoGenerateSynonymsPhraseQuery: Boolean? = null,
-    var flags: Flag? = null,
-    var fuzzyMaxExpansions: Int? = null,
-    var fuzzyPrefixLength: Int? = null,
-    var fuzzyTranspositions: Boolean? = null,
-    var lenient: Boolean? = null,
-    var minimumShouldMatch: MinimumShouldMatch? = null,
-    var quoteFieldSuffix: String? = null
-)
+class SimpleQueryStringQuery: Clause() {
+    var query: String by parameters
+    var fields: List<String> by parameters
+    var defaultOperator: Operator by parameters
+    var allFields: Boolean by parameters
+    var analyzeWildCard: Boolean by parameters
+    var analyzer: Analyzer by parameters
+    var autoGenerateSynonymsPhraseQuery: Boolean by parameters
+    var flags: Flag by parameters
+    var fuzzyMaxExpansions: Int by parameters
+    var fuzzyPrefixLength: Int by parameters
+    var fuzzyTranspositions: Boolean by parameters
+    var lenient: Boolean by parameters
+    var minimumShouldMatch: MinimumShouldMatch by parameters
+    var quoteFieldSuffix: String by parameters
+
+    override val requiredParams = listOf(::query)
+}
 
 enum class Flag {
     ALL, AND, ESCAPE, FUZZY, NEAR, NONE, NOT, OR, PHRASE, PRECEDENCE,

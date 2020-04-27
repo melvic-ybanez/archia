@@ -30,8 +30,8 @@ interface MatchQueryValue
 
 interface WithMatchQueryValue : WithText, WithNum, WithBool, WithDate
 
-data class MatchAllQuery(var boost: Boost? = null) : Clause
-class MatchNoneQuery : Clause
+data class MatchAllQuery(var boost: Boost? = null) : Clause()
+class MatchNoneQuery : Clause()
 
 enum class Operator { OR, AND }
 enum class ZeroTermsQuery { NONE, ALL }

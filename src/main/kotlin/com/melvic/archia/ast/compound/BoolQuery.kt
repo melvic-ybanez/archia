@@ -9,7 +9,7 @@ data class BoolQuery(
     var _mustNot: MultiClause? = null,
     var minimumShouldMatch: MinimumShouldMatch? = null,
     var boost: Boost? = null
-): Clause, WithNum, BuilderHelper {
+): Clause(), WithNum, BuilderHelper {
     fun must(init: Init<ClauseArrayBuilder>) {
         setClauseArray(init) { _must = it }
     }

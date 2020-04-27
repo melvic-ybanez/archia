@@ -52,6 +52,8 @@ interface Builder {
     fun common(init: Init<CommonTermsQuery>) = save(init)
 
     fun queryString(init: Init<QueryStringQuery>) = save(init)
+    
+    fun simpleQueryString(init: Init<SimpleQueryStringQuery>) = save(init)
 }
 
 data class ClauseBuilder(var clause: Clause? = null) : Builder {

@@ -43,7 +43,7 @@ fun <F : Field> WithField<F>.withField(
     return out.validate()
 }
 
-fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
+fun MinimumShouldMatch.interpret(parent: JsonObject = json {}): JsonValue {
     val msm: MinimumShouldMatch = this
     return with(parent) {
         fun interpretSimple(it: SimpleMSM): JsonValue = when (it) {
@@ -68,7 +68,7 @@ fun MinimumShouldMatch.interpret(parent: JsonObject): JsonValue {
     }
 }
 
-fun Fuzziness.interpret(parent: JsonObject): JsonValue {
+fun Fuzziness.interpret(parent: JsonObject = json {}): JsonValue {
     return parent {
         when (this@interpret) {
             is Fuzziness._0 -> 0.json()

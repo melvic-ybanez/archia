@@ -7,7 +7,7 @@ data class Script(
     var lang: ScriptLang? = null,
     var source: String? = null,
     var _params: MutableMap<String, Number>? = null
-) : Clause {
+) : Clause() {
     fun params(init: Init<Params>) {
         _params = Params().apply(init).params
     }
