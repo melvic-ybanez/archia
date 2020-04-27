@@ -15,3 +15,5 @@ interface ParamHelper {
         return Pair(callable.esNameFormat(), value)
     }
 }
+
+data class OneOrMore<A>(val items: List<A>)

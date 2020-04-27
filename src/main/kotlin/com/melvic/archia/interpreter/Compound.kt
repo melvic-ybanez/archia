@@ -5,19 +5,6 @@ import com.melvic.archia.ast.compound.*
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
 
-fun BoolQuery.interpret(parent: JsonObject): Evaluation {
-    val propsOut = json {
-        propFunc(::_must) { it.interpret() }
-        propFunc(::_should) { it.interpret() }
-        propFunc(::_filter) { it.interpret() }
-        propFunc(::_mustNot) { it.interpret() }
-        prop(::minimumShouldMatch) { it.interpret(this) }
-        prop(::boost) { it.json() }
-    }
-    val boolOut = parent { esName() to propsOut }
-    return boolOut.validate()
-}
-
 fun BoostingQuery.interpret(parent: JsonObject): Evaluation {
     val errors = mutableListOf<ErrorCode>()
 

@@ -35,7 +35,6 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
         is RangeQuery -> interpret(parentObject)
 
         // Compound clauses
-        is BoolQuery -> interpret(parentObject)
         is BoostingQuery -> interpret(parentObject)
         is ConstantScoreQuery -> interpret(parentObject)
         is DisMaxQuery -> interpret(parentObject)
@@ -98,6 +97,16 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
 
             if (errors.isEmpty()) arrayOut.success()
             else Failed(errors)
+        }
+
+        is OneOrMore<*> ->  when (val result = interpretParam(name, value.items)) {
+            is Failed -> result
+            is Success<*> -> {
+                val arrayOut = result.value() as JsonArray
+                if (arrayOut.items.size == 1) {
+                    arrayOut.items[0].success()
+                } else arrayOut.success()
+            }
         }
 
         // interpret child clause

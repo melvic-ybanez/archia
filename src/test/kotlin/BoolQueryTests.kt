@@ -37,10 +37,6 @@ class BoolQueryTests : BehaviorSpec({
                           "must" : {
                             "term" : { "user" : "kimchy" }
                           },
-                          "should" : [
-                            { "term" : { "tag" : "wow" } },
-                            { "term" : { "tag" : "elasticsearch" } }
-                          ],
                           "filter": {
                             "term" : { "tag" : "tech" }
                           },
@@ -49,6 +45,10 @@ class BoolQueryTests : BehaviorSpec({
                               "age" : { "gte" : 10, "lte" : 20 }
                             }
                           },
+                          "should" : [
+                            { "term" : { "tag" : "wow" } },
+                            { "term" : { "tag" : "elasticsearch" } }
+                          ],
                           "minimum_should_match" : 1,
                           "boost" : 1.0
                         }
