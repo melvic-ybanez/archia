@@ -53,10 +53,6 @@ data class JsonObject(
 
     fun array(values: List<JsonValue>) = JsonArray(values.toMutableList())
 
-    fun Number.json() = JsonNumber(this)
-    fun String.json() = JsonString(this)
-    fun Boolean.json() = JsonBoolean(this)
-
     override fun instance() = this
 
     fun error(code: ErrorCode) {
@@ -65,6 +61,10 @@ data class JsonObject(
 
     fun isValid(): Boolean = errors.isEmpty()
 }
+
+fun Number.json() = JsonNumber(this)
+fun String.json() = JsonString(this)
+fun Boolean.json() = JsonBoolean(this)
 
 interface Compound<C> {
     fun instance(): C

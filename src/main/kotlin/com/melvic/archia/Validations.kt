@@ -2,6 +2,7 @@ package com.melvic.archia
 
 import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonObject
+import com.melvic.archia.output.JsonValue
 import com.melvic.archia.output.json
 import kotlin.reflect.KCallable
 
@@ -14,6 +15,10 @@ fun JsonObject.validate(): Evaluation {
     return if (this.errors.isEmpty()) {
         this.success()
     } else Failed(this.errors)
+}
+
+fun JsonValue.validate(): Evaluation {
+    return if (this is JsonObject) this.validate() else this.success()
 }
 
 /**

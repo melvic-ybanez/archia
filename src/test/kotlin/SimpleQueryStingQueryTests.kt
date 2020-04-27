@@ -1,6 +1,9 @@
 import com.melvic.archia.ast.evalQuery
 import com.melvic.archia.ast.fulltext.Operator
 import com.melvic.archia.interpreter.missingField
+import com.melvic.archia.interpreter.output
+import com.melvic.archia.output.JsonStringOutput
+import com.melvic.archia.output.mapTo
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
@@ -15,6 +18,29 @@ class SimpleQueryStingQueryTests : BehaviorSpec({
                     }
                 }
                 result shouldBe missingField("query")
+            }
+        }
+        `when`("all required parameters are provided") {
+            then("it should return the correct JSON structure") {
+                val output = evalQuery {
+                    simpleQueryString {
+                        query = """\"fried eggs\" +(eggplant | potato) -frittata"""
+                        fields = listOf("title^5", "body")
+                        defaultOperator = Operator.AND
+                    }
+                }.output()
+
+                assert(output, """
+                    {
+                      "query": {
+                        "simple_query_string" : {
+                            "query": "\"fried eggs\" +(eggplant | potato) -frittata",
+                            "fields": ["title^5", "body"],
+                            "default_operator": "and"
+                        }
+                      }
+                    }
+                """.trimIndent())
             }
         }
     }

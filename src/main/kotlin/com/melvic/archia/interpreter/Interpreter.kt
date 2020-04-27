@@ -7,9 +7,7 @@ import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.interpreter.fulltext.interpret
-import com.melvic.archia.output.JsonObject
-import com.melvic.archia.output.JsonValue
-import com.melvic.archia.output.json
+import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
 import com.melvic.archia.validate
 
@@ -63,23 +61,48 @@ fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
                 }
             }
 
-            for ((fieldName, value) in parameters) {
-                fieldName to when (value) {
-                    // primitive values
-                    is Number -> value.json()
-                    is Boolean -> value.json()
-                    is String -> value.json()
-
-                    // elasticsearch params
-                    is MinimumShouldMatch -> value.interpret()
-                    is Fuzziness -> value.interpret()
-
-                    // interpret child clause
-                    is Clause -> value.interpret()
-
-                    else -> InvalidValue(fieldName, value)
+            esName() to json {
+                for ((fieldName, value) in parameters) {
+                    fieldName.toSnakeCase() to interpretParam(fieldName, value)
                 }
             }
         }.validate()
+    }
+}
+
+fun <V> interpretParam(name: String, value: V): Evaluation {
+    return when (value) {
+        // Primitive values
+        is Number -> value.json().success()
+        is Boolean -> value.json().success()
+        is String -> value.json().success()
+
+        // Enums
+        is Operator -> value.json().success()
+
+        // Elasticsearch params
+        is MinimumShouldMatch -> value.interpret().validate()
+        is Fuzziness -> value.interpret().validate()
+
+        // If it's a list, recursively evaluate each item
+        is List<*> -> {
+            val errors = mutableListOf<ErrorCode>()
+            val arrayOut = jsonArray()
+
+            for (item in value) {
+                when (val eval = interpretParam(name, item)) {
+                    is Failed -> errors.addAll(eval.errors)
+                    is Success<*> -> arrayOut.add(eval.value())
+                }
+            }
+
+            if (errors.isEmpty()) arrayOut.success()
+            else Failed(errors)
+        }
+
+        // interpret child clause
+        is Clause -> value.interpret()
+
+        else -> InvalidValue(name, value).fail()
     }
 }
