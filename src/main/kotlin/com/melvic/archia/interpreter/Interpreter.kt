@@ -4,7 +4,6 @@ import QueryStringQuery
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
-import com.melvic.archia.interpreter.fulltext.interpret
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
 import com.melvic.archia.validate
@@ -26,11 +25,11 @@ fun Query.interpret(): Evaluation {
 fun Clause.interpret(parent: JsonObject = json {}): Evaluation {
     return when (this) {
         // Full text
-        is MatchBoolPrefixQuery -> interpret(parent)
-        is MatchPhraseQuery -> interpret(parent)
-        is MatchPhrasePrefixQuery -> interpret(parent)
-        is MultiMatchQuery -> interpret(parent)
-        is QueryStringQuery -> interpret(parent)
+        //is MatchBoolPrefixQuery -> interpret(parent)
+        //is MatchPhraseQuery -> interpret(parent)
+        //is MatchPhrasePrefixQuery -> interpret(parent)
+        //is MultiMatchQuery -> interpret(parent)
+        //is QueryStringQuery -> interpret(parent)
 
         is WithShortForm<*, *> -> this.interpret(parent)
 
@@ -84,6 +83,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is ScoreMode -> value.json().success()
         is Modifier -> value.json().success()
         is MultiValueMode -> value.json().success()
+        is MultiMatchType -> value.json().success()
 
         // Elasticsearch params
         is MinimumShouldMatch -> value.interpret().validate()

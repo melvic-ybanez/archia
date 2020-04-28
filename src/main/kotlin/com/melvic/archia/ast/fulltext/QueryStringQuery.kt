@@ -1,27 +1,31 @@
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.fulltext.Operator
+import kotlin.reflect.KProperty
 
-data class QueryStringQuery(
-    var query: String? = null,
-    var defaultField: String? = null,
-    var allowLeadingWildcard: Boolean? = null,
-    var analyzeWildcard: Boolean? = null,
-    var analyzer: Analyzer? = null,
-    var autoGenerateSynonymsPhraseQuery: Boolean? = null,
-    var boost: Boost? = null,
-    var defaultOperator: Operator? = null,
-    var enablePositionIncrements: Boolean? = null,
-    var fields: List<String>? = null,
-    var fuzziness: Fuzziness? = null,
-    var fuzzyMaxExpansions: Int? = null,
-    var fuzzyPrefixLength: Int? = null,
-    var fuzzyTranspositions: Boolean? = null,
-    var lenient: Boolean? = null,
-    var maxDeterminedStates: Int? = null,
-    var minimumShouldMatch: MinimumShouldMatch? = null,
-    var quoteAnalyzer: Analyzer? = null,
-    var phraseSlop: Int? = null,
-    var quoteFieldSuffix: String? = null,
-    var rewrite: Rewrite? = null,
-    var timezone: TimeZone? = null
-) : Clause(), WithNum
+class QueryStringQuery : Clause(), WithNum {
+    var query: String by parameters
+    var defaultField: String by parameters
+    var allowLeadingWildcard: Boolean by parameters
+    var analyzeWildcard: Boolean by parameters
+    var analyzer: Analyzer by parameters
+    var autoGenerateSynonymsPhraseQuery: Boolean by parameters
+    var boost: Boost by parameters
+    var defaultOperator: Operator by parameters
+    var enablePositionIncrements: Boolean by parameters
+    var fields: List<String> by parameters
+    var fuzziness: Fuzziness by parameters
+    var fuzzyMaxExpansions: Int by parameters
+    var fuzzyPrefixLength: Int by parameters
+    var fuzzyTranspositions: Boolean by parameters
+    var lenient: Boolean by parameters
+    var maxDeterminedStates: Int by parameters
+    var minimumShouldMatch: MinimumShouldMatch by parameters
+    var quoteAnalyzer: Analyzer by parameters
+    var phraseSlop: Int by parameters
+    var quoteFieldSuffix: String by parameters
+    var rewrite: Rewrite by parameters
+    var timezone: TimeZone by parameters
+
+    override val requiredParams: List<KProperty<Any>>
+        get() = listOf(::query)
+}
