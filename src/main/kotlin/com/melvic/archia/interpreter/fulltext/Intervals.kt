@@ -5,7 +5,6 @@ import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.interpreter.*
 import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.json
-import com.melvic.archia.output.jsonArray
 import com.melvic.archia.require
 import com.melvic.archia.validate
 
@@ -14,15 +13,15 @@ import com.melvic.archia.validate
  * @param parent the json object that will contain the interpreted
  * form of the given intervals query
  */
-fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
+/*fun IntervalsQuery.interpret(parent: JsonObject): Evaluation {
     return withField(parent) {
         json {
             rule?.interpret(this)
         }
     }
-}
+}*/
 
-fun Param<IntervalRule>.interpret(parent: JsonObject): JsonObject {
+/*fun Param<IntervalRule>.interpret(parent: JsonObject): JsonObject {
     val (name, clause) = this
     return parent {
         name to when (clause) {
@@ -35,8 +34,8 @@ fun Param<IntervalRule>.interpret(parent: JsonObject): JsonObject {
             else -> InvalidValue(name, clause).fail()
         }
     }
-}
-
+}*/
+/*
 fun WithAnalyzer.interpretAnalyzer(parent: JsonObject): JsonObject {
     return parent {
         propStr(::analyzer, ::useField)
@@ -71,9 +70,9 @@ fun FuzzyRule.interpret(): Evaluation {
         prop(::fuzziness) { it.interpret(this) }
         interpretAnalyzer(this)
     }
-}
+}*/
 
-fun AllOfRule.interpret(): Evaluation {
+/*fun AllOfRule.interpret(): Evaluation {
     return interpretIntervalOptions {
         propNum(::maxGaps)
         propBool(::ordered)
@@ -82,12 +81,12 @@ fun AllOfRule.interpret(): Evaluation {
 
 fun AnyOfRule.interpret(): Evaluation {
     return interpretIntervalOptions {}
-}
+}*/
 
-fun IntervalOptions.interpretIntervalOptions(body: JsonObject.() -> Unit): Evaluation {
-    return require(::intervals, _intervals) {
+/*fun IntervalOptions.interpretIntervalOptions(body: JsonObject.() -> Unit): Evaluation {
+    return require(::intervals, intervals) {
         body()
-        propFunc(::_intervals) prop@ {
+        propFunc(::intervals) prop@ {
             val intervalRules = jsonArray()
             for (interval in it) {
                 val eval = interval.interpret(json {}).validate()
@@ -96,12 +95,12 @@ fun IntervalOptions.interpretIntervalOptions(body: JsonObject.() -> Unit): Evalu
             }
             intervalRules.success()
         }
-        propFunc(::_filter) { it.interpret(json {}) }
+        propFunc(::filter) { it.interpret(json {}) }
     }
-}
+}*/
 
-fun FilterRule.interpret(parent: JsonObject): Evaluation =
+/*fun FilterRule.interpret(parent: JsonObject): Evaluation =
     query?.let {
         val (name, clause) = it
         parent { name to clause.interpret(json {})}.validate()
-    } ?: json {}.success()
+    } ?: json {}.success()*/

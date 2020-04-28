@@ -5,13 +5,12 @@ import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
 class IntervalsQuery : WithField<IntervalField>() {
-    override fun getField(name: String) = IntervalField(name)
+    override fun initField(name: String) = IntervalField(name)
 }
 
-class IntervalField(
-    name: String,
-    var rule: Param<IntervalRule>? = null
-) : Field(name), ParamHelper, IntervalBuilder {
+class IntervalField(name: String) : Field(name), ParamHelper, IntervalBuilder {
+    var rule: Param<IntervalRule> by parameters
+
     private inline fun <reified R : IntervalRule> save(init: Init<R>, field: KCallable<Unit>) {
         setProp(init) { this.rule = param(field, it) }
     }
@@ -76,56 +75,62 @@ class MultiIntervals : IntervalBuilder, ParamHelper {
     }
 }
 
-sealed class IntervalRule
+open class IntervalRule : TreeNode()
 
 open class WithAnalyzer : IntervalRule() {
-    var analyzer: String? = null
-    var useField: String? = null
+    var analyzer: String by parameters
+    var useField: String by parameters
 }
 
 open class IntervalOptions : IntervalRule() {
-    var _intervals: MutableList<Param<IntervalRule>>? = null
-    var _filter: FilterRule? = null
+    var intervals: MutableList<Param<IntervalRule>> by parameters
+    var filter: FilterRule by parameters
 
     fun intervals(init: Init<MultiIntervals>) {
-        setProp(init) { _intervals = it.intervals }
+        setProp(init) { intervals = it.intervals }
     }
 
     fun filter(init: Init<FilterRule>) {
-        setProp(init) { _filter = it }
+        setProp(init) { filter = it }
     }
 }
 
-data class MatchRule(
-    var query: String? = null,
-    var maxGaps: Int? = null,
-    var ordered: Boolean? = null,
-    var _filter: FilterRule? = null
-) : WithAnalyzer() {
+class MatchRule : WithAnalyzer() {
+    var query: String by parameters
+    var maxGaps: Int by parameters
+    var ordered: Boolean by parameters
+    var filter: FilterRule by parameters
+
     fun filter(init: Init<FilterRule>) {
-        setProp(init) { _filter = it }
+        setProp(init) { filter = it }
     }
 }
 
-data class PrefixRule(var prefix: String? = null): WithAnalyzer()
+class PrefixRule: WithAnalyzer() {
+    var prefix: String by parameters
+}
 
-data class WildCardRule(var pattern: String? = null) : WithAnalyzer()
+class WildCardRule : WithAnalyzer() {
+    var pattern: String by parameters
+}
 
-data class FuzzyRule(
-    var term: String? = null,
-    var prefixLength: String? = null,
-    var transpositions: Boolean? = null,
-    var fuzziness: Fuzziness? = null
-) : WithAnalyzer()
+class FuzzyRule : WithAnalyzer() {
+    var term: String by parameters
+    var prefixLength: String by parameters
+    var transpositions: Boolean by parameters
+    var fuzziness: Fuzziness by parameters
+}
 
-data class AllOfRule(
-    var maxGaps: Int? = null,
-    var ordered: Boolean? = null
-) : IntervalOptions()
+class AllOfRule : IntervalOptions() {
+    var maxGaps: Int by parameters
+    var ordered: Boolean by parameters
+}
 
 class AnyOfRule : IntervalOptions()
 
-data class FilterRule(var query: Param<Clause>? = null): IntervalRule(), ParamHelper, BuilderHelper {
+class FilterRule: IntervalRule(), ParamHelper, BuilderHelper {
+    var query: Param<Clause> by parameters
+
     private fun saveParam(init: Init<ClauseBuilder>, field: KCallable<Unit>) {
         setClause(init) { this.query = param(field, it) }
     }

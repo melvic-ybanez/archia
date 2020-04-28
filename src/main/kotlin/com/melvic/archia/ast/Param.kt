@@ -1,6 +1,7 @@
 package com.melvic.archia.ast
 
 import com.melvic.archia.interpreter.esNameFormat
+import com.melvic.archia.interpreter.toSnakeCase
 import kotlin.reflect.KCallable
 
 typealias Param<A> = Pair<String, A>

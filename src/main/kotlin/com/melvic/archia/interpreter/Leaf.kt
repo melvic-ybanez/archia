@@ -11,7 +11,7 @@ import com.melvic.archia.output.JsonObject
 import com.melvic.archia.output.json
 import kotlin.reflect.KCallable
 
-fun TermQuery.interpret(parent: JsonObject): Evaluation {
+/*fun TermQuery.interpret(parent: JsonObject): Evaluation {
     val namedPropOut = namedProp?.let {
         json { it.first to it.second.json() }
     }
@@ -22,9 +22,9 @@ fun TermQuery.interpret(parent: JsonObject): Evaluation {
             prop(::boost) { it.json() }
         }
     }
-}
+}*/
 
-fun RangeQuery.interpret(parent: JsonObject): Evaluation {
+/*fun RangeQuery.interpret(parent: JsonObject): Evaluation {
     return withField(parent) {
         json {
             fun <R, C : KCallable<R>> propFieldParam(callable: C) {
@@ -47,4 +47,4 @@ fun RangeQuery.interpret(parent: JsonObject): Evaluation {
             prop(::boost) { it.json() }
         }
     }
-}
+}*/

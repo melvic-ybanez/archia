@@ -6,7 +6,7 @@ import com.melvic.archia.ast.MinimumShouldMatch
 import com.melvic.archia.ast.WithField
 
 class MatchBoolPrefixQuery : WithField<MatchBoolPrefixField>() {
-    override fun getField(name: String): MatchBoolPrefixField {
+    override fun initField(name: String): MatchBoolPrefixField {
         return MatchBoolPrefixField(name)
     }
 }

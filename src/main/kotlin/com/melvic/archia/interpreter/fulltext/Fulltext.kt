@@ -16,7 +16,7 @@ import com.melvic.archia.output.json
 import com.melvic.archia.require
 import com.melvic.archia.validate
 
-fun MatchQuery.interpret(parent: JsonObject): Evaluation {
+/*fun MatchQuery.interpret(parent: JsonObject): Evaluation {
     fun JsonObject.toJson(query: MatchQueryValue): JsonValue {
         return when (query) {
             is AString -> query.value.json()
@@ -47,7 +47,7 @@ fun MatchQuery.interpret(parent: JsonObject): Evaluation {
             propEnum(::zeroTermsQuery)
         }
     }
-}
+}*/
 
 fun MatchAllQuery.interpret(parent: JsonObject): Evaluation {
     return parent {
@@ -110,21 +110,6 @@ fun MultiMatchQuery.interpret(parent: JsonObject): Evaluation {
             propEnum(::rewrite)
         }
     }.validate()
-}
-
-fun CommonTermsQuery.interpret(parent: JsonObject): Evaluation {
-    return withField(parent, required = { ::query }) {
-        json {
-            propStr(::query)
-            propNum(::cutoffFrequency)
-            propEnum(::lowFreqOperator)
-
-            // Can't use the prop util function because of the name ambiguity
-            minimumShouldMatch?.let {
-                "minimum_should_match" to it.interpret(parent)
-            }
-        }
-    }
 }
 
 fun QueryStringQuery.interpret(parent: JsonObject): Evaluation {

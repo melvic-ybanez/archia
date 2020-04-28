@@ -1,25 +1,30 @@
 package com.melvic.archia.ast
 
-open class Field(var name: String) : TreeNode()
+import kotlin.reflect.KProperty
+
+open class Field(var name: String, var shortForm: Boolean = false) : TreeNode()
 
 abstract class WithField<F : Field> : Clause() {
-    var field: F? = null
+    var field: F by parameters
 
     /**
      * Constructs an elasticsearch match field from a string
      */
     operator fun String.invoke(init: Init<F>) {
-        field = getField(this).apply(init)
+        field = initField(this).apply(init)
     }
 
-    abstract fun getField(name: String): F
+    abstract fun initField(name: String): F
+
+    override val requiredParams: List<KProperty<Any>>
+        get() = listOf(::field)
 }
 
 abstract class WithShortForm<F : Field, V> : WithField<F>() {
-    var namedProp: Pair<String, V>? = null
+    var customProp: Param<V>? = null
 
     infix fun String.to(_value: V) {
-        namedProp = Pair(this, _value)
+        customProp = Pair(this, _value)
         this { this.updateValue(_value) }
     }
 

@@ -4,8 +4,6 @@ import QueryStringQuery
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
-import com.melvic.archia.ast.leaf.RangeQuery
-import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.interpreter.fulltext.interpret
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
@@ -25,25 +23,16 @@ fun Query.interpret(): Evaluation {
     }
 }
 
-fun Clause.interpret(parent: JsonValue = json {}): Evaluation {
-    val parentObject = if (parent is JsonObject) parent else json {}
-
+fun Clause.interpret(parent: JsonObject = json {}): Evaluation {
     return when (this) {
-        // Leaf clauses
-        is TermQuery -> interpret(parentObject)
-        is MatchAllQuery -> interpret(parentObject)
-        is MatchNoneQuery -> interpret(parentObject)
-        is RangeQuery -> interpret(parentObject)
-
         // Full text
-        is IntervalsQuery -> interpret(parentObject)
-        is MatchQuery -> interpret(parentObject)
-        is MatchBoolPrefixQuery -> interpret(parentObject)
-        is MatchPhraseQuery -> interpret(parentObject)
-        is MatchPhrasePrefixQuery -> interpret(parentObject)
-        is MultiMatchQuery -> interpret(parentObject)
-        is CommonTermsQuery -> interpret(parentObject)
-        is QueryStringQuery -> interpret(parentObject)
+        is MatchBoolPrefixQuery -> interpret(parent)
+        is MatchPhraseQuery -> interpret(parent)
+        is MatchPhrasePrefixQuery -> interpret(parent)
+        is MultiMatchQuery -> interpret(parent)
+        is QueryStringQuery -> interpret(parent)
+
+        is WithShortForm<*, *> -> this.interpret(parent)
 
         // Scripts
         is Script -> interpret()
@@ -65,10 +54,13 @@ fun TreeNode.interpretSubTree(): Evaluation {
 fun interpretParamList(parameters: Map<String, Any?>, parent: JsonObject): JsonValue {
     return parent {
         for ((fieldName, value) in parameters) {
+            // A parameter with a Param value has a customized parameter name, specified
+            // as the first element of the Param pair
             val (paramName, paramValue) = if (value is Pair<*, *> && value.first is String) {
                 Pair((value.first as String).toSnakeCase(), value.second)
             } else Pair(fieldName.toSnakeCase(), value)
 
+            // If the parameter is a field, the field's name becomes the key in the JSON object
             val fieldParamName = if (paramValue is Field) paramValue.name else paramName
 
             fieldParamName to interpretParam(fieldName, paramValue)
@@ -104,9 +96,18 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
             val arrayOut = jsonArray()
 
             for (item in value) {
-                when (val eval = interpretParam(name, item)) {
+                var isPair = false
+                val (paramName, paramValue) = if (item is Pair<*, *> && item.first is String) {
+                    isPair = true
+                    Pair((item.first as String).toSnakeCase(), item.second)
+                } else Pair(name, item)
+
+                when (val eval = interpretParam(paramName, paramValue)) {
                     is Failed -> errors.addAll(eval.errors)
-                    is Success<*> -> arrayOut.add(eval.value())
+                    is Success<*> -> arrayOut.add(run {
+                        if (isPair) json { paramName to eval.value() }
+                        else eval.value()
+                    })
                 }
             }
 
@@ -128,6 +129,22 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is Clause -> if (value.topLevel) value.interpret() else value.interpretSubTree()
         is TreeNode -> value.interpretSubTree()
 
-        else -> InvalidValue(name, value).fail()
+        else -> {
+            println(value)
+            InvalidValue(name, value).fail()
+        }
     }
+}
+
+fun <F : Field, V> WithShortForm<F, V>.interpret(parent: JsonObject): Evaluation {
+    return json {
+        validateRequiredParams(this@interpret)
+
+        esName() to run {
+            customProp?.let {
+                val (paramName, paramValue) = it
+                json { paramName to interpretParam(paramName, paramValue) }
+            } ?: interpretParamList(parameters, parent)
+        }
+    }.validate()
 }

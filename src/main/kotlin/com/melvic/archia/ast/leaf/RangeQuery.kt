@@ -3,22 +3,20 @@ package com.melvic.archia.ast.leaf
 import com.melvic.archia.ast.*
 
 class RangeQuery : WithField<RangeField>() {
-    override fun getField(name: String) = RangeField(name)
+    override fun initField(name: String) = RangeField(name)
 }
 
-class RangeField(
-    name: String,
+class RangeField(name: String): Field(name), WithNum {
+    var gt: RangeValue by parameters
+    var gte: RangeValue by parameters
+    var lt: RangeValue by parameters
+    var lte: RangeValue by parameters
 
-    var gt: RangeValue? = null,
-    var gte: RangeValue? = null,
-    var lt: RangeValue? = null,
-    var lte: RangeValue? = null,
-
-    var format: DateFormat? = null,
-    var relation: Relation? = null,
-    var timeZone: TimeZone? = null,
-    var boost: Boost? = null
-): Field(name), WithNum
+    var format: DateFormat by parameters
+    var relation: Relation by parameters
+    var timeZone: TimeZone by parameters
+    var boost: Boost by parameters
+}
 
 enum class Relation { INTERSECTS, CONTAINS, WITHIN }
 

@@ -5,7 +5,7 @@ import com.melvic.archia.ast.Field
 import com.melvic.archia.ast.WithField
 
 class MatchPhraseQuery : WithField<MatchPhraseField>() {
-    override fun getField(name: String): MatchPhraseField {
+    override fun initField(name: String): MatchPhraseField {
         return MatchPhraseField(name)
     }
 }

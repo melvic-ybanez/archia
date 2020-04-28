@@ -6,7 +6,7 @@ import kotlin.reflect.KProperty
 
 typealias Init<A> = A.() -> Unit
 
-data class Query(var clause: Clause? = null) {
+data class Query(var clause: Clause? = null): Clause() {
     fun query(init: Init<ClauseBuilder>) {
         val builder = ClauseBuilder().apply(init)
         clause = builder.clause

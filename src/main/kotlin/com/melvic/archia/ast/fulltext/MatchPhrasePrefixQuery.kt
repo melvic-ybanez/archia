@@ -5,7 +5,7 @@ import com.melvic.archia.ast.Field
 import com.melvic.archia.ast.WithField
 
 class MatchPhrasePrefixQuery : WithField<MatchPhrasePrefixField>() {
-    override fun getField(name: String): MatchPhrasePrefixField {
+    override fun initField(name: String): MatchPhrasePrefixField {
         return MatchPhrasePrefixField(name)
     }
 }
