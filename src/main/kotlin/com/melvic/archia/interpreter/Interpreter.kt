@@ -24,16 +24,7 @@ fun Query.interpret(): Evaluation {
 
 fun Clause.interpret(parent: JsonObject = json {}): Evaluation {
     return when (this) {
-        // Full text
-        //is MatchBoolPrefixQuery -> interpret(parent)
-        //is MatchPhraseQuery -> interpret(parent)
-        //is MatchPhrasePrefixQuery -> interpret(parent)
-        //is MultiMatchQuery -> interpret(parent)
-        //is QueryStringQuery -> interpret(parent)
-
         is WithShortForm<*, *> -> this.interpret(parent)
-
-        // Scripts
         is Script -> interpret()
 
         else -> json {
