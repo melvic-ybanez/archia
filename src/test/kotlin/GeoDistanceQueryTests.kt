@@ -1,3 +1,4 @@
+import com.melvic.archia.ast.geo.GeoArray
 import io.kotest.core.spec.style.BehaviorSpec
 
 class GeoDistanceQueryTests : BehaviorSpec({
@@ -41,6 +42,23 @@ class GeoDistanceQueryTests : BehaviorSpec({
                             }
                         }
                     """.trimIndent()
+                }
+            }
+        }
+        `when`("the provided geo point isn't a geo object") {
+            then("the result shouldn't contain lat and lon properties") {
+                assert {
+                    query {
+                        bool {
+                            must { matchAll{} }
+                            filter {
+                                geoDistance {
+                                    distance = 12.km()
+                                    "pin.location" to GeoArray(-70, 40)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
