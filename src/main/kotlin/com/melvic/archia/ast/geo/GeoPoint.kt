@@ -1,14 +1,14 @@
 package com.melvic.archia.ast.geo
 
 import com.melvic.archia.ast.DecayFieldType
+import kotlin.reflect.KProperty
 
-
-sealed class Geo : DecayFieldType
-data class GeoObject(var lat: Number? = null, var lon: Number? = null) : Geo()
-data class GeoString(val lat: Number, val lon: Number) : Geo()
-data class GeoHash(val hash: String) : Geo()
-data class GeoArray(val lat: Double, val lon: Double) : Geo()
-data class GeoWktPoint(val lat: Double, val lon: Double) : Geo()
+sealed class GeoPoint : DecayFieldType
+data class GeoObject(var lat: Number? = null, var lon: Number? = null) : GeoPoint()
+data class GeoString(val lat: Number, val lon: Number) : GeoPoint()
+data class GeoHash(val hash: String) : GeoPoint()
+data class GeoArray(val lat: Double, val lon: Double) : GeoPoint()
+data class GeoWktPoint(val lat: Double, val lon: Double) : GeoPoint()
 
 data class Bbox(
     val topRight: Double,

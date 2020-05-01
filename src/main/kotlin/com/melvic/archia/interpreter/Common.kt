@@ -6,7 +6,6 @@ import com.melvic.archia.ast.geo.*
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
 import com.melvic.archia.validateRequiredParams
-import java.text.DecimalFormat
 
 fun MinimumShouldMatch.interpret(parent: JsonObject = json {}): JsonValue {
     val msm: MinimumShouldMatch = this
@@ -47,7 +46,7 @@ fun Fuzziness.interpret(parent: JsonObject = json {}): JsonValue {
     }
 }
 
-fun Geo.interpret(): JsonValue {
+fun GeoPoint.interpret(): JsonValue {
     return when (this) {
         is GeoObject -> with (this) {
             json {
@@ -77,4 +76,8 @@ fun <F : Field, V> WithShortForm<F, V>.interpret(parent: JsonObject): Evaluation
             } ?: interpretParamList(parameters, parent)
         }
     }.validate()
+}
+
+fun Distance.interpret(): JsonValue {
+    return "$value${unit.lowerName()}".json()
 }
