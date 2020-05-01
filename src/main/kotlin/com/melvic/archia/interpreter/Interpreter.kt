@@ -4,6 +4,7 @@ import QueryStringQuery
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
+import com.melvic.archia.ast.geo.Geo
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
 import com.melvic.archia.validate
@@ -120,22 +121,6 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is Clause -> if (value.topLevel) value.interpret() else value.interpretSubTree()
         is TreeNode -> value.interpretSubTree()
 
-        else -> {
-            println(value)
-            InvalidValue(name, value).fail()
-        }
+        else -> InvalidValue(name, value).fail()
     }
-}
-
-fun <F : Field, V> WithShortForm<F, V>.interpret(parent: JsonObject): Evaluation {
-    return json {
-        validateRequiredParams(this@interpret)
-
-        esName() to run {
-            customProp?.let {
-                val (paramName, paramValue) = it
-                json { paramName to interpretParam(paramName, paramValue) }
-            } ?: interpretParamList(parameters, parent)
-        }
-    }.validate()
 }

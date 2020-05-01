@@ -1,9 +1,9 @@
-import com.melvic.archia.ast.GeoString
 import com.melvic.archia.ast.compound.BoostMode
 import com.melvic.archia.ast.compound.Modifier
 import com.melvic.archia.ast.compound.MultiValueMode
 import com.melvic.archia.ast.compound.ScoreMode
 import com.melvic.archia.ast.evalQuery
+import com.melvic.archia.ast.geo.GeoString
 import com.melvic.archia.interpreter.output
 import com.melvic.archia.output.JsonStringOutput
 import com.melvic.archia.output.mapTo

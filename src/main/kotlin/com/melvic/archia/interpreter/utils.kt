@@ -50,13 +50,22 @@ fun <C : Any> KClass<C>.esNameFormat(): String {
  * Evaluates a property. Add it to the JSON object if successful.
  * Otherwise, append the errors to the JSON's error list.
  */
-inline fun <R> JsonObject.propEval(field: KCallable<R?>, f: (R) -> Evaluation) {
+inline fun <R> JsonObject.propEval(
+    field: KCallable<R?>,
+    required: Boolean = false,
+    f: (R) -> Evaluation
+) {
     field.call()?.let { field.esNameFormat() to f(it) }
+        ?: if (required) error(missingFieldCode(field))
 }
 
-inline fun <R> JsonObject.prop(vararg fields: KCallable<R?>, f: (R) -> JsonValue) {
+inline fun <R> JsonObject.prop(
+    vararg fields: KCallable<R?>,
+    required: Boolean = false,
+    f: (R) -> JsonValue
+) {
     fields.forEach { field ->
-        propEval(field) { f(it).success() }
+        propEval(field, required) { f(it).success() }
     }
 }
 

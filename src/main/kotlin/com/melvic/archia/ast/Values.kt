@@ -13,13 +13,6 @@ data class AString(val value: String) : MatchQueryValue, DecayFieldType
 data class ABoolean(val value: Boolean) : MatchQueryValue
 data class ADate(val value: LocalDate) : MatchQueryValue, DecayFieldType
 
-sealed class Geo : DecayFieldType
-data class GeoObject(val lat: Number, val long: Number) : Geo()
-data class GeoString(val lat: Number, val long: Number) : Geo()
-data class GeoHash(val hash: String) : Geo()
-data class GeoArray(val lat: Double, val long: Double) : Geo()
-data class GeoWktPoint(val lat: Double, val long: Double) : Geo()
-
 interface WithNum {
     fun num(value: Number) = ANumber(value)
 

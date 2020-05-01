@@ -2,9 +2,10 @@ package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.fulltext.CommonTermsField
+import com.melvic.archia.ast.geo.*
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
-import kotlin.reflect.KCallable
+import com.melvic.archia.validateRequiredParams
 
 fun MinimumShouldMatch.interpret(parent: JsonObject = json {}): JsonValue {
     val msm: MinimumShouldMatch = this
@@ -47,12 +48,28 @@ fun Fuzziness.interpret(parent: JsonObject = json {}): JsonValue {
 
 fun Geo.interpret(): JsonValue {
     return when (this) {
-        is GeoObject -> with(this) {
-            json { propNum(::lat); propNum(::long) }
+        is GeoObject -> with (this) {
+            json {
+                prop(::lat, required = true) { it.json() }
+                prop(::lon, required = true) { it.json() }
+            }
         }
-        is GeoString -> JsonString("${this.lat},${this.long}")
+        is GeoString -> JsonString("${this.lat},${this.lon}")
         is GeoHash -> JsonString(this.hash)
-        is GeoArray -> jsonArray(JsonNumber(lat), JsonNumber(long))
+        is GeoArray -> jsonArray(JsonNumber(lat), JsonNumber(lon))
         is GeoWktPoint -> JsonString("POINT (${this.lat} )")
     }
+}
+
+fun <F : Field, V> WithShortForm<F, V>.interpret(parent: JsonObject): Evaluation {
+    return json {
+        validateRequiredParams(this@interpret)
+
+        esName() to run {
+            customProp?.let {
+                val (paramName, paramValue) = it
+                json { paramName to interpretParam(paramName, paramValue) }
+            } ?: interpretParamList(parameters, parent)
+        }
+    }.validate()
 }

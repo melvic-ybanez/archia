@@ -1,6 +1,7 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
+import com.melvic.archia.ast.geo.GeoObject
 import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
@@ -98,6 +99,10 @@ class DecayFunctionField(name: String): Field(name), WithText {
     var scale: String by parameters
     var offset: String by parameters
     var decay: Double by parameters
+
+    fun origin(init: Init<GeoObject>) {
+        setProp(init) { origin = it }
+    }
 }
 
 enum class Modifier {

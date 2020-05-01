@@ -3,6 +3,7 @@ package com.melvic.archia.ast
 import QueryStringQuery
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
+import com.melvic.archia.ast.geo.GeoBoundingBoxQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.identity
@@ -54,6 +55,8 @@ interface Builder {
     fun queryString(init: Init<QueryStringQuery>) = save(init)
     
     fun simpleQueryString(init: Init<SimpleQueryStringQuery>) = save(init)
+
+    fun geoBoundingBox(init: Init<GeoBoundingBoxQuery>) = save(init)
 }
 
 class ClauseBuilder : Builder {
