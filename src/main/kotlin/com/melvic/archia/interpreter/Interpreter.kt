@@ -1,8 +1,12 @@
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.compound.*
-import com.melvic.archia.ast.fulltext.*
+import com.melvic.archia.ast.compound.BoostMode
+import com.melvic.archia.ast.compound.Modifier
+import com.melvic.archia.ast.compound.MultiValueMode
+import com.melvic.archia.ast.compound.ScoreMode
+import com.melvic.archia.ast.fulltext.MultiMatchType
+import com.melvic.archia.ast.fulltext.Operator
 import com.melvic.archia.ast.geo.Bbox
 import com.melvic.archia.ast.geo.BoundingBoxType
 import com.melvic.archia.ast.geo.GeoPoint

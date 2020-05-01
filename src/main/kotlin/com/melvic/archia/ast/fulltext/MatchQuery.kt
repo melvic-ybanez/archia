@@ -1,7 +1,6 @@
 package com.melvic.archia.ast.fulltext
 
 import com.melvic.archia.ast.*
-import kotlin.reflect.KCallable
 import kotlin.reflect.KProperty
 
 class MatchQuery : WithShortForm<MatchField, MatchQueryValue>(), WithMatchQueryValue {

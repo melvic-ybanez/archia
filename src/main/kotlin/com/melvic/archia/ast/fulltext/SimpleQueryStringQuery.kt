@@ -3,7 +3,6 @@ package com.melvic.archia.ast.fulltext
 import com.melvic.archia.ast.Analyzer
 import com.melvic.archia.ast.Clause
 import com.melvic.archia.ast.MinimumShouldMatch
-import kotlin.reflect.KProperty
 
 class SimpleQueryStringQuery: Clause() {
     var query: String by parameters

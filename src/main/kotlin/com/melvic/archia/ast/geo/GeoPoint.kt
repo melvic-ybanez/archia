@@ -1,7 +1,6 @@
 package com.melvic.archia.ast.geo
 
 import com.melvic.archia.ast.DecayFieldType
-import kotlin.reflect.KProperty
 
 sealed class GeoPoint : DecayFieldType
 data class GeoObject(var lat: Number? = null, var lon: Number? = null) : GeoPoint()

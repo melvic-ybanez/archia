@@ -1,6 +1,8 @@
 package com.melvic.archia.ast.geo
 
-import com.melvic.archia.ast.*
+import com.melvic.archia.ast.Field
+import com.melvic.archia.ast.Init
+import com.melvic.archia.ast.setProp
 
 class GeoBoundingBoxQuery : GeoQuery<GeoBoundingBoxField>() {
     var type: BoundingBoxType by parameters
