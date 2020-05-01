@@ -1,6 +1,4 @@
-import com.melvic.archia.ast.geo.GeoArray
-import com.melvic.archia.ast.geo.GeoString
-import com.melvic.archia.ast.geo.Bbox
+import com.melvic.archia.ast.geo.*
 import io.kotest.core.spec.style.BehaviorSpec
 
 class GeoBoundingBoxQueryTests : BehaviorSpec({
@@ -166,6 +164,142 @@ class GeoBoundingBoxQueryTests : BehaviorSpec({
                                             "pin.location" : {
                                                 "wkt" : "BBOX (-74.1, -71.12, 40.73, 40.01)"
                                             }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                }
+            }
+        }
+        `when`("the geo points are in hash format") {
+            then("the resulting fields should have hash values") {
+                assert {
+                    query {
+                        bool {
+                            must {
+                                matchAll {}
+                            }
+                            filter {
+                                geoBoundingBox {
+                                    "pin.location" {
+                                        topLeft = GeoHash("dr5r9ydj2y73")
+                                        bottomRight = GeoHash("drj7teegpus6")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    expected = """
+                        {
+                            "query": {
+                                "bool" : {
+                                    "must" : {
+                                        "match_all" : {}
+                                    },
+                                    "filter" : {
+                                        "geo_bounding_box" : {
+                                            "pin.location" : {
+                                                "top_left" : "dr5r9ydj2y73",
+                                                "bottom_right" : "drj7teegpus6"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                }
+            }
+        }
+        `when`("the points are provided in vertices format") {
+            then("the output should have all four vertices") {
+                assert {
+                    query {
+                        bool {
+                            must {
+                                matchAll {  }
+                            }
+                            filter {
+                                geoBoundingBox {
+                                    "pin.location" {
+                                        top = 40.73
+                                        left = -74.1
+                                        bottom = 40.01
+                                        right = -71.12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    expected = """
+                        {
+                            "query": {
+                                "bool" : {
+                                    "must" : {
+                                        "match_all" : {}
+                                    },
+                                    "filter" : {
+                                        "geo_bounding_box" : {
+                                            "pin.location" : {
+                                                "top" : 40.73,
+                                                "left" : -74.1,
+                                                "bottom" : 40.01,
+                                                "right" : -71.12
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                }
+            }
+        }
+        `when`("type param is provided") {
+            then("the resulting JSON should contain a type") {
+                assert {
+                    query {
+                        bool {
+                            must { matchAll {} }
+                            filter {
+                                geoBoundingBox {
+                                    "pin.location" {
+                                        topLeft {
+                                            lat = 40.73
+                                            lon = -74.1
+                                        }
+                                        bottomRight {
+                                            lat = 40.10
+                                            lon = -71.12
+                                        }
+                                    }
+                                    type = BoundingBoxType.INDEXED
+                                }
+                            }
+                        }
+                    }
+                    expected = """
+                        {
+                            "query": {
+                                "bool" : {
+                                    "must" : {
+                                        "match_all" : {}
+                                    },
+                                    "filter" : {
+                                        "geo_bounding_box" : {
+                                            "pin.location" : {
+                                                "top_left" : {
+                                                    "lat" : 40.73,
+                                                    "lon" : -74.1
+                                                },
+                                                "bottom_right" : {
+                                                    "lat" : 40.1,
+                                                    "lon" : -71.12
+                                                }
+                                            },
+                                            "type" : "indexed"
                                         }
                                     }
                                 }

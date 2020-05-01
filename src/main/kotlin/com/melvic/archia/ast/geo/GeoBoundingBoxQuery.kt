@@ -3,6 +3,10 @@ package com.melvic.archia.ast.geo
 import com.melvic.archia.ast.*
 
 class GeoBoundingBoxQuery : WithField<GeoBoundingBoxField>() {
+    var _name: String by parameters
+    var validationMethod: ValidationMethod by parameters
+    var type: BoundingBoxType by parameters
+
     override fun initField(name: String): GeoBoundingBoxField {
         return GeoBoundingBoxField(name)
     }
@@ -16,10 +20,7 @@ class GeoBoundingBoxField(name: String) : Field(name) {
 
     var wkt: Bbox by parameters
 
-    var _name: String by parameters
-    var validationMethod: ValidationMethod by parameters
-    var type: BoundingBoxType by parameters
-
+    // Vertices
     var top: Double by parameters
     var left: Double by parameters
     var bottom: Double by parameters

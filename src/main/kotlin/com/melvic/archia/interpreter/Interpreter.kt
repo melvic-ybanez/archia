@@ -5,6 +5,7 @@ import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.geo.Bbox
+import com.melvic.archia.ast.geo.BoundingBoxType
 import com.melvic.archia.ast.geo.Geo
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
@@ -77,6 +78,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is Modifier -> value.json().success()
         is MultiValueMode -> value.json().success()
         is MultiMatchType -> value.json().success()
+        is BoundingBoxType -> value.json().success()
 
         // Elasticsearch params
         is MinimumShouldMatch -> value.interpret().validate()
