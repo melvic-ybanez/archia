@@ -10,7 +10,7 @@ data class GeoHash(val hash: String) : Geo()
 data class GeoArray(val lat: Double, val lon: Double) : Geo()
 data class GeoWktPoint(val lat: Double, val lon: Double) : Geo()
 
-data class GeoWktBb(
+data class Bbox(
     val topRight: Double,
     val bottomRight: Double,
     val bottomLeft: Double,

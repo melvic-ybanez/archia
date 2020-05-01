@@ -14,6 +14,8 @@ class GeoBoundingBoxField(name: String) : Field(name) {
     var topRight: Geo by parameters
     var bottomLeft: Geo by parameters
 
+    var wkt: Bbox by parameters
+
     var _name: String by parameters
     var validationMethod: ValidationMethod by parameters
     var type: BoundingBoxType by parameters

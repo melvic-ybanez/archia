@@ -61,6 +61,10 @@ fun Geo.interpret(): JsonValue {
     }
 }
 
+fun Bbox.interpret(): JsonValue {
+    return "BBOX ($topRight, $bottomRight, $bottomLeft, $topLeft)".json()
+}
+
 fun <F : Field, V> WithShortForm<F, V>.interpret(parent: JsonObject): Evaluation {
     return json {
         validateRequiredParams(this@interpret)

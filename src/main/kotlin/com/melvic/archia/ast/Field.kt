@@ -2,13 +2,13 @@ package com.melvic.archia.ast
 
 import kotlin.reflect.KProperty
 
-open class Field(var name: String, var shortForm: Boolean = false) : TreeNode()
+open class Field(var name: String) : TreeNode()
 
 abstract class WithField<F : Field> : Clause() {
     var field: F by parameters
 
     /**
-     * Constructs an elasticsearch match field from a string
+     * Constructs an elasticsearch field from a string
      */
     operator fun String.invoke(init: Init<F>) {
         field = initField(this).apply(init)

@@ -4,6 +4,7 @@ import QueryStringQuery
 import com.melvic.archia.ast.*
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
+import com.melvic.archia.ast.geo.Bbox
 import com.melvic.archia.ast.geo.Geo
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
@@ -81,6 +82,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is MinimumShouldMatch -> value.interpret().validate()
         is Fuzziness -> value.interpret().validate()
         is Geo -> value.interpret().validate()
+        is Bbox -> value.interpret().success()
 
         // If it's a list, recursively evaluate each item
         is List<*> -> {
