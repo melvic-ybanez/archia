@@ -19,7 +19,7 @@ class FunctionScoreQuery: FunctionClause() {
     }
 
     fun functions(vararg init: Init<FunctionClause>) {
-        functions = init.map { FunctionClause().apply(it) }.toMutableList()
+        functions = init.map { FunctionClause().apply(it) }
     }
 }
 
