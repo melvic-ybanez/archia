@@ -3,10 +3,10 @@ package com.melvic.archia.ast.compound
 import com.melvic.archia.ast.*
 
 class BoolQuery: Clause(), WithNum, BuilderHelper {
-    var must: OneOrMore<Clause> by parameters
-    var filter: OneOrMore<Clause> by parameters
-    var should: OneOrMore<Clause> by parameters
-    var mustNot: OneOrMore<Clause> by parameters
+    private var must: OneOrMore<Clause> by parameters
+    private var filter: OneOrMore<Clause> by parameters
+    private var should: OneOrMore<Clause> by parameters
+    private var mustNot: OneOrMore<Clause> by parameters
     var minimumShouldMatch: MinimumShouldMatch by parameters
     var boost: Boost by parameters
 

@@ -10,8 +10,8 @@ class GeoShapeQuery : WithField<GeoShapeField>() {
 }
 
 class GeoShapeField(name: String) : Field(name), WithGeoShape {
+    private var indexedShape: IndexedShape by parameters
     var shape: GeoShape by parameters
-    var indexedShape: IndexedShape by parameters
     var relation: SpatialRelation by parameters
 
     fun indexedShape(init: Init<IndexedShape>) {

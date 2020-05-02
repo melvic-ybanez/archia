@@ -4,8 +4,8 @@ import com.melvic.archia.ast.*
 import kotlin.reflect.KProperty
 
 class BoostingQuery: Clause(), WithNum, BuilderHelper {
-    var positive: Clause by parameters
-    var negative: Clause by parameters
+    private var positive: Clause by parameters
+    private var negative: Clause by parameters
     var negativeBoost: Double by parameters
 
     fun positive(init: Init<ClauseBuilder>) {

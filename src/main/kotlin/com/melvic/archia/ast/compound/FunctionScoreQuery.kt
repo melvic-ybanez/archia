@@ -6,9 +6,10 @@ import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
 class FunctionScoreQuery: FunctionClause() {
+    private var functions: List<FunctionClause> by parameters
+
     var query: Clause by parameters
     var boost: String by parameters
-    var functions: List<FunctionClause> by parameters
     var maxBoost: Int by parameters
     var scoreMode: ScoreMode by parameters
     var boostMode: BoostMode by parameters
@@ -24,8 +25,8 @@ class FunctionScoreQuery: FunctionClause() {
 }
 
 open class FunctionClause: Clause(), ParamHelper, WithDate, BuilderHelper {
+    private var scoreFunction: Param<ScoreFunction> by parameters
     var filter: Clause by parameters
-    var scoreFunction: Param<ScoreFunction> by parameters
     var weight: Number by parameters
 
     private inline fun <reified R : ScoreFunction> save(init: Init<R>, field: KCallable<Unit>) {

@@ -4,7 +4,7 @@ import com.melvic.archia.ast.*
 import kotlin.reflect.KProperty
 
 class DisMaxQuery: Clause(), BuilderHelper {
-    var queries: MultiClause by parameters
+    private var queries: MultiClause by parameters
     var tieBreaker: Double by parameters
 
     fun queries(init: Init<ClauseArrayBuilder>) {

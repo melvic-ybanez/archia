@@ -9,7 +9,7 @@ class IntervalsQuery : WithField<IntervalField>() {
 }
 
 class IntervalField(name: String) : Field(name), ParamHelper, IntervalBuilder {
-    var rule: Param<IntervalRule> by parameters
+    private var rule: Param<IntervalRule> by parameters
 
     private inline fun <reified R : IntervalRule> save(init: Init<R>, field: KCallable<Unit>) {
         setProp(init) { this.rule = param(field, it) }
@@ -83,7 +83,7 @@ open class WithAnalyzer : IntervalRule() {
 }
 
 open class IntervalOptions : IntervalRule() {
-    var intervals: MutableList<Param<IntervalRule>> by parameters
+    private var intervals: MutableList<Param<IntervalRule>> by parameters
     var filter: FilterRule by parameters
 
     fun intervals(init: Init<MultiIntervals>) {
