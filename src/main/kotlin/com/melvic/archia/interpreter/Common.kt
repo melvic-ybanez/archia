@@ -81,3 +81,30 @@ fun <F : Field, V> WithShortForm<F, V>.interpret(parent: JsonObject): Evaluation
 fun Distance.interpret(): JsonValue {
     return "$value${unit.lowerName()}".json()
 }
+
+fun GeoShape.interpret() : JsonValue {
+    fun coordsToArray(coord: PointCoordinates) =
+        jsonArray(coord.first.json(), coord.second.json())
+
+    fun coordListToArray(coords: List<PointCoordinates>) =
+        jsonArray(coords.map { coordsToArray(it) })
+
+    fun coordinatesName() = when (this) {
+        is GeometryCollection -> "geometries"
+        else -> "coordinates"
+    }
+
+    return json {
+        "type" to esName().json()
+        coordinatesName() to when (this@interpret) {
+            is Point -> coordsToArray(coordinates)
+            is LineString -> coordListToArray(coordinates)
+            is Polygon -> coordListToArray(coordinates)
+            is MultiPoint -> coordListToArray(coordinates)
+            is MultiLineString -> jsonArray(coordinates.map { coordListToArray(it) })
+            is MultiPolygon -> jsonArray(coordinates.map { coordListToArray(it) })
+            is GeometryCollection -> jsonArray(geometries.map { it.interpret() })
+            is Envelope -> coordListToArray(coordinates)
+        }
+    }
+}

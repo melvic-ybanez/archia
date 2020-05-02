@@ -7,9 +7,7 @@ import com.melvic.archia.ast.compound.MultiValueMode
 import com.melvic.archia.ast.compound.ScoreMode
 import com.melvic.archia.ast.fulltext.MultiMatchType
 import com.melvic.archia.ast.fulltext.Operator
-import com.melvic.archia.ast.geo.Bbox
-import com.melvic.archia.ast.geo.BoundingBoxType
-import com.melvic.archia.ast.geo.GeoPoint
+import com.melvic.archia.ast.geo.*
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
 import com.melvic.archia.validate
@@ -82,6 +80,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is MultiValueMode -> value.json().success()
         is MultiMatchType -> value.json().success()
         is BoundingBoxType -> value.json().success()
+        is SpatialRelation -> value.json().success()
 
         // Elasticsearch params
         is MinimumShouldMatch -> value.interpret().validate()
@@ -89,6 +88,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is GeoPoint -> value.interpret().validate()
         is Bbox -> value.interpret().success()
         is Distance -> value.interpret().success()
+        is GeoShape -> value.interpret().success()
 
         // If it's a list, recursively evaluate each item
         is List<*> -> {

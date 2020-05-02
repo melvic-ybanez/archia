@@ -6,6 +6,7 @@ import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.geo.GeoBoundingBoxQuery
 import com.melvic.archia.ast.geo.GeoDistanceQuery
 import com.melvic.archia.ast.geo.GeoPolygonQuery
+import com.melvic.archia.ast.geo.GeoShapeQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.identity
@@ -63,6 +64,8 @@ interface Builder {
     fun geoDistance(init: Init<GeoDistanceQuery>) = save(init)
 
     fun geoPolygon(init: Init<GeoPolygonQuery>) = save(init)
+
+    fun geoShape(init: Init<GeoShapeQuery>) = save(init)
 }
 
 class ClauseBuilder : Builder {

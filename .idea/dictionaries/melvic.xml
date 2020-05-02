@@ -2,6 +2,7 @@
   <dictionary name="melvic">
     <words>
       <w>bbox</w>
+      <w>coords</w>
       <w>elasticsearch</w>
       <w>freqs</w>
       <w>melvic</w>
