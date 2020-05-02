@@ -49,5 +49,45 @@ class GeoShapeQueryTests : BehaviorSpec({
                 }
             }
         }
+        `when`("an indexed shape is provided") {
+            then("the result contain indexed shape properties") {
+                assert {
+                    query {
+                        bool {
+                            filter {
+                                geoShape {
+                                    "location" {
+                                        indexedShape {
+                                            index = "shapes"
+                                            id = "deu"
+                                            path = "location"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    expected = """
+                        {
+                            "query": {
+                                "bool": {
+                                    "filter": {
+                                        "geo_shape": {
+                                            "location": {
+                                                "indexed_shape": {
+                                                    "index": "shapes",
+                                                    "id": "deu",
+                                                    "path": "location"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                }
+            }
+        }
     }
 })
