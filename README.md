@@ -158,7 +158,7 @@ prettification of the string output isn't supported yet, but soon will be._)
 
 The following are the currently supported features:
 
-**Compound Queries**: 
+### Compound Queries: 
 * Bool Query
 * Boosting Query
 * Constant Score Query
@@ -182,6 +182,8 @@ The following are the currently supported features:
 * Geo Point
 * Geo Polygon Query
 * Geo Shape Query
+
+### Shape Queries
 * Shape Query
 
 ### Leaf Queries
