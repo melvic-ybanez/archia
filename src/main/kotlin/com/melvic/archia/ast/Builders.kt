@@ -4,6 +4,7 @@ import QueryStringQuery
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.geo.*
+import com.melvic.archia.ast.joining.NestedQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.identity
@@ -65,6 +66,8 @@ interface Builder {
     fun geoShape(init: Init<GeoShapeQuery>) = save(init)
 
     fun shape(init: Init<ShapeQuery>) = save(init)
+
+    fun nested(init: Init<NestedQuery>) = save(init)
 }
 
 class ClauseBuilder : Builder {

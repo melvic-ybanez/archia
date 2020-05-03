@@ -156,7 +156,7 @@ For instance, the first example would produce the following JSON string:
 (_The resulting JSON string is manually prettified. At the time of this writing, 
 prettification of the string output isn't supported yet, but soon will be._)
 
-The following are the currently supported features:
+The following are the currently supported queries:
 
 ### Compound Queries: 
 * Bool Query
@@ -176,15 +176,16 @@ The following are the currently supported features:
 * Query String Query
 * Simple Query String Query
 
-### Geo Queries
+### Geo & Shape Queries
 * Geo Bounding Box Query
 * Geo Distance Query
 * Geo Point
 * Geo Polygon Query
 * Geo Shape Query
-
-### Shape Queries
 * Shape Query
+
+### Joining Queries
+* Nested Query
 
 ### Leaf Queries
 * Range Query

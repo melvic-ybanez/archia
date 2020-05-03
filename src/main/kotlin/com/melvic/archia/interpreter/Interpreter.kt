@@ -7,6 +7,7 @@ import com.melvic.archia.ast.compound.MultiValueMode
 import com.melvic.archia.ast.compound.ScoreMode
 import com.melvic.archia.ast.fulltext.MultiMatchType
 import com.melvic.archia.ast.fulltext.Operator
+import com.melvic.archia.ast.joining.ScoreMode as JoiningScoreMode
 import com.melvic.archia.ast.geo.*
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
@@ -81,6 +82,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is MultiMatchType -> value.json().success()
         is BoundingBoxType -> value.json().success()
         is SpatialRelation -> value.json().success()
+        is JoiningScoreMode -> value.json().success()
 
         // Elasticsearch params
         is MinimumShouldMatch -> value.interpret().validate()
