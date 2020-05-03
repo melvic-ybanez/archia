@@ -7,7 +7,7 @@ Even if you didn't have much Elasticsearch knowledge, Elasticsearch queries you 
 easily convertible into Archia's DSL.
 
 **Note**: This project's first and upcoming release is still work-in-progress. 
-_Contributions are welcome_.
+_Contributions are welcome_. 
 
 ### Why do we need this DSL?
 Off the top of my head:
@@ -155,6 +155,38 @@ For instance, the first example would produce the following JSON string:
 
 (_The resulting JSON string is manually prettified. At the time of this writing, 
 prettification of the string output isn't supported yet, but soon will be._)
+
+The following are the currently supported features:
+
+**Compound Queries**: 
+* Bool Query
+* Boosting Query
+* Constant Score Query
+* Disjunction Max Query
+* Function Score Query
+
+### Full Text Queries
+* Common Terms Query
+* Intervals Query
+* Match Bool Prefix Query
+* Match Phrase Prefix Query
+* Match Phrase Query
+* Match Query
+* Multi Match Query
+* Query String Query
+* Simple Query String Query
+
+### Geo Queries
+* Geo Bounding Box Query
+* Geo Distance Query
+* Geo Point
+* Geo Polygon Query
+* Geo Shape Query
+* Shape Query
+
+### Leaf Queries
+* Range Query
+* Term Query
 
 Future features might add support for transforming the result into actual queries that connect to the elastic
 engine. However, this isn't currently a priority.
