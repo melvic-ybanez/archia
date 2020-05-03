@@ -33,7 +33,7 @@ class MatchQueryTests : BehaviorSpec({
                         }
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "match" : {
@@ -44,7 +44,7 @@ class MatchQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("short form is provided") {
@@ -55,7 +55,7 @@ class MatchQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "match" : {
@@ -63,7 +63,7 @@ class MatchQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

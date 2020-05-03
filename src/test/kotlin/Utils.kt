@@ -16,19 +16,19 @@ data class TestData(
     }
 }
 
-fun String.strip(): String {
+fun String.trimWhitespace(): String {
     return trimIndent().replace(" ", "").replace("\n", "")
 }
 
 fun assert(result: JsonValue, expected: String) {
-    result.mapTo(JsonStringOutput).strip() shouldBe expected.strip()
+    result.mapTo(JsonStringOutput).trimWhitespace() shouldBe expected.trimWhitespace()
 }
 
 fun assert(init: Init<TestData>) {
     val testData = TestData().apply(init)
     val output = testData.query?.let { Query(it).interpret() } ?: return
-    val expected = testData.expected?.strip() ?: return
+    val expected = testData.expected?.trimWhitespace() ?: return
 
-    val actual = output.output().mapTo(JsonStringOutput).strip()
+    val actual = output.output().mapTo(JsonStringOutput).trimWhitespace()
     actual shouldBe expected
 }

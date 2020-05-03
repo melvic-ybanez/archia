@@ -30,7 +30,7 @@ class MatchPhrasePrefixQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "match_phrase_prefix" : {
@@ -40,7 +40,7 @@ class MatchPhrasePrefixQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

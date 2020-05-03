@@ -25,7 +25,7 @@ class RangeQueryTests : BehaviorSpec({
                         }
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "range" : {
@@ -37,7 +37,7 @@ class RangeQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

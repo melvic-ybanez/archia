@@ -26,7 +26,7 @@ class ConstantScoreTests : BehaviorSpec({
                         boost = 1.2
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "constant_score" : {
@@ -37,7 +37,7 @@ class ConstantScoreTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

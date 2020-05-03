@@ -17,7 +17,7 @@ class QueryStringQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "query_string" : {
@@ -26,7 +26,7 @@ class QueryStringQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

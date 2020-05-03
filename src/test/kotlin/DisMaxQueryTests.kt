@@ -27,7 +27,7 @@ class DisMaxQueryTests : BehaviorSpec({
                         tieBreaker = 0.7
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "dis_max" : {
@@ -39,7 +39,7 @@ class DisMaxQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

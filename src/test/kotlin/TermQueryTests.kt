@@ -32,7 +32,7 @@ class TermQueryTests : BehaviorSpec({
                     }
                 }
                 val output = result.output().mapTo(JsonStringOutput)
-                output.strip() shouldBe """
+                output.trimWhitespace() shouldBe """
                     {
                         "query": {
                             "term": {
@@ -43,7 +43,7 @@ class TermQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("in simplified form") {
@@ -52,13 +52,13 @@ class TermQueryTests : BehaviorSpec({
                     term { "user" to "melvic" }
                 }
                 val output = result.output().mapTo(JsonStringOutput)
-                output.strip() shouldBe """
+                output.trimWhitespace() shouldBe """
                     {
                         "query": {
                             "term": { "user": "melvic" }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

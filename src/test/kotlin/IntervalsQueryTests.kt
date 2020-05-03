@@ -31,7 +31,7 @@ class IntervalsQueryTests : BehaviorSpec({
                         }
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                       "query": {
                         "intervals" : {
@@ -60,7 +60,7 @@ class IntervalsQueryTests : BehaviorSpec({
                         }
                       }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("the rule has a filter field") {
@@ -81,7 +81,7 @@ class IntervalsQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                       "query": {
                         "intervals" : {
@@ -101,7 +101,7 @@ class IntervalsQueryTests : BehaviorSpec({
                         }
                       }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("it has a script filter") {
@@ -121,7 +121,7 @@ class IntervalsQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                       "query": {
                         "intervals" : {
@@ -138,7 +138,7 @@ class IntervalsQueryTests : BehaviorSpec({
                         }
                       }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

@@ -26,7 +26,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -37,7 +37,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("several functions are combined") {
@@ -64,7 +64,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -88,7 +88,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("it contains a script score") {
@@ -106,7 +106,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -121,7 +121,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("it contains a script score with params") {
@@ -142,7 +142,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                         }
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -161,7 +161,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("the score function is random score") {
@@ -174,7 +174,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                         }
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -185,7 +185,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("the score function is field value factor") {
@@ -201,7 +201,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -214,7 +214,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("it has a decay function of gauss") {
@@ -233,7 +233,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                 {
                     "query": {
                         "function_score": {
@@ -249,7 +249,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                         }
                     }
                 }
-            """.strip()
+            """.trimWhitespace()
             }
         }
         `when`("it has multiple decay functions") {
@@ -283,7 +283,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "function_score": {
@@ -314,7 +314,7 @@ class FunctionScoreQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

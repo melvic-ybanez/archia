@@ -34,7 +34,7 @@ class BoostingQueryTests : BehaviorSpec({
                         negativeBoost = 0.5
                     }
                 }.output()
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                         "query": {
                             "boosting" : {
@@ -52,7 +52,7 @@ class BoostingQueryTests : BehaviorSpec({
                             }
                         }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

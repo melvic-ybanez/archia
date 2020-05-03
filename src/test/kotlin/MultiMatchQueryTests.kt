@@ -17,7 +17,7 @@ class MultiMatchQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                       "query": {
                         "multi_match" : {
@@ -26,7 +26,7 @@ class MultiMatchQueryTests : BehaviorSpec({
                         }
                       }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
         `when`("a type is provided") {
@@ -40,7 +40,7 @@ class MultiMatchQueryTests : BehaviorSpec({
                     }
                 }.output()
 
-                output.mapTo(JsonStringOutput).strip() shouldBe """
+                output.mapTo(JsonStringOutput).trimWhitespace() shouldBe """
                     {
                       "query": {
                         "multi_match" : {
@@ -51,7 +51,7 @@ class MultiMatchQueryTests : BehaviorSpec({
                         }
                       }
                     }
-                """.strip()
+                """.trimWhitespace()
             }
         }
     }

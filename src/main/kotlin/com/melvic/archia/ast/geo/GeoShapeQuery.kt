@@ -3,11 +3,13 @@ package com.melvic.archia.ast.geo
 import com.melvic.archia.ast.*
 import kotlin.reflect.KProperty
 
-class GeoShapeQuery : WithField<GeoShapeField>() {
+open class GeoShapeQuery : WithField<GeoShapeField>() {
     override fun initField(name: String): GeoShapeField {
         return GeoShapeField(name)
     }
 }
+
+class ShapeQuery : GeoShapeQuery()
 
 class GeoShapeField(name: String) : Field(name), WithGeoShape {
     private var indexedShape: IndexedShape by parameters
