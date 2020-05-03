@@ -32,6 +32,19 @@ open class TreeNode {
     open val requiredParams: List<KProperty<Any>> = listOf()
 }
 
+open class WithQuery : Clause(), BuilderHelper {
+    var query: Clause by parameters
+
+    fun query(init: Init<ClauseBuilder>) {
+        setClause(init) { query = it }
+    }
+
+    override val requiredParams: List<KProperty<Any>>
+        get() = extraRequiredParams + listOf(::query)
+
+    open val extraRequiredParams: List<KProperty<Any>> = listOf()
+}
+
 typealias MultiClause = MutableList<Clause>
 
 fun buildQuery(init: Init<Query>) = Query().apply(init)
