@@ -186,6 +186,7 @@ The following are the currently supported queries:
 
 ### Joining Queries
 * Nested Query
+* Has Child Query
 
 ### Leaf Queries
 * Range Query

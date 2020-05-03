@@ -4,6 +4,7 @@ import QueryStringQuery
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.fulltext.*
 import com.melvic.archia.ast.geo.*
+import com.melvic.archia.ast.joining.HasChildQuery
 import com.melvic.archia.ast.joining.NestedQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
@@ -68,8 +69,13 @@ interface Builder {
     fun shape(init: Init<ShapeQuery>) = save(init)
 
     fun nested(init: Init<NestedQuery>) = save(init)
+
+    fun hasChild(init: Init<HasChildQuery>) = save(init)
 }
 
+/**
+ * A builder for a single query. Use this for types that hold query objects.
+ */
 class ClauseBuilder : Builder {
     var clause: Clause = Clause()
 
@@ -78,12 +84,20 @@ class ClauseBuilder : Builder {
     }
 }
 
+/**
+ * A builder for multiple queries.
+ */
 data class ClauseArrayBuilder(val clauses: MutableList<Clause> = mutableListOf()) : Builder {
     override fun <C : Clause> save(clause: C) {
         clauses.add(clause)
     }
 }
 
+/**
+ * Contains functions for saving the clauses saved by the builders. Typically, this
+ * should be used as a mixin for Clause sub-types that contain fields with the Clause
+ * or MultiClause type.
+ */
 interface BuilderHelper {
     fun setClauseArray(init: Init<ClauseArrayBuilder>, set: (MultiClause) -> Unit) {
         build(init, { it.clauses }) { set(it) }

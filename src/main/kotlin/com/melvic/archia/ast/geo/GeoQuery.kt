@@ -3,6 +3,9 @@ package com.melvic.archia.ast.geo
 import com.melvic.archia.ast.Field
 import com.melvic.archia.ast.WithField
 
+/**
+ * Base class for geo-based queries
+ */
 abstract class GeoQuery<F : Field> : WithField<F>() {
     var _name: String by parameters
     var validationMethod: ValidationMethod by parameters
