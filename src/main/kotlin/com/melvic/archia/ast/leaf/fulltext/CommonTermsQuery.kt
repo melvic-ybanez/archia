@@ -1,4 +1,4 @@
-package com.melvic.archia.ast.fulltext
+package com.melvic.archia.ast.leaf.fulltext
 
 import com.melvic.archia.ast.*
 

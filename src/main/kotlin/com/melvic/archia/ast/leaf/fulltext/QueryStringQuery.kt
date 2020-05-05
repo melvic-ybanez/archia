@@ -1,5 +1,5 @@
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.fulltext.Operator
+import com.melvic.archia.ast.leaf.fulltext.Operator
 import kotlin.reflect.KProperty
 
 class QueryStringQuery : Clause(), WithNum {

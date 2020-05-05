@@ -1,4 +1,4 @@
-import com.melvic.archia.ast.geo.*
+import com.melvic.archia.ast.leaf.geo.*
 import io.kotest.core.spec.style.BehaviorSpec
 
 class GeoBoundingBoxQueryTests : BehaviorSpec({

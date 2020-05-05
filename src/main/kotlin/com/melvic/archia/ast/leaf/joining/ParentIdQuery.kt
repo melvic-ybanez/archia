@@ -1,4 +1,4 @@
-package com.melvic.archia.ast.joining
+package com.melvic.archia.ast.leaf.joining
 
 import com.melvic.archia.ast.Clause
 import kotlin.reflect.KProperty

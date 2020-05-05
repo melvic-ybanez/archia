@@ -5,14 +5,14 @@ import com.melvic.archia.ast.compound.BoostMode
 import com.melvic.archia.ast.compound.Modifier
 import com.melvic.archia.ast.compound.MultiValueMode
 import com.melvic.archia.ast.compound.ScoreMode
-import com.melvic.archia.ast.fulltext.MultiMatchType
-import com.melvic.archia.ast.fulltext.Operator
-import com.melvic.archia.ast.joining.ScoreMode as JoiningScoreMode
-import com.melvic.archia.ast.geo.*
+import com.melvic.archia.ast.leaf.fulltext.MultiMatchType
+import com.melvic.archia.ast.leaf.fulltext.Operator
+import com.melvic.archia.ast.leaf.geo.*
 import com.melvic.archia.output.*
 import com.melvic.archia.script.Script
 import com.melvic.archia.validate
 import com.melvic.archia.validateRequiredParams
+import com.melvic.archia.ast.leaf.joining.ScoreMode as JoiningScoreMode
 
 typealias Evaluation = Result<JsonValue>
 

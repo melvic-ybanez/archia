@@ -1,7 +1,7 @@
 package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.geo.GeoObject
+import com.melvic.archia.ast.leaf.geo.GeoObject
 import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 

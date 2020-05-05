@@ -1,5 +1,5 @@
 import com.melvic.archia.ast.evalQuery
-import com.melvic.archia.ast.fulltext.MultiMatchType
+import com.melvic.archia.ast.leaf.fulltext.MultiMatchType
 import com.melvic.archia.interpreter.output
 import com.melvic.archia.output.JsonStringOutput
 import com.melvic.archia.output.mapTo

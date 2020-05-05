@@ -1,6 +1,6 @@
-import com.melvic.archia.ast.geo.GeoArray
-import com.melvic.archia.ast.geo.GeoHash
-import com.melvic.archia.ast.geo.GeoString
+import com.melvic.archia.ast.leaf.geo.GeoArray
+import com.melvic.archia.ast.leaf.geo.GeoHash
+import com.melvic.archia.ast.leaf.geo.GeoString
 import io.kotest.core.spec.style.BehaviorSpec
 
 class GeoPolygonQueryTests : BehaviorSpec({

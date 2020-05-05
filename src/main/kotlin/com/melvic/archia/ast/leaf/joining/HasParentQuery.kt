@@ -1,7 +1,5 @@
-package com.melvic.archia.ast.joining
+package com.melvic.archia.ast.leaf.joining
 
-import com.melvic.archia.ast.BuilderHelper
-import com.melvic.archia.ast.Clause
 import com.melvic.archia.ast.WithQuery
 import kotlin.reflect.KProperty
 

@@ -1,4 +1,4 @@
-package com.melvic.archia.ast.joining
+package com.melvic.archia.ast.leaf.joining
 
 enum class ScoreMode {
     AVG, MAX, MIN, NONE, SUM

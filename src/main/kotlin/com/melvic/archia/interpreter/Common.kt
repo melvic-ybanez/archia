@@ -1,8 +1,8 @@
 package com.melvic.archia.interpreter
 
 import com.melvic.archia.ast.*
-import com.melvic.archia.ast.fulltext.CommonTermsField
-import com.melvic.archia.ast.geo.*
+import com.melvic.archia.ast.leaf.fulltext.CommonTermsField
+import com.melvic.archia.ast.leaf.geo.*
 import com.melvic.archia.output.*
 import com.melvic.archia.validate
 import com.melvic.archia.validateRequiredParams

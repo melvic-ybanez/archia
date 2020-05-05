@@ -1,4 +1,4 @@
-import com.melvic.archia.ast.geo.GeoArray
+import com.melvic.archia.ast.leaf.geo.GeoArray
 import io.kotest.core.spec.style.BehaviorSpec
 
 class GeoDistanceQueryTests : BehaviorSpec({

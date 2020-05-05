@@ -1,6 +1,6 @@
-package com.melvic.archia.ast.joining
+package com.melvic.archia.ast.leaf.joining
 
-import com.melvic.archia.ast.*
+import com.melvic.archia.ast.WithQuery
 import kotlin.reflect.KProperty
 
 class HasChildQuery : WithQuery() {

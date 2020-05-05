@@ -1,4 +1,4 @@
-import com.melvic.archia.ast.geo.SpatialRelation
+import com.melvic.archia.ast.leaf.geo.SpatialRelation
 import io.kotest.core.spec.style.BehaviorSpec
 
 class ShapeQueryTests : BehaviorSpec({

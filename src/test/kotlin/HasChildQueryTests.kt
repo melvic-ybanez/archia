@@ -1,6 +1,5 @@
-import com.melvic.archia.ast.joining.ScoreMode
+import com.melvic.archia.ast.leaf.joining.ScoreMode
 import com.melvic.archia.interpreter.MissingField
-import com.melvic.archia.interpreter.missingField
 import io.kotest.core.spec.style.FeatureSpec
 
 class HasChildQueryTests : FeatureSpec({

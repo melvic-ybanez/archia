@@ -165,7 +165,9 @@ The following are the currently supported queries:
 * Disjunction Max Query
 * Function Score Query
 
-### Full Text Queries
+### Leaf Queries
+
+#### Full Text Queries
 * Common Terms Query
 * Intervals Query
 * Match Bool Prefix Query
@@ -176,7 +178,7 @@ The following are the currently supported queries:
 * Query String Query
 * Simple Query String Query
 
-### Geo & Shape Queries
+#### Geo & Shape Queries
 * Geo Bounding Box Query
 * Geo Distance Query
 * Geo Point
@@ -184,15 +186,16 @@ The following are the currently supported queries:
 * Geo Shape Query
 * Shape Query
 
-### Joining Queries
+#### Joining Queries
 * Nested Query
 * Has Child Query
 * Has Parent Query
 * Parent Id Query
 
-### Leaf Queries
+#### Others
 * Range Query
 * Term Query
+* Match All Query
 
 Future features might add support for transforming the result into actual queries that connect to the elastic
 engine. However, this isn't currently a priority.

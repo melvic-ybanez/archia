@@ -3,15 +3,12 @@ import com.melvic.archia.ast.compound.Modifier
 import com.melvic.archia.ast.compound.MultiValueMode
 import com.melvic.archia.ast.compound.ScoreMode
 import com.melvic.archia.ast.evalQuery
-import com.melvic.archia.ast.geo.GeoString
+import com.melvic.archia.ast.leaf.geo.GeoString
 import com.melvic.archia.interpreter.output
 import com.melvic.archia.output.JsonStringOutput
 import com.melvic.archia.output.mapTo
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import java.time.LocalDate
-import java.time.Month
-import java.util.*
 
 class FunctionScoreQueryTests : BehaviorSpec({
     given("function score query") {

@@ -1,4 +1,4 @@
-package com.melvic.archia.ast.geo
+package com.melvic.archia.ast.leaf.geo
 
 import com.melvic.archia.ast.Field
 import com.melvic.archia.ast.Init
