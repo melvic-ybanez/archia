@@ -7,6 +7,7 @@ import com.melvic.archia.ast.geo.*
 import com.melvic.archia.ast.joining.HasChildQuery
 import com.melvic.archia.ast.joining.HasParentQuery
 import com.melvic.archia.ast.joining.NestedQuery
+import com.melvic.archia.ast.joining.ParentIdQuery
 import com.melvic.archia.ast.leaf.RangeQuery
 import com.melvic.archia.ast.leaf.TermQuery
 import com.melvic.archia.identity
@@ -74,6 +75,8 @@ interface Builder {
     fun hasChild(init: Init<HasChildQuery>) = save(init)
 
     fun hasParent(init: Init<HasParentQuery>) = save(init)
+
+    fun parentId(init: Init<ParentIdQuery>) = save(init)
 }
 
 /**

@@ -188,6 +188,7 @@ The following are the currently supported queries:
 * Nested Query
 * Has Child Query
 * Has Parent Query
+* Parent Id Query
 
 ### Leaf Queries
 * Range Query
