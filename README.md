@@ -196,6 +196,7 @@ The following are the currently supported queries:
 * Range Query
 * Term Query
 * Match All Query
+* Match None Query
 
 Future features might add support for transforming the result into actual queries that connect to the elastic
 engine. However, this isn't currently a priority.
