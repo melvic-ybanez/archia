@@ -2,7 +2,7 @@ package com.melvic.archia.ast
 
 import QueryStringQuery
 import com.melvic.archia.ast.compound.*
-import com.melvic.archia.ast.leaf.RangeQuery
+import com.melvic.archia.ast.leaf.term.RangeQuery
 import com.melvic.archia.ast.leaf.fulltext.*
 import com.melvic.archia.ast.leaf.geo.*
 import com.melvic.archia.ast.leaf.joining.HasChildQuery

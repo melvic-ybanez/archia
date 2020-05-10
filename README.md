@@ -198,9 +198,9 @@ The following are the currently supported queries:
 * Fuzzy Query
 * IDs Query
 * Prefix Query
+* Range Query
 
 #### Others
-* Range Query
 * Match All Query
 * Match None Query
 

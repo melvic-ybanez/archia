@@ -1,6 +1,6 @@
 package com.melvic.archia.ast
 
-import com.melvic.archia.ast.leaf.RangeValue
+import com.melvic.archia.ast.leaf.term.RangeValue
 import com.melvic.archia.ast.leaf.fulltext.MatchQueryValue
 import java.time.LocalDate
 

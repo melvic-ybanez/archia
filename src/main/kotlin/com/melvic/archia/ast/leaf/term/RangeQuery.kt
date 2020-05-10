@@ -1,4 +1,4 @@
-package com.melvic.archia.ast.leaf
+package com.melvic.archia.ast.leaf.term
 
 import com.melvic.archia.ast.*
 
