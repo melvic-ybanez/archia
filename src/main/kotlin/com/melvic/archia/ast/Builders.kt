@@ -3,16 +3,13 @@ package com.melvic.archia.ast
 import QueryStringQuery
 import com.melvic.archia.ast.compound.*
 import com.melvic.archia.ast.leaf.RangeQuery
-import com.melvic.archia.ast.leaf.term.TermQuery
 import com.melvic.archia.ast.leaf.fulltext.*
 import com.melvic.archia.ast.leaf.geo.*
 import com.melvic.archia.ast.leaf.joining.HasChildQuery
 import com.melvic.archia.ast.leaf.joining.HasParentQuery
 import com.melvic.archia.ast.leaf.joining.NestedQuery
 import com.melvic.archia.ast.leaf.joining.ParentIdQuery
-import com.melvic.archia.ast.leaf.term.ExistsQuery
-import com.melvic.archia.ast.leaf.term.FuzzyQuery
-import com.melvic.archia.ast.leaf.term.IdsQuery
+import com.melvic.archia.ast.leaf.term.*
 import com.melvic.archia.identity
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -86,6 +83,8 @@ interface Builder {
     fun fuzzy(init: Init<FuzzyQuery>) = save(init)
 
     fun ids(init: Init<IdsQuery>) = save(init)
+
+    fun prefix(init: Init<PrefixQuery>) = save(init)
 }
 
 /**
