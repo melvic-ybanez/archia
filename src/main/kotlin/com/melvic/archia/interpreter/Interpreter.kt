@@ -83,6 +83,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is BoundingBoxType -> value.json().success()
         is SpatialRelation -> value.json().success()
         is JoiningScoreMode -> value.json().success()
+        is Rewrite -> value.json().success()
 
         // Elasticsearch params
         is MinimumShouldMatch -> value.interpret().validate()

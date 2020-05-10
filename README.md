@@ -195,6 +195,7 @@ The following are the currently supported queries:
 #### Term-level Queries
 * Exists Query
 * Term Query
+* Fuzzy Query
 
 #### Others
 * Range Query

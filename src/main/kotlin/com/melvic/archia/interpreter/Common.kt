@@ -32,17 +32,15 @@ fun MinimumShouldMatch.interpret(parent: JsonObject = json {}): JsonValue {
     }
 }
 
-fun Fuzziness.interpret(parent: JsonObject = json {}): JsonValue {
-    return parent {
-        when (this@interpret) {
-            is Fuzziness._0 -> 0.json()
-            is Fuzziness._1 -> 1.json()
-            is Fuzziness._2 -> 2.json()
-            is Fuzziness.Auto -> this@interpret.distances?.let { distances ->
-                val (low, high) = distances
-                "AUTO:[$low],[$high]".json()
-            } ?: "AUTO".json()
-        }
+fun Fuzziness.interpret(): JsonValue {
+    return when (this@interpret) {
+        is Fuzziness._0 -> 0.json()
+        is Fuzziness._1 -> 1.json()
+        is Fuzziness._2 -> 2.json()
+        is Fuzziness.Auto -> this@interpret.distances?.let { distances ->
+            val (low, high) = distances
+            "AUTO:[$low],[$high]".json()
+        } ?: "AUTO".json()
     }
 }
 
