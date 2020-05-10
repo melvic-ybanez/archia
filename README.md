@@ -192,9 +192,12 @@ The following are the currently supported queries:
 * Has Parent Query
 * Parent Id Query
 
+#### Term-level Queries
+* Exists Query
+* Term Query
+
 #### Others
 * Range Query
-* Term Query
 * Match All Query
 * Match None Query
 
