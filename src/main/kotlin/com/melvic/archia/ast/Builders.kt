@@ -12,6 +12,7 @@ import com.melvic.archia.ast.leaf.joining.NestedQuery
 import com.melvic.archia.ast.leaf.joining.ParentIdQuery
 import com.melvic.archia.ast.leaf.term.ExistsQuery
 import com.melvic.archia.ast.leaf.term.FuzzyQuery
+import com.melvic.archia.ast.leaf.term.IdsQuery
 import com.melvic.archia.identity
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -83,6 +84,8 @@ interface Builder {
     fun exists(init: Init<ExistsQuery>) = save(init)
 
     fun fuzzy(init: Init<FuzzyQuery>) = save(init)
+
+    fun ids(init: Init<IdsQuery>) = save(init)
 }
 
 /**

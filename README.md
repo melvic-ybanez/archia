@@ -196,6 +196,7 @@ The following are the currently supported queries:
 * Exists Query
 * Term Query
 * Fuzzy Query
+* IDs Query
 
 #### Others
 * Range Query
