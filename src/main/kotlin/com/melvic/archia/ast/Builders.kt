@@ -85,6 +85,8 @@ interface Builder {
     fun ids(init: Init<IdsQuery>) = save(init)
 
     fun prefix(init: Init<PrefixQuery>) = save(init)
+
+    fun regexp(init: Init<RegexpQuery>) = save(init)
 }
 
 /**

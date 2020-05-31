@@ -92,6 +92,7 @@ fun <V> interpretParam(name: String, value: V): Evaluation {
         is Bbox -> value.interpret().success()
         is Distance -> value.interpret().success()
         is GeoShape -> value.interpret().success()
+        is Flag -> value.interpret().success()
 
         // If it's a list, recursively evaluate each item
         is List<*> -> {
