@@ -15,7 +15,7 @@ class RegexpQuery : WithField<RegexpField>() {
 class RegexpField(name: String) : Field(name) {
     var value: String by parameters
     var flags: Flag by parameters
-    var maxDeterminedStates: Int by parameters
+    var maxDeterminizedStates: Int by parameters
     var rewrite: Rewrite by parameters
 
     override val requiredParams: List<KProperty<Any>>

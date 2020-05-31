@@ -11,12 +11,40 @@ class RegexpQueryTests : FeatureSpec({
                     regexp {
                         "user" {
                             flags = All
-                            maxDeterminedStates = 1000
+                            maxDeterminizedStates = 1000
                             rewrite = Rewrite.CONSTANT_SCORE
                         }
                     }
                 }
                 errors = listOf(MissingField("value"))
+            }
+        }
+        scenario("should be valid if all required fields are provided") {
+            assert {
+                query {
+                    regexp {
+                        "user" {
+                            value = "k.*y"
+                            flags = All
+                            maxDeterminizedStates = 10000
+                            rewrite = Rewrite.CONSTANT_SCORE
+                        }
+                    }
+                    expected = """
+                        {
+                            "query": {
+                                "regexp": {
+                                    "user": {
+                                        "value": "k.*y",
+                                        "flags" : "ALL",
+                                        "max_determinized_states": 10000,
+                                        "rewrite": "constant_score"
+                                    }
+                                }
+                            }
+                        }
+                    """.trimIndent()
+                }
             }
         }
     }

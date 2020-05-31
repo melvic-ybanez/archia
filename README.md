@@ -199,6 +199,7 @@ The following are the currently supported queries:
 * IDs Query
 * Prefix Query
 * Range Query
+* Regexp Query
 
 #### Others
 * Match All Query

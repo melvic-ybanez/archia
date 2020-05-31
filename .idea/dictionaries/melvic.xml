@@ -3,6 +3,7 @@
     <words>
       <w>bbox</w>
       <w>coords</w>
+      <w>determinized</w>
       <w>elasticsearch</w>
       <w>freqs</w>
       <w>melvic</w>
