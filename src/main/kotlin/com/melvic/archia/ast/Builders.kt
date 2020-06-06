@@ -87,6 +87,8 @@ interface Builder {
     fun prefix(init: Init<PrefixQuery>) = save(init)
 
     fun regexp(init: Init<RegexpQuery>) = save(init)
+
+    fun terms(init: Init<TermsQuery>) = save(init)
 }
 
 /**

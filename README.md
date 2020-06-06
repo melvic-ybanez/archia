@@ -194,12 +194,13 @@ The following are the currently supported queries:
 
 #### Term-level Queries
 * Exists Query
-* Term Query
 * Fuzzy Query
 * IDs Query
 * Prefix Query
 * Range Query
 * Regexp Query
+* Term Query
+* Terms Query
 
 #### Others
 * Match All Query

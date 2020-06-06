@@ -5,7 +5,7 @@ import com.melvic.archia.ast.Field
 import com.melvic.archia.ast.WithShortForm
 import kotlin.reflect.KProperty
 
-class TermQuery: WithShortForm<TermField, String>() {
+class TermQuery : WithShortForm<TermField, String>() {
     override fun initField(name: String) = TermField(name)
 
     override fun TermField.updateValue(value: String) {
