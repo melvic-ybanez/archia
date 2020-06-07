@@ -91,6 +91,8 @@ interface Builder {
     fun terms(init: Init<TermsQuery>) = save(init)
 
     fun termsSet(init: Init<TermsSetQuery>) = save(init)
+
+    fun type(init: Init<TypeQuery>) = save(init)
 }
 
 /**

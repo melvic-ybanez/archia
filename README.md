@@ -202,6 +202,7 @@ The following are the currently supported queries:
 * Term Query
 * Terms Query
 * Terms Set Query
+* Type Query
 
 #### Others
 * Match All Query
