@@ -4,7 +4,7 @@ import com.melvic.archia.ast.Analyzer
 import com.melvic.archia.ast.Clause
 import com.melvic.archia.ast.MinimumShouldMatch
 
-class SimpleQueryStringQuery: Clause() {
+class SimpleQueryStringQuery : Clause() {
     var query: String by parameters
     var fields: List<String> by parameters
     var defaultOperator: Operator by parameters

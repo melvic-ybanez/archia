@@ -89,6 +89,8 @@ interface Builder {
     fun regexp(init: Init<RegexpQuery>) = save(init)
 
     fun terms(init: Init<TermsQuery>) = save(init)
+
+    fun termsSet(init: Init<TermsSetQuery>) = save(init)
 }
 
 /**

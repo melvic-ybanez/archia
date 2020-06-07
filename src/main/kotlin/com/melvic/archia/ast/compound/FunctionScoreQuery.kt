@@ -5,7 +5,7 @@ import com.melvic.archia.ast.leaf.geo.GeoObject
 import com.melvic.archia.script.Script
 import kotlin.reflect.KCallable
 
-class FunctionScoreQuery: FunctionClause() {
+class FunctionScoreQuery : FunctionClause() {
     private var functions: List<FunctionClause> by parameters
 
     var query: Clause by parameters

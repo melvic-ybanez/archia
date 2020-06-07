@@ -2,7 +2,7 @@ package com.melvic.archia.ast.compound
 
 import com.melvic.archia.ast.*
 
-class BoolQuery: Clause(), WithNum, BuilderHelper {
+class BoolQuery : Clause(), WithNum, BuilderHelper {
     private var must: OneOrMore<Clause> by parameters
     private var filter: OneOrMore<Clause> by parameters
     private var should: OneOrMore<Clause> by parameters

@@ -6,7 +6,7 @@ class TermsQueryTests : FeatureSpec({
             assert {
                 query {
                     terms {
-                        "user"("kimchy", "elasticsearch")
+                        "user" to listOf("kimchy", "elasticsearch")
                         boost = 1.0
                     }
                 }

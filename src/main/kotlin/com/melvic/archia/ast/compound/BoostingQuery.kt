@@ -3,7 +3,7 @@ package com.melvic.archia.ast.compound
 import com.melvic.archia.ast.*
 import kotlin.reflect.KProperty
 
-class BoostingQuery: Clause(), WithNum, BuilderHelper {
+class BoostingQuery : Clause(), WithNum, BuilderHelper {
     private var positive: Clause by parameters
     private var negative: Clause by parameters
     var negativeBoost: Double by parameters

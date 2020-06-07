@@ -3,7 +3,7 @@ package com.melvic.archia.ast.compound
 import com.melvic.archia.ast.*
 import kotlin.reflect.KProperty
 
-class DisMaxQuery: Clause(), BuilderHelper {
+class DisMaxQuery : Clause(), BuilderHelper {
     private var queries: MultiClause by parameters
     var tieBreaker: Double by parameters
 

@@ -7,8 +7,8 @@ class TermsQuery : WithField<LookupField>() {
     private var terms: Param<List<String>> by parameters
     var boost: Boost by parameters
 
-    operator fun String.invoke(vararg term: String) {
-        terms = Pair(this, term.toList())
+    infix fun String.to(terms: List<String>) {
+        this@TermsQuery.terms = Pair(this, terms)
     }
 
     override fun initField(name: String): LookupField {

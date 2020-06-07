@@ -201,6 +201,7 @@ The following are the currently supported queries:
 * Regexp Query
 * Term Query
 * Terms Query
+* Terms Set Query
 
 #### Others
 * Match All Query
