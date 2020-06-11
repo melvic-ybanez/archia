@@ -203,6 +203,7 @@ The following are the currently supported queries:
 * Terms Query
 * Terms Set Query
 * Type Query
+* Wildcard Query
 
 #### Others
 * Match All Query
